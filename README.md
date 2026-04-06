@@ -21,65 +21,67 @@ VietIDP giải quyết bài toán **số hóa văn bản hành chính** end-to-e
 
 ## 🏗️ Kiến trúc hệ thống
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
-│                    Frontend (React 18 + Vite)                │
+│                    Frontend (React 18 + Vite)               │
 │            Upload PDF/Image → Hiển thị kết quả              │
 ├──────────────────────────┬──────────────────────────────────┤
-│   Backend (Express.js)   │      FastAPI (Python)             │
-│   Port 5000              │      (Optional, Port 8000)        │
+│   Backend (Express.js)   │      FastAPI (Python)            │
+│   Port 5000              │      (Optional, Port 8000)       │
 ├──────────────────────────┴──────────────────────────────────┤
-│                         src/ Pipeline                        │
-│  ┌─────────────┐ ┌──────────┐ ┌──────────┐ ┌──────────────┐│
-│  │Preprocessing│→│   OCR    │→│   LLM    │→│  Validation  ││
-│  │Deskew+Denoi-│ │PaddleOCR │ │Qwen2.5:7b│ │ JSON Output  ││
-│  │se+GAN       │ │PP-OCRv4  │ │via Ollama│ │              ││
-│  └─────────────┘ └──────────┘ └──────────┘ └──────────────┘│
+│                         src/ Pipeline                       │
+│  ┌─────────────┐ ┌──────────┐ ┌──────────┐ ┌──────────────┐ │
+│  │Preprocessing│→│   OCR    │→│   LLM    │→│  Validation  │ │
+│  │Deskew+Denoi-│ │PaddleOCR │ │Qwen2.5:7b│ │ JSON Output  │ │
+│  │se+GAN       │ │PP-OCRv4  │ │via Ollama│ │              │ │
+│  └─────────────┘ └──────────┘ └──────────┘ └──────────────┘ │
 ├─────────────────────────────────────────────────────────────┤
-│  Models: YOLOv8n │ U-Net GAN │ PaddleOCR │ Qwen2.5:7b     │
+│  Models: YOLOv8n │ U-Net GAN │ PaddleOCR │ Qwen2.5:7b       │
 └─────────────────────────────────────────────────────────────┘
 ```
 
-## 📁 Cấu trúc thư mục
+## 📁 Cấu trúc thư mục (Chuẩn MLOps)
 
-```
-VietIDP/
-├── src/                           # ✨ Production Modules
-│   ├── config.py                  # Centralized configuration
-│   ├── preprocessing/             # Deskew, denoise, stamp removal
-│   ├── ocr/                       # PaddleOCR engine + postprocess
-│   ├── llm/                       # Ollama client + prompt templates
-│   ├── pipeline/                  # End-to-end OCR-LLM pipeline
-│   ├── api/                       # FastAPI + authentication
-│   ├── evaluation/                # CER/WER/F1 metrics
-│   └── data/                      # Data preparation utilities
-├── ai/                            # Production scripts
-│   ├── detect_api.py              # YOLO stamp detection
-│   ├── summarize.py               # LLM summarization
-│   ├── inference.py               # Model inference
-│   ├── train_yolo.py              # YOLO training
-│   └── generate_dataset.py        # Synthetic dataset generation
-├── backend/                       # Express.js API server
-├── frontend/                      # React 18 + Vite web interface
-├── notebooks/                     # Research notebooks (5 phases)
-│   ├── Phase1_Data_Preparation.py
-│   ├── Phase2_Stamp_Removal_GAN.py
-│   ├── Phase3_OCR_Engine.py
-│   ├── Phase4_LLM_Finetuning.py
-│   └── Phase5_End_to_End_Pipeline.py
-├── models/                        # Model weights (YOLO, GAN, QLoRA)
-├── data/                          # Datasets
-│   ├── raw_word_files/            # Source DOCX files
-│   ├── test/                      # 150 test PDFs
-│   └── stamps/                    # Extracted/synthetic stamps
-├── configs/                       # YAML configurations
-├── requirements.txt               # CPU dependencies
-├── requirements-gpu.txt           # GPU dependencies (Colab)
-├── setup.py                       # Python package setup
-├── Dockerfile                     # Docker deployment
-├── .env.example                   # Environment config template
-├── run_vietidp.bat                # Windows launcher
-└── README.md                      # This file
+```text
+OCR-LLM_Research/
+│
+├── data/                       # Dữ liệu phục vụ AI
+│   ├── raw/                    # Dữ liệu gốc (docx_raw, pdf_test, stamps_raw)
+│   ├── interim/                # Dữ liệu trung gian (stamps_transparent, stamps_synthetic)
+│   └── processed/              # Dữ liệu đã làm sạch cho Train (pix2pix_dataset, yolo_dataset, llm_instruction)
+│
+├── models/                     # Trọng số mô hình
+│   ├── base_models/            # Các model nền tảng tải từ ngoài (VD: yolov8n.pt)
+│   └── finetuned/              # Checkpoint model sinh ra sau khi huấn luyện
+│
+├── src/                        # Chứa Core Modules (Production)
+│   ├── api/                    # FastAPI
+│   ├── data/                   # Utilities cho dữ liệu
+│   ├── evaluation/             # Đánh giá Metrics (CER, WER, F1)
+│   ├── llm/                    # Prompt Templates & Ollama logic
+│   ├── ocr/                    # Lớp điều khiển PaddleOCR / VietOCR
+│   ├── pipeline/               # Kịch bản tích hợp end-to-end
+│   ├── preprocessing/          # Deskew, xóa dấu, lọc nhiễu
+│   └── config.py               # Biến môi trường hệ thống
+│
+├── scripts/                    # Các script tạo data, thử nghiệm, training (Tooling)
+│   ├── generate_dataset.py
+│   ├── generate_pix2pix_dataset.py
+│   ├── remove_bg_batch.py
+│   └── train_yolo.py
+│
+├── apps/                       # Web Applications
+│   ├── frontend/               # React18 + Vite (UI Side-by-side)
+│   └── backend/                # Express.js HTTP Server
+│
+├── notebooks/                  # Các phase Jupyter Notebook Research thử nghiệm độc lập
+│
+├── docs/                       # Tài liệu nghiên cứu, công bố khoa học
+│   ├── bao_cao_tien_do_nckh.md
+│   ├── de_cuong_nghien_cuu.pdf
+│   └── final_tri.pdf
+│
+└── config files (.env, .gitignore, requirements.txt, Dockerfile)
 ```
 
 ## 🚀 Cài đặt nhanh (Windows)
@@ -108,22 +110,19 @@ ollama pull nomic-embed-text
 pip install -r requirements.txt
 
 # Frontend dependencies
-cd frontend && npm install && cd ..
+cd apps/frontend && npm install && cd ../..
 
 # Backend dependencies
-cd backend && npm install && cd ..
+cd apps/backend && npm install && cd ../..
 ```
 
 ### Bước 3: Khởi động
 
 ```powershell
-# Cách 1: Dùng launcher script
-run_vietidp.bat
-
-# Cách 2: Chạy thủ công
-ollama serve                                # Terminal 1
-node backend/index.js                       # Terminal 2
-cd frontend && npx vite --port 5173         # Terminal 3
+# Khởi động Backend + Frontend riêng biệt
+ollama serve                                     # Terminal 1
+node apps/backend/index.js                       # Terminal 2
+cd apps/frontend && npx vite --port 5173         # Terminal 3
 ```
 
 Truy cập: **http://localhost:5173**
@@ -148,26 +147,22 @@ Sao chép `.env.example` → `.env` và sửa:
 | F1 | Trích xuất thông tin | > 85% |
 
 ```python
-from src.evaluation import compute_cer, compute_wer
+from src.evaluation import compute_cer
 cer = compute_cer("Cộng hòa xã hội chủ nghĩa Việt Nam", ocr_text)
 ```
 
 ## 🔒 Bảo mật
 
 - ✅ CORS restricted (localhost only)
-- ✅ File type/size validation (20MB max)
-- ✅ Path traversal protection
 - ✅ 100% offline processing
-- ✅ Temp files cleanup
 - ✅ No external API calls
 
 ## 📖 Nghiên cứu
 
 Dự án phục vụ nghiên cứu khoa học, tham khảo:
-- `Document/Final_TRI.pdf` — Bài báo nghiên cứu
-- `Document/Đề cương nghiên cứu.pdf` — Đề cương chi tiết
+- `docs/final_tri.pdf` — Bài báo nghiên cứu
+- `docs/de_cuong_nghien_cuu.pdf` — Đề cương chi tiết
 - `notebooks/` — 5 Phase nghiên cứu đầy đủ
 
 ---
-
 **VietIDP v2.0** | VietIDP Research Team | 2026
