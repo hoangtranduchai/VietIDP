@@ -1,0 +1,10 @@
+node_modules/
+.git/
+.env
+uploads/
+frontend/
+.gemini/
+__pycache__/
+*.pt
+stamps_dataset/
+synthetic_dataset/

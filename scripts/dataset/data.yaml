@@ -1,0 +1,5 @@
+train: c:\Users\LAPTOP T&T\Desktop\AI_Science\ai\dataset/images/train
+val: c:\Users\LAPTOP T&T\Desktop\AI_Science\ai\dataset/images/val
+
+nc: 1
+names: ['stamp']

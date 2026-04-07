@@ -1,0 +1,17 @@
+# AI Science - VietIDP
+node_modules/
+backend/node_modules/
+frontend/node_modules/
+backend/uploads/
+backend/out.log
+backend/err.log
+ai/models/
+ai/__pycache__/
+*.pyc
+*.pyo
+.env
+.DS_Store
+Thumbs.db
+ai/dataset/images/
+ai/dataset/labels/
+stamps_transparent/

@@ -1,0 +1,170 @@
+/* ============================
+   DESIGN TOKENS
+   ============================ */
+:root {
+  /* Tông Giấy Ấm (Warm Paper/Sepia) cực kỳ dịu mắt */
+  --bg-primary: #fdfaf6;       /* Nền trang: Màu xám pha kem rất nhạt */
+  --bg-secondary: #f4efeb;     /* Sidebar/Header: Xám nâu nhẹ */
+  --bg-card: #ffffff;          /* Card sáng nhưng không bén */
+  --bg-hover: #eae4de;         /* Nền khi di chuột */
+  --border: #e0d8d0;           /* Viền xám ấm */
+  --border-bright: #c8bdaf;
+
+  --accent: #1e6792;           /* Xanh dương trầm, thanh lịch */
+  --accent-2: #2482ab;
+  --accent-glow: rgba(30, 103, 146, 0.08);
+  --accent-success: #2c855a;   /* Xanh lá đậm, không chói */
+  --accent-warning: #bd7916;
+  --accent-error: #c53030;     /* Đỏ đô/gạch thay vì đỏ tươi */
+
+  --text-primary: #3d3b38;     /* Chữ nâu xám đậm, êm hơn đen */
+  --text-secondary: #6e6761;   /* Chữ phụ trợ xám nâu */
+  --text-muted: #9c948c;
+
+  --flow-1: #4f7fff;
+  --flow-2: #7c5fff;
+  --flow-3: #ec4899;
+  --flow-4: #f59e0b;
+  --flow-5: #2dd4bf;
+
+  --font: 'Inter', -apple-system, sans-serif;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --radius-lg: 16px;
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  --shadow-accent: 0 10px 15px -3px rgba(37, 99, 235, 0.1), 0 4px 6px -2px rgba(37, 99, 235, 0.05);
+}
+
+/* ============================
+   RESET & BASE
+   ============================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root { height: 100%; }
+
+/* ============================
+   SCROLLBAR
+   ============================ */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-secondary); }
+::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* ============================
+   COMMON COMPONENTS
+   ============================ */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.badge-blue { background: rgba(79,127,255,0.15); color: var(--accent); border: 1px solid rgba(79,127,255,0.3); }
+.badge-green { background: rgba(45,212,191,0.15); color: var(--accent-success); border: 1px solid rgba(45,212,191,0.3); }
+.badge-yellow { background: rgba(245,158,11,0.15); color: var(--accent-warning); border: 1px solid rgba(245,158,11,0.3); }
+.badge-red { background: rgba(239,68,68,0.15); color: var(--accent-error); border: 1px solid rgba(239,68,68,0.3); }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  font-family: var(--font);
+  text-decoration: none;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: white;
+  box-shadow: 0 4px 15px rgba(79,127,255,0.35);
+}
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(79,127,255,0.5);
+}
+.btn-secondary {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border: 1px solid var(--border-bright);
+}
+.btn-secondary:hover { background: var(--border); }
+.btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+.btn-ghost:hover { color: var(--text-primary); border-color: var(--border-bright); background: var(--bg-hover); }
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  transition: border-color 0.2s;
+}
+.card:hover { border-color: var(--border-bright); }
+
+/* ============================
+   ANIMATIONS
+   ============================ */
+@keyframes fadeIn { from { opacity:0; transform: translateY(12px); } to { opacity:1; transform: translateY(0); } }
+@keyframes pulse { 0%,100% { opacity:1; } 50% { opacity: 0.5; } }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes flowDot {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.4); opacity: 0.6; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.fade-in { animation: fadeIn 0.4s ease both; }
+.spin { animation: spin 1s linear infinite; }
+
+/* ============================
+   PROGRESS BAR
+   ============================ */
+.progress-bar {
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  border-radius: 2px;
+  transition: width 0.5s ease;
+  position: relative;
+}
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 60px; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4));
+  animation: shimmer 1.5s infinite;
+  background-size: 200%;
+}
