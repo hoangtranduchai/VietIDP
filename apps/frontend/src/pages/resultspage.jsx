@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import {
   FileText, ChevronDown, ChevronUp, Download,
   Lightbulb, Users, BookOpen, Search, RefreshCw,
@@ -138,6 +138,7 @@ function EntitySection({ icon: Icon, label, items, color }) {
 
 export default function ResultsPage() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [isHovering, setIsHovering] = useState(null);
   
   // Try to use real data first, merge with fallbacks for empty fields
@@ -159,33 +160,37 @@ export default function ResultsPage() {
   
   const displayData = hasRealContent ? {
     meta: {
-      loai: realSum.loai_van_ban || MOCK.meta.loai,
-      so_hieu: realSum.so_hieu || MOCK.meta.so_hieu,
-      ngay: realSum.ngay_ban_hanh || MOCK.meta.ngay,
-      co_quan: realSum.co_quan_ban_hanh || MOCK.meta.co_quan,
-      nguoi_ky: realSum.nguoi_ky || MOCK.meta.nguoi_ky,
-      linh_vuc: realSum.linh_vuc || MOCK.meta.linh_vuc,
-      hieu_luc: realSum.thoi_han_hieu_luc || MOCK.meta.hieu_luc,
-      muc_do: realSum.muc_do_quan_trong || MOCK.meta.muc_do
+      loai: realSum.loai_van_ban || 'Chưa xác định',
+      so_hieu: realSum.so_hieu || 'Chưa xác định',
+      ngay: realSum.ngay_ban_hanh || 'Chưa xác định',
+      co_quan: realSum.co_quan_ban_hanh || 'Chưa xác định',
+      nguoi_ky: realSum.nguoi_ky || 'Không có thông tin',
+      linh_vuc: realSum.linh_vuc || 'Chưa phân loại',
+      hieu_luc: realSum.thoi_han_hieu_luc || 'Không đề cập',
+      muc_do: realSum.muc_do_quan_trong || 'Chưa rõ'
     },
-    tldr: realSum.tom_tat_ngan || MOCK.tldr,
-    tom_tat: realSum.tom_tat_day_du || MOCK.tom_tat,
+    tldr: realSum.tom_tat_ngan || '',
+    tom_tat: realSum.tom_tat_day_du || 'Không có tóm tắt chi tiết.',
     insights: (realSum.diem_chinh && realSum.diem_chinh.length > 0)
       ? realSum.diem_chinh.map((p, i) => ({ title: `Nội dung ${i+1}`, body: p }))
-      : MOCK.insights,
+      : [],
     entities: {
-      organizations: realSum.co_quan_ban_hanh ? [realSum.co_quan_ban_hanh] : MOCK.entities.organizations,
-      people: realSum.nguoi_ky ? [realSum.nguoi_ky] : MOCK.entities.people,
-      laws: (realSum.van_ban_lien_quan && realSum.van_ban_lien_quan.length > 0) ? realSum.van_ban_lien_quan : MOCK.entities.laws,
-      dates: realSum.thoi_han_hieu_luc ? [realSum.thoi_han_hieu_luc] : MOCK.entities.dates
+      organizations: realSum.co_quan_ban_hanh ? [realSum.co_quan_ban_hanh] : [],
+      people: realSum.nguoi_ky ? [realSum.nguoi_ky] : [],
+      laws: (realSum.van_ban_lien_quan && realSum.van_ban_lien_quan.length > 0) ? realSum.van_ban_lien_quan : [],
+      dates: realSum.thoi_han_hieu_luc ? [realSum.thoi_han_hieu_luc] : []
     },
-    keywords: (realSum.tu_khoa && realSum.tu_khoa.length > 0) ? realSum.tu_khoa : MOCK.keywords,
+    keywords: (realSum.tu_khoa && realSum.tu_khoa.length > 0) ? realSum.tu_khoa : [],
     faqs: (realSum.nghia_vu_va_quyen_han && realSum.nghia_vu_va_quyen_han.length > 0)
-      ? realSum.nghia_vu_va_quyen_han.map(o => ({ q: "Nghĩa vụ / Quyền hạn", a: o }))
-      : MOCK.faqs
+      ? realSum.nghia_vu_va_quyen_han.map(o => ({ q: "Quy định / Quyền hạn", a: o }))
+      : []
   } : MOCK;
 
-  const { meta, tldr, tom_tat, insights, entities, keywords, faqs } = displayData;
+  const { meta, tldr, tom_tat, insights, entities, keywords, faqs: initialFaqs } = displayData;
+
+  const [faqs, setFaqs] = useState(initialFaqs);
+  const [chatInput, setChatInput] = useState('');
+  const [isAsking, setIsAsking] = useState(false);
 
   const pages = JSON.parse(localStorage.getItem('last_processed_pages') || 'null') || [
     { original_url: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4', annotated_url: null, stamps: [] }
@@ -196,7 +201,7 @@ export default function ResultsPage() {
 
       {/* ── LEFT: Document Preview ────────────────────────── */}
       <div style={{
-        width: 340, flexShrink: 0, borderRight: '1px solid var(--border)',
+        width: 560, flexShrink: 0, borderRight: '1px solid var(--border)',
         overflowY: 'auto', padding: '20px 16px', background: 'var(--bg-secondary)'
       }}>
         {/* Doc identity chip */}
@@ -249,12 +254,12 @@ export default function ResultsPage() {
         {/* Actions */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 16 }}>
           <button className="btn btn-primary" style={{ justifyContent: 'center' }}><Download size={14} /> Xuất Excel</button>
-          <button className="btn btn-ghost" style={{ justifyContent: 'center' }}><RefreshCw size={14} /> Xử lý lại</button>
+          <button className="btn btn-ghost" style={{ justifyContent: 'center' }} onClick={() => navigate('/')}><RefreshCw size={14} /> Xử lý lại</button>
         </div>
       </div>
 
       {/* ── CENTER: Analysis ──────────────────────────────── */}
-      <div style={{ flex: 1, overflowY: 'auto', padding: '28px 28px' }}>
+      <div style={{ flex: 1, maxWidth: 780, overflowY: 'auto', padding: '28px 28px' }}>
 
         {/* Warning banner when LLM data is incomplete */}
         {isPartialData && (
@@ -316,6 +321,37 @@ export default function ResultsPage() {
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {faqs.map((faq, i) => <FaqCard key={i} {...faq} />)}
+            <form onSubmit={async (e) => {
+              e.preventDefault();
+              if (!chatInput.trim() || isAsking) return;
+              const q = chatInput.trim();
+              setChatInput('');
+              setIsAsking(true);
+              setFaqs(prev => [...prev, { q, a: '⏳ Đang phân tích câu trả lời...' }]);
+              try {
+                const ctx = JSON.parse(localStorage.getItem('last_summary'))?.extracted_text || tom_tat;
+                const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+                const res = await fetch(`${API_URL}/api/chat`, {
+                  method: 'POST', headers: {'Content-Type': 'application/json'},
+                  body: JSON.stringify({ question: q, context: ctx })
+                });
+                const data = await res.json();
+                setFaqs(prev => prev.map((f, i) => i === prev.length - 1 ? { q, a: data.answer || data.error } : f));
+              } catch (err) {
+                 setFaqs(prev => prev.map((f, i) => i === prev.length - 1 ? { q, a: '❌ Lỗi kết nối AI.' } : f));
+              }
+              setIsAsking(false);
+            }} style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+              <input 
+                value={chatInput} onChange={e => setChatInput(e.target.value)}
+                placeholder="Hỏi AI thêm về văn bản này (Ví dụ: Đối tượng áp dụng là ai?)..." 
+                disabled={isAsking}
+                style={{ flex: 1, padding: '12px 16px', borderRadius: 10, border: '1px solid var(--border)', background: 'white', fontSize: 13 }}
+              />
+              <button type="submit" disabled={isAsking} className="btn btn-primary" style={{ padding: '0 20px', borderRadius: 10, opacity: isAsking ? 0.7 : 1 }}>
+                {isAsking ? 'Đang hỏi...' : 'Hỏi AI'}
+              </button>
+            </form>
           </div>
         </section>
       </div>

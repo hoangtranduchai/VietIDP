@@ -77,7 +77,8 @@ app.post('/api/process', upload.single('document'), (req, res) => {
         success: true,
         pages: processedPages,
         confidence_avg: result.confidence_avg,
-        summary: result.summary || null
+        summary: result.summary || null,
+        extracted_text: result.extracted_text || ''
       });
 
     } catch (e) {
@@ -119,6 +120,59 @@ app.post('/api/summarize', upload.single('document'), (req, res) => {
   });
 });
 
+// API Chatbot hỏi đáp
+app.post('/api/chat', (req, res) => {
+  const { question, context } = req.body;
+  if (!question || !context) return res.status(400).json({ error: 'Thiếu question hoặc context' });
+
+  const payload = JSON.stringify({
+    model: 'qwen2.5:1.5b',
+    messages: [
+      {
+        role: "system",
+        content: "Bạn là chuyên gia phân tích văn bản. Hãy đọc kỹ tài liệu được cung cấp và trả lời câu hỏi của người dùng TRỰC TIẾP dựa vào văn bản. Bắt buộc: 1) KHÔNG được tự nghĩ ra. 2) Cố gắng trích xuất đầy đủ và chính xác (ngày tháng, số hiệu, nội dung). 3) Trả lời ngắn gọn bằng tiếng Việt. Nếu tài liệu không chứa thông tin, hãy nói 'Tôi không tìm thấy'."
+      },
+      {
+        role: "user",
+        content: `[TÀI LIỆU VĂN BẢN]\n${context}\n\n[CÂU HỎI CỦA NGƯỜI DÙNG]\n${question}`
+      }
+    ],
+    stream: true,
+    options: {
+      temperature: 0.1,
+      top_p: 0.3,
+    }
+  });
+
+  const options = {
+    hostname: '127.0.0.1',
+    port: 11434,
+    path: '/api/chat',
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' }
+  };
+
+  const ollamaReq = require('http').request(options, (ollamaRes) => {
+    let data = '';
+    ollamaRes.on('data', chunk => { data += chunk; });
+    ollamaRes.on('end', () => {
+      try {
+        const lines = data.trim().split('\n');
+        let fullResponse = '';
+        lines.forEach(line => {
+          if (line) fullResponse += JSON.parse(line).message.content;
+        });
+        res.json({ answer: fullResponse });
+      } catch (err) {
+        res.status(500).json({ error: 'Ollama parse error' });
+      }
+    });
+  });
+
+  ollamaReq.on('error', (e) => res.status(500).json({ error: e.message }));
+  ollamaReq.write(payload);
+  ollamaReq.end();
+});
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'healthy', version: '2.0.0' });

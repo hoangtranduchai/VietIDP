@@ -100,6 +100,19 @@ VĂN BẢN CẦN PHÂN TÍCH:
             if json_match:
                 try:
                     summary = json.loads(json_match.group())
+                    # Heuristic Fallback cho 1.5B Model: Nếu thiếu người ký, tìm ở cuối văn bản
+                    if not summary.get("nguoi_ky") or summary.get("nguoi_ky") == "Không có thông tin":
+                        lines = [line.strip() for line in text.split('\n') if line.strip()]
+                        # Quét 15 dòng cuối từ dưới lên
+                        for line in reversed(lines[-15:]):
+                            words = line.split()
+                            # Tên người Việt Nam thường có 2-5 chữ, viết hoa chữ cái đầu, không chứa số/kí tự lạ
+                            if 2 <= len(words) <= 5 and line.istitle() and not any(c.isdigit() for c in line) and not line.endswith(':'):
+                                # Loại bỏ các chức danh thường bị viết hoa nhầm
+                                if not any(kw in line.lower() for kw in ['chủ tịch', 'giám đốc', 'bộ trưởng', 'thứ trưởng', 'trưởng phòng']):
+                                    summary["nguoi_ky"] = line
+                                    break
+                                    
                     return summary, None
                 except json.JSONDecodeError:
                     if attempt < MAX_RETRIES - 1:

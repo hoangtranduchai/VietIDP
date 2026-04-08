@@ -9,7 +9,7 @@ import fitz  # PyMuPDF
 import numpy as np
 from ultralytics import YOLO
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MODEL_PATH = os.path.join(BASE_DIR, "models", "stamp_model", "weights", "best.pt")
 
 # DPI for PDF rendering (200 recommended for small text)
@@ -92,12 +92,19 @@ def detect_and_draw(img_path):
                 for box in r.boxes:
                     x1, y1, x2, y2 = box.xyxy[0].tolist()
                     conf = float(box.conf[0])
+                    bw = x2 - x1
+                    bh = y2 - y1
+                    
+                    # Filter false positives: ignore if confidence is low, or if aspect ratio is extreme (text lines)
+                    if conf < 0.8 or bw/bh > 3.5 or bh/bw > 3.5:
+                        continue
+                        
                     total_conf += conf
                     total_stamps += 1
 
                     stamps.append({
                         "x": int(x1), "y": int(y1),
-                        "w": int(x2 - x1), "h": int(y2 - y1),
+                        "w": int(bw), "h": int(bh),
                         "confidence": round(conf * 100, 2)
                     })
 
@@ -134,7 +141,8 @@ def detect_and_draw(img_path):
     print(json.dumps({
         "pages": pages_result,
         "confidence_avg": avg_conf,
-        "summary": summary_data
+        "summary": summary_data,
+        "extracted_text": extracted_text
     }))
 
 

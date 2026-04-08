@@ -1,0 +1,7 @@
+﻿apps/backend/index.js
+apps/frontend/src/app.jsx
+apps/frontend/src/pages/resultspage.jsx
+run_vietidp.bat
+scripts/detect_api.py
+scripts/summarize.py
+src/config.py
