@@ -1,0 +1,5 @@
+paddlepaddle-gpu>=2.6.0
+paddleocr>=2.7.0
+bitsandbytes>=0.43.0
+peft>=0.10.0
+trl>=0.8.0
