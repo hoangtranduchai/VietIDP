@@ -1,17 +1,70 @@
-# AI Science - VietIDP
+# ==========================================
+# VietIDP - MLOps & Local Research Gitignore
+# ==========================================
+
+# 1. Python Environment & Cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+env.bak/
+venv.bak/
+
+# 2. Data (QUAN TRỌNG: Tuyệt đối không đẩy Data local lên Git)
+data/raw/*
+data/interim/*
+data/processed/*
+!data/raw/.gitkeep
+!data/interim/.gitkeep
+!data/processed/.gitkeep
+
+# Dành cho các thư mục cũ (phòng ngừa băm nhỏ)
+stamps_dataset/
+stamps_transparent/
+
+# 3. Model Weights & Checkpoints (Tránh sập GitHub giới hạn 100MB)
+models/base_models/*
+models/finetuned/*
+models/stamp_model/*
+!models/base_models/.gitkeep
+!models/finetuned/.gitkeep
+!models/stamp_model/.gitkeep
+
+# Bỏ qua tệp trọng số đơn lẻ
+*.pt
+*.pth
+*.onnx
+*.safetensors
+*.bin
+*.gguf
+
+# 4. Logs & Metrics
+logs/
+*.log
+apps/backend/out.log
+apps/backend/err.log
+apps/backend/uploads/
+
+# 5. Node Ecosystem (Frontend/Backend)
 node_modules/
-backend/node_modules/
-frontend/node_modules/
-backend/uploads/
-backend/out.log
-backend/err.log
-ai/models/
-ai/__pycache__/
-*.pyc
-*.pyo
+apps/frontend/node_modules/
+apps/backend/node_modules/
+dist/
+build/
+.vite/
+
+# 6. Environment configs (Bảo mật 100% On-premise)
 .env
+.env.local
+.env.production
+
+# 7. OS & IDE
 .DS_Store
 Thumbs.db
-ai/dataset/images/
-ai/dataset/labels/
-stamps_transparent/
+.vscode/
+.idea/
+.ipynb_checkpoints/
