@@ -2,7 +2,11 @@ import cv2
 import numpy as np
 import os
 import glob
-from rembg import remove
+from rembg import remove, new_session
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
+# Optimize: Initiate session once
+session = new_session()
 
 def remove_stamp_bg_hybrid(image_path, output_path):
     img = cv2.imread(image_path)
@@ -10,8 +14,8 @@ def remove_stamp_bg_hybrid(image_path, output_path):
         return False
         
     # 1. Dùng AI (Rembg) để cắt hình khối con dấu
-    # Giúp loại bỏ hoàn toàn nhiễu bên ngoài như bàn tay, mặt bàn, cạnh giấy bị đen, v.v.
-    rembg_out = remove(img)
+    # Truyền session vào để tối ưu tốc độ x10 lần
+    rembg_out = remove(img, session=session)
     
     # Kênh Alpha của rembg (Mặt nạ bao quanh con dấu)
     ai_alpha = rembg_out[:, :, 3]
@@ -33,32 +37,34 @@ def remove_stamp_bg_hybrid(image_path, output_path):
     bg_intensity = np.median(gray[mask])
     
     if bg_intensity > 128:
-        # Nền giấy sáng (trắng/vàng/hồng/xám lợt), nét mực đậm hơn nền
         WHITE = min(255.0, bg_intensity + 15)
         DARK = max(0.0, bg_intensity - 60)
         ink_alpha = (WHITE - gray) / (WHITE - DARK + 1e-5) * 255.0
     else:
-        # Nền giấy tối (hoặc nền đen), nét phẩy mực sáng hơn nền
         BLACK = max(0.0, bg_intensity - 15)
         LIGHT = min(255.0, bg_intensity + 60)
         ink_alpha = (gray - BLACK) / (LIGHT - BLACK + 1e-5) * 255.0
         
     ink_alpha = np.clip(ink_alpha, 0, 255).astype(np.uint8)
-    
-    # Tăng cường viền chữ
     ink_alpha = cv2.GaussianBlur(ink_alpha, (3, 3), 0)
     
-    # 3. KẾT HỢP: Lấy vùng giao nhau giữa AI (cắt viền ngoài) và Thuật toán (khoét lõi trong)
+    # 3. KẾT HỢP
     final_alpha = cv2.bitwise_and(ai_alpha, ink_alpha)
     
-    # Khôi phục màu BGR gốc của ảnh ban đầu (img) thay vì rembg_out để màu trung thực nhất
-    # (Do rembg_out nền đen có thể ám màu viền)
     b, g, r = cv2.split(img)
     rgba = [b, g, r, final_alpha]
     dst = cv2.merge(rgba, 4)
     
     cv2.imwrite(output_path, dst)
     return True
+
+def process_single_image(file_path, output_dir):
+    filename = os.path.basename(file_path)
+    name_only = os.path.splitext(filename)[0]
+    output_path = os.path.join(output_dir, f"{name_only}.png")
+    if remove_stamp_bg_hybrid(file_path, output_path):
+        return True
+    return False
 
 def process_batch(input_dir, output_dir):
     if not os.path.exists(output_dir):
@@ -69,20 +75,19 @@ def process_batch(input_dir, output_dir):
     for ext in extensions:
         image_files.extend(glob.glob(os.path.join(input_dir, ext)))
         
-    print(f"Bắt đầu xử lý {len(image_files)} ảnh bằng thuật toán HYBRID (AI + OpenCV)...")
+    print(f"Bắt đầu xử lý {len(image_files)} ảnh bằng thuật toán HYBRID (AI + OpenCV) đa múi giờ...")
     
     success_count = 0
-    for idx, file_path in enumerate(image_files):
-        filename = os.path.basename(file_path)
-        name_only = os.path.splitext(filename)[0]
-        output_path = os.path.join(output_dir, f"{name_only}.png")
+    # Optimize: Use ThreadPoolExecutor to process images in parallel (Rembg via ONNX supports multithreading nicely)
+    with ThreadPoolExecutor(max_workers=4) as executor:
+        futures = {executor.submit(process_single_image, path, output_dir): path for path in image_files}
         
-        if remove_stamp_bg_hybrid(file_path, output_path):
-            success_count += 1
-            
-        if (idx+1) % 20 == 0:
-            print(f" Đã xử lý {idx+1}/{len(image_files)} ảnh...")
-            
+        for i, future in enumerate(as_completed(futures)):
+            if future.result():
+                success_count += 1
+            if (i + 1) % 20 == 0:
+                print(f" Đã xử lý {i + 1}/{len(image_files)} ảnh...")
+                
     print(f" Hoàn tất! Đã xử lý xong toàn bộ {success_count} ảnh.")
 
 if __name__ == "__main__":
@@ -90,3 +95,4 @@ if __name__ == "__main__":
     INPUT_FOLDER = os.path.join(pwd, "..", "data", "raw", "stamps_raw")
     OUTPUT_FOLDER = os.path.join(pwd, "..", "data", "interim", "stamps_transparent")
     process_batch(INPUT_FOLDER, OUTPUT_FOLDER)
+
