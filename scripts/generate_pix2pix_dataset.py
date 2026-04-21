@@ -7,8 +7,8 @@ from tqdm import tqdm
 
 # Cấu hình Path chuẩn MLOps
 BASE_DIR = Path(__file__).resolve().parent.parent
-STAMPS_DIR = BASE_DIR / "data" / "interim" / "stamps_transparent"
-BG_TEXT_DIR = BASE_DIR / "data" / "interim" / "document_crops"  # Nơi chứa 2200 ảnh A4 sạch
+STAMPS_DIR = BASE_DIR / "data" / "interim" / "stamps_transparent" # Dùng ảnh đã xóa nền
+BG_TEXT_DIR = BASE_DIR / "data" / "interim" / "document_crops"      # Thư mục chứa các ảnh crop văn bản sạch (Không dấu)
 OUTPUT_DIR = BASE_DIR / "data" / "processed" / "pix2pix_dataset"
 
 NUM_IMAGES = 10000  # Tạo dư dả 10.000 samples từ 2200 tờ A4 để Train model cứng cáp nhất
