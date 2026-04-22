@@ -35,7 +35,7 @@ class Config:
     # ── Model Directories ────────────────────────────────────────────────
     MODELS_DIR = BASE_DIR / "models"
     STAMP_DETECTION_MODEL = MODELS_DIR / "stamp_model" / "weights" / "best.pt"
-    STAMP_REMOVAL_MODEL = MODELS_DIR / "stamp_removal" / "best_generator.pth"
+    STAMP_REMOVAL_MODEL = MODELS_DIR / "finetuned" / "stamp_removal_gan" / "best_generator.pth"
     LLM_ADAPTER_PATH = MODELS_DIR / "qwen_finetuned" / "lora_adapters"
     YOLO_BASE_MODEL = BASE_DIR / "yolov8n.pt"
 

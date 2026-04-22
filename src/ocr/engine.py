@@ -48,9 +48,10 @@ class VietnameseOCREngine:
                 use_gpu = False
 
         try:
-            from paddleocr import PaddleOCR
+            from paddleocr import PaddleOCR, PPStructure
             from src.config import Config
 
+            # Lõi Nhận diện Chữ Quốc ngữ (Standard Det & Rec)
             self.ocr = PaddleOCR(
                 use_angle_cls=True,
                 lang=lang,
@@ -61,7 +62,18 @@ class VietnameseOCREngine:
                 rec_batch_num=Config.OCR_REC_BATCH_NUM,
                 max_text_length=100,
             )
-            print("✅ PaddleOCR initialized (Vietnamese)")
+            
+            # Lõi Phân tích Bố cục Không gian (Spatial Layout Parser)
+            # Áp dụng cho các Bảng Biểu, Trích Yếu, Chữ Ký phức tạp
+            self.layout_engine = PPStructure(
+                show_log=False, 
+                image_orientation=True,
+                lang=lang,
+                layout=True,
+                table=True, # Bật cơ chế nhận diện Bảng biểu
+                ocr=True
+            )
+            print("✅ PaddleOCR & PP-Structure Layout Engine initialized (Vietnamese)")
         except ImportError:
             print("⚠️ PaddleOCR not installed. Run: pip install paddlepaddle paddleocr")
         except Exception as e:
@@ -94,42 +106,73 @@ class VietnameseOCREngine:
             image_path = image_input
 
         try:
-            result = self.ocr.ocr(image_path, cls=True)
+            # Ưu tiên sử dụng PP-Structure để phân tích Layout tổng thể
+            layout_result = self.layout_engine(image_path)
+            
+            lines = []
+            all_text = []
+            confidences = []
+            
+            # Nếu PP-Structure hoạt động thành công
+            if layout_result:
+                # Xử lý theo từng Vùng Không gian (Region)
+                for region in layout_result:
+                    region_type = region['type'] # e.g. text, table, figure, text_part
+                    if 'res' not in region:
+                        continue
+                        
+                    res = region['res']
+                    
+                    # Nếu là dạng text thông thường hoặc là kết quả OCR trong Table
+                    if isinstance(res, list):
+                        for line in res:
+                            # Tùy theo cấu trúc trả về (PPStructure đôi khi trả Dict hoặc Tuple)
+                            if isinstance(line, dict) and 'text' in line:
+                                bbox = line.get('text_region', [])
+                                text = line['text']
+                                conf = line.get('confidence', 0.9)
+                            elif len(line) >= 2:
+                                bbox = line[0]
+                                text = line[1][0]
+                                conf = line[1][1]
+                            else:
+                                continue
+                                
+                            text = postprocess_vietnamese(text)
+                            lines.append({'bbox': bbox, 'text': text, 'confidence': conf, 'type': region_type})
+                            confidences.append(conf)
+            
+                # Fallback Nếu layout parser trả trống (ít xảy ra)
+                if not lines:
+                    result = self.ocr.ocr(image_path, cls=True)
+                    if result and result[0]:
+                        for line in result[0]:
+                            bbox = line[0]
+                            text = postprocess_vietnamese(line[1][0])
+                            conf = line[1][1]
+                            lines.append({'bbox': bbox, 'text': text, 'confidence': conf, 'type': 'text'})
+                            confidences.append(conf)
+
+            # Phân tách logic Bảng biểu (Markdown format) và Text thường
+            # Để LLM dễ dàng hiểu quy tắc dòng và cột
+            structured_text = []
+            
+            # Sắp xếp thô theo Y coordinate (Giữ lại nếu LayoutEngine không bắt thứ tự tốt)
+            lines.sort(key=lambda x: x['bbox'][0][1] if x['bbox'] else 0)
+            
+            for l in lines:
+                prefix = f"[{l['type'].upper()}]: " if l['type'] != 'text' else ""
+                structured_text.append(f"{prefix}{l['text']}")
+
+            return {
+                'text': '\n'.join(structured_text),
+                'lines': lines,
+                'confidence': float(np.mean(confidences)) if confidences else 0.0
+            }
+            
         finally:
             if temp_path and os.path.exists(temp_path):
                 os.remove(temp_path)
-
-        if not result or not result[0]:
-            return {'text': '', 'lines': [], 'confidence': 0.0}
-
-        lines = []
-        all_text = []
-        confidences = []
-
-        for line in result[0]:
-            bbox = line[0]
-            text = line[1][0]
-            conf = line[1][1]
-
-            # Post-processing tiếng Việt
-            text = postprocess_vietnamese(text)
-
-            lines.append({
-                'bbox': bbox,
-                'text': text,
-                'confidence': conf
-            })
-            all_text.append(text)
-            confidences.append(conf)
-
-        # Sắp xếp theo vị trí Y (trên → dưới)
-        lines.sort(key=lambda x: x['bbox'][0][1])
-
-        return {
-            'text': '\n'.join([l['text'] for l in lines]),
-            'lines': lines,
-            'confidence': float(np.mean(confidences)) if confidences else 0.0
-        }
 
     def process_pdf(self, pdf_path, dpi=None):
         """

@@ -82,34 +82,51 @@ Dự án được chia thành **6 Phase** theo đúng đề cương nghiên cứ
 
 ---
 
-### Phase 2: Stamp Removal - Pix2Pix GAN (The Eye - Part 1)
+### Phase 2: Transparent Stamp Matting (The Extractor)
 
-#### [NEW] [src/preprocessing/stamp_removal_gan.py](file:///e:/OCR-LLM_Research/src/preprocessing/stamp_removal_gan.py)
-- Kiến trúc Pix2Pix GAN (Generator U-Net + PatchGAN Discriminator)
-- Training pipeline trên cặp {ảnh có dấu} → {ảnh sạch}
-
-#### [NEW] [src/preprocessing/image_preprocessor.py](file:///e:/OCR-LLM_Research/src/preprocessing/image_preprocessor.py)
-- Auto-deskew (xoay ảnh thẳng)
-- Denoising (khử nhiễu)
-- Binarization (nhị phân hóa)
-- Contrast enhancement
+#### [MODIFY/NEW] [src/preprocessing/stamp_matting.py](file:///e:/OCR-LLM_Research/src/preprocessing/stamp_matting.py)
+- Kế thừa và chuẩn hóa đoạn code từ `scripts/remove_bg_batch.py` thành lớp OOP `HybridStampMatting`.
+- Chạy siêu nhẹ, không tốn VRAM: Dùng **Rembg** lấy Alpha mask sơ bộ, dùng **OpenCV** (Math Thresholding) quét ảnh xám loại bỏ các điểm ảnh đen của chữ, giữ lại mực đỏ.
+- Khớp nối trực tiếp với đầu ra của YOLOv8:
+  1. Nhận Bounding Box BGR Crop từ YOLO (Phase 1).
+  2. Bóc tách và trả về ảnh RGBA trong suốt.
+  3. Cung cấp API trực tiếp lưu thành file hoặc trả về memory array cho Giao diện UI.
 
 ---
 
-### Phase 3: OCR Engine (The Eye - Part 2)
+### Phase 3: Backend API (Giao tiếp Hệ thống - Tầng Stamp)
 
-#### [NEW] [src/ocr/ocr_engine.py](file:///e:/OCR-LLM_Research/src/ocr/ocr_engine.py)
-- Wrapper cho PaddleOCR with Vietnamese language support
-- Text detection + Text recognition pipeline
-- Post-processing: spell correction, format normalization
+#### [MODIFY] [src/api/fastapi_app.py](file:///e:/OCR-LLM_Research/src/api/fastapi_app.py)
+- Viết lại/Bổ sung endpoint `POST /api/extract_stamp` chuyên dụng cho giao diện web.
+- Flow xử lý chính tại Endpoint:
+  1. Nhận file Upload (PDF/Image) từ người dùng.
+  2. Bắn qua model YOLOv8 (file `best.pt` ở Giai đoạn 1) để lấy array tọa độ chính xác `[x1, y1, x2, y2]`.
+  3. Đẩy mảng ảnh Bounding Box đó qua class `HybridStampMatting` (Giai đoạn 2) để khử bóng chữ đen và nền trắng.
+  4. (Tương lai) Kích hoạt chạy nền mạng Pix2Pix xóa dấu để OCR LLM đọc sau.
+  5. Đóng gói ảnh RGBA kết quả ra thành chuỗi `Base64`, trả về JSON cùng tọa độ để React Frontend render "phù phép" con dấu đỏ nổi lề giấy.
 
-#### [NEW] [src/ocr/ocr_evaluator.py](file:///e:/OCR-LLM_Research/src/ocr/ocr_evaluator.py)
-- Đo CER (Character Error Rate) và WER (Word Error Rate)
-- So sánh OCR output với ground truth từ docx
+#### [NEW] [src/pipeline/stamp_pipeline.py](file:///e:/OCR-LLM_Research/src/pipeline/stamp_pipeline.py)
+- Cấu trúc class `StampDetectorPipeline` giúp load trước bộ tạ weights YOLOv8 và Rembg Session vào RAM để phục vụ Web với độ trễ cực thấp (<50ms).
 
 ---
 
-### Phase 4: LLM Fine-tuning (The Brain)
+### Phase 4: Giao diện React Chuyên nghiệp (GovTech/Enterprise Dashboard)
+
+#### Thiết kế Hành chính Quốc gia (Enterprise Minimalist)
+![Premium UI Mockup](file:///C:/Users/ADMIN/.gemini/antigravity/brain/3cc31bf7-580b-42bd-b678-63bae1be7321/enterprise_ui_mockup_1776848744632.png)
+*(Bản vẽ UI/UX đề xuất: Phong cách Light-mode hiện đại, sáng sủa, thanh lịch, chuẩn mực và mang tính bảo mật đặc trưng của hệ thống hành chính)*
+
+#### [NEW] [apps/frontend/src/components/DocumentViewer.jsx](file:///e:/OCR-LLM_Research/OCR-LLM_Research/apps/frontend/src/components/DocumentViewer.jsx)
+- **Vùng chính (Main Viewer):** Giao diện hiển thị PDF/Layout trắng sáng sắc nét (Off-white `#F8FAFC`). Khác với kiểu viền Neon giải trí, Bounding Box AI ở đây là một đường nét đứt, chính xác màu Đỏ Hành Chính (`#DC2626`) đi kèm góc tọa độ vuông vắn (như giao diện phần mềm Adobe Acrobat hay các hệ thống chuyên ngành Khoa học).
+- **Hiệu ứng Hoạt hình (Framer Motion):** Giữ sự mượt mà nhưng bỏ đi yếu tố "nảy" (bounce) để tạo cảm giác nghiêm túc. Viền đỏ sẽ xuất hiện bằng hiệu ứng Fade In, sau đó ảnh crop sẽ "Trượt" (Slide & Ease-in-out) một cách thanh lịch sang thanh công cụ bên phải mà không gây mất tập trung.
+
+#### [NEW] [apps/frontend/src/components/StampPanel.jsx](file:///e:/OCR-LLM_Research/OCR-LLM_Research/apps/frontend/src/components/StampPanel.jsx)
+- **Panel Điều Kiển (Inspector Sidebar):** Khối UI nằm bên lề phải với tông màu trắng tinh khôi và Shadow đổ bóng tinh tế (Soft material shadow). Thể hiện các metadata phân tích của AI.
+- **Mặt nền Trong suốt:** Một Container bao bọc kết quả cắt nền trong suốt RGBA. Hình nền sử dụng lưới ô Caro (Checkerboard) rất phổ biến trong các báo cáo trích xuất hình ảnh, làm minh chứng trực quan cho sự triệt để của kỹ thuật OCR/Matting.
+
+---
+
+### Phase 5: LLM Fine-tuning (The Brain)
 
 #### [NEW] [src/llm/finetune_qwen.py](file:///e:/OCR-LLM_Research/src/llm/finetune_qwen.py)
 - QLoRA fine-tuning pipeline cho Qwen-2.5-7B-Instruct
@@ -195,19 +212,25 @@ e:/OCR-LLM_Research/
    ```
    Verify: Kiểm tra file ảnh stamp được tạo ra, mở xem bằng mắt
 
-2. **Phase 2 - Stamp Removal**:
+2. **Phase 2 - Stamp Matting**:
    ```bash
-   python -m src.preprocessing.stamp_removal_gan --test --input data/processed/stamped_images --limit 5
+   python -m src.preprocessing.stamp_matting --test --input data/raw/stamps_raw --output data/interim/stamps_transparent
    ```
-   Verify: So sánh ảnh trước/sau xóa dấu bằng SSIM score
+   Verify: Mở ảnh đầu ra kiểm tra bằng mắt, nền phải trong suốt chuẩn xác, mực đỏ còn nguyên, không dính chữ đen.
 
-3. **Phase 3 - OCR**:
+3. **Phase 3 - Backend API**:
    ```bash
-   python -m src.ocr.ocr_evaluator --input data/processed/clean_images --ground-truth data/raw_word_files --limit 20
+   uvicorn src.api.fastapi_app:app --reload --port 8000
    ```
-   Verify: CER < 5%, WER < 10%
+   Verify: Dùng Postman hoặc CURL gửi file ảnh có dấu vào endpoint `/api/extract_stamp`. Đảm bảo JSON response trả về chứa trường base64 hợp lệ, khi decode ra là ảnh PNG trong suốt chính xác tuyệt đối.
 
-4. **Phase 4 - LLM**:
+4. **Phase 4 - UI React Component Test**:
+   ```bash
+   cd apps/frontend && npm run dev
+   ```
+   Verify: Upload file từ giao diện. Bounding Box neon đỏ bọc trúng con dấu. Animation bay đúng quỹ đạo sang phải. Nền Panel Caro hiện rõ với con dấu ở trung tâm.
+   
+5. **Phase 5 - LLM**:
    ```bash
    python -m src.llm.evaluator --model models/qwen-finetuned --test-data data/llm_training/test.json
    ```
