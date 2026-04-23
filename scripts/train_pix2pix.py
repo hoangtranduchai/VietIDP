@@ -9,8 +9,13 @@ Chạy: python scripts/train_pix2pix.py
 """
 
 import os
+import sys
+import cv2  # Fix Windows DLL conflict with torchvision
 import time
 import torch
+
+# Fix python path for importing src from the root directory
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import Dataset, DataLoader
@@ -82,6 +87,8 @@ def train_gan():
     # 2. Build Models
     generator = UNetGenerator().to(device)
     discriminator = PatchGANDiscriminator().to(device)
+    
+    # Mặc định khởi tạo trọng số ngẫu nhiên
     generator.apply(weights_init)
     discriminator.apply(weights_init)
 
@@ -96,11 +103,34 @@ def train_gan():
     out_dir = Config.MODELS_DIR / "finetuned" / "stamp_removal_gan"
     out_dir.mkdir(parents=True, exist_ok=True)
     
-    # 4. Vòng lặp Học (Training Loop)
+    # --- LOGIC RESUME TRAINING (TRƯỜNG HỢP 1) ---
+    start_epoch = 1
     num_epochs = Config.GAN_NUM_EPOCHS
+    
+    # Tìm checkpoint gần nhất
+    checkpoints = [f for f in os.listdir(out_dir) if f.startswith('checkpoint_ep') and f.endswith('.pth')]
+    if checkpoints:
+        # Lấy file có epoch cao nhất
+        checkpoints.sort(key=lambda x: int(x.replace('checkpoint_ep', '').replace('.pth', '')))
+        latest_checkpoint = out_dir / checkpoints[-1]
+        
+        print(f"🔄 Đang khôi phục quá trình huấn luyện từ: {latest_checkpoint}")
+        checkpoint = torch.load(latest_checkpoint, map_location=device)
+        
+        generator.load_state_dict(checkpoint['gen_state'])
+        discriminator.load_state_dict(checkpoint['disc_state'])
+        optimizer_G.load_state_dict(checkpoint['opt_g_state'])
+        optimizer_D.load_state_dict(checkpoint['opt_d_state'])
+        
+        start_epoch = checkpoint['epoch'] + 1
+        print(f"✅ Đã tải thành công (G, D, Opt_G, Opt_D). Sẽ tiếp tục chạy từ Epoch {start_epoch} đến {num_epochs}!")
+    else:
+        print(f"Bắt đầu huấn luyện mới hoàn toàn từ Epoch 1 đến {num_epochs}!")
+
+    # 4. Vòng lặp Học (Training Loop)
     lambda_L1 = Config.GAN_LAMBDA_L1
     
-    for epoch in range(1, num_epochs + 1):
+    for epoch in range(start_epoch, num_epochs + 1):
         generator.train()
         discriminator.train()
         
@@ -138,9 +168,20 @@ def train_gan():
             
         # Cuối mỗi epoch quan trọng tiến hành lưu lại bộ xương
         if epoch % 10 == 0 or epoch == num_epochs:
-            checkpoint_path = out_dir / f"generator_ep{epoch}.pth"
-            torch.save({'gen_state': generator.state_dict()}, checkpoint_path)
-            print(f"💾 Đã sao lưu Checkpoint Epoch {epoch} tại {checkpoint_path}")
+            checkpoint_path = out_dir / f"checkpoint_ep{epoch}.pth"
+            torch.save({
+                'epoch': epoch,
+                'gen_state': generator.state_dict(),
+                'disc_state': discriminator.state_dict(),
+                'opt_g_state': optimizer_G.state_dict(),
+                'opt_d_state': optimizer_D.state_dict()
+            }, checkpoint_path)
+            
+            # Lưu riêng bản best.pth (chỉ lấy Generator) để dùng cho inference
+            best_path = out_dir / "best_generator.pth"
+            torch.save({'gen_state': generator.state_dict()}, best_path)
+            
+            print(f"💾 Đã sao lưu Checkpoint Toàn diện (G+D+Opt) Epoch {epoch} tại {checkpoint_path}")
 
     # Đóng gói Model mạnh nhất
     best_path = out_dir / "best_generator.pth"

@@ -66,7 +66,7 @@ class Config:
     # ── GAN Stamp Removal ────────────────────────────────────────────────
     GAN_IMG_SIZE = 512
     GAN_BATCH_SIZE = 4
-    GAN_NUM_EPOCHS = 100
+    GAN_NUM_EPOCHS = 50
     GAN_LEARNING_RATE = 2e-4
     GAN_LAMBDA_L1 = 100
 

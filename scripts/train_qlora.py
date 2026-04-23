@@ -9,7 +9,11 @@ Sử dụng máy gia tốc Unsloth để giảm một nửa lượng VRAM tiêu 
 """
 
 import os
+import sys
 import torch
+
+# Fix python path for importing src from the root directory
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from datasets import load_dataset
 from trl import SFTTrainer
 from transformers import TrainingArguments

@@ -1,8 +1,93 @@
-# ==========================================
-# VietIDP - MLOps & Local Research Gitignore
-# ==========================================
+# =========================================================================
+# OCR-LLM RESEARCH - MASTER MLOPS GITIGNORE
+# =========================================================================
+# Mục tiêu: Đảm bảo bảo mật 100% dữ liệu hành chính (On-premise)
+#          Ngăn chặn rò rỉ tài nguyên, rác VRAM và giới hạn GitHub.
 
-# 1. Python Environment & Cache
+# -------------------------------------------------------------------------
+# 1. BẢO MẬT DỮ LIỆU & TÀI LIỆU (DATA SECURITY - CẤP ĐỘ 1)
+# Tuyệt đối không đẩy bất kỳ dữ liệu thật nào của Quốc gia/Cơ quan lên Mạng.
+# -------------------------------------------------------------------------
+data/raw/*
+data/interim/*
+data/processed/*
+data/raw_word_files/*
+data/llm_training/*
+!data/raw/.gitkeep
+!data/interim/.gitkeep
+!data/processed/.gitkeep
+
+# Thư mục chứa tài liệu Upload của người dùng qua giao diện Web
+apps/backend/uploads/
+apps/frontend/public/temp_uploads/
+
+# Các định dạng tài liệu nhạy cảm nếu vô tình để quên ở Root
+*.pdf
+*.docx
+*.doc
+*.png
+*.jpg
+*.jpeg
+*.tif
+*.tiff
+# Ngoại trừ các ảnh phục vụ cho README.md
+!docs/images/
+!README.md
+!*.md
+
+# -------------------------------------------------------------------------
+# 2. TRỌNG SỐ MÔ HÌNH & CHUYÊN GIA AI (MODEL WEIGHTS)
+# GitHub giới hạn 100MB/file. Đẩy models lên sẽ gây lỗi sập Repository.
+# -------------------------------------------------------------------------
+models/base_models/*
+models/finetuned/*
+models/stamp_model/*
+models/qwen_finetuned/*
+!models/base_models/.gitkeep
+!models/finetuned/.gitkeep
+!models/stamp_model/.gitkeep
+
+# Chặn mọi đuôi file Model khổng lồ
+*.pt
+*.pth
+*.onnx
+*.safetensors
+*.bin
+*.gguf
+*.h5
+*.pb
+*.tflite
+*.ckpt
+
+# -------------------------------------------------------------------------
+# 3. NHẬT KÝ HUẤN LUYỆN & THEO DÕI ĐO LƯỜNG (LOGS & METRICS)
+# -------------------------------------------------------------------------
+# Thư mục xuất hệ thống Unsloth/HuggingFace Trainer
+outputs/
+runs/
+wandb/
+.hydra/
+mlruns/
+
+# Logs Backend/Hệ thống
+logs/
+*.log
+apps/backend/out.log
+apps/backend/err.log
+
+# -------------------------------------------------------------------------
+# 4. THÔNG TIN CẤU HÌNH NHẠY CẢM (SECRETS & CONFIGS)
+# -------------------------------------------------------------------------
+.env
+.env.*
+!.env.example
+credentials.json
+client_secret.json
+auth.json
+
+# -------------------------------------------------------------------------
+# 5. MÔI TRƯỜNG PYTHON CỤC BỘ (PYTHON ENVIRONMENT)
+# -------------------------------------------------------------------------
 __pycache__/
 *.py[cod]
 *$py.class
@@ -13,58 +98,46 @@ venv/
 .venv/
 env.bak/
 venv.bak/
+pip-log.txt
+pip-delete-this-directory.txt
+.pytest_cache/
 
-# 2. Data (QUAN TRỌNG: Tuyệt đối không đẩy Data local lên Git)
-data/raw/*
-data/interim/*
-data/processed/*
-!data/raw/.gitkeep
-!data/interim/.gitkeep
-!data/processed/.gitkeep
+# -------------------------------------------------------------------------
+# 6. MÔI TRƯỜNG THỰC THI JUPYTER (NOTEBOOKS)
+# -------------------------------------------------------------------------
+.ipynb_checkpoints
+profile_default/
+ipython_config.py
 
-# Dành cho các thư mục cũ (phòng ngừa băm nhỏ)
-stamps_dataset/
-stamps_transparent/
-
-# 3. Model Weights & Checkpoints (Tránh sập GitHub giới hạn 100MB)
-models/base_models/*
-models/finetuned/*
-models/stamp_model/*
-!models/base_models/.gitkeep
-!models/finetuned/.gitkeep
-!models/stamp_model/.gitkeep
-
-# Bỏ qua tệp trọng số đơn lẻ
-*.pt
-*.pth
-*.onnx
-*.safetensors
-*.bin
-*.gguf
-
-# 4. Logs & Metrics
-logs/
-*.log
-apps/backend/out.log
-apps/backend/err.log
-apps/backend/uploads/
-
-# 5. Node Ecosystem (Frontend/Backend)
+# -------------------------------------------------------------------------
+# 7. MÔI TRƯỜNG REACT/NODEJS (FRONTEND/BACKEND)
+# -------------------------------------------------------------------------
 node_modules/
 apps/frontend/node_modules/
 apps/backend/node_modules/
 dist/
 build/
 .vite/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.next/
+out/
 
-# 6. Environment configs (Bảo mật 100% On-premise)
-.env
-.env.local
-.env.production
-
-# 7. OS & IDE
+# -------------------------------------------------------------------------
+# 8. HỆ ĐIỀU HÀNH & CÔNG CỤ PHÁT TRIỂN (OS & IDE)
+# -------------------------------------------------------------------------
 .DS_Store
-Thumbs.db
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+ehthumbs_vista.db
+[Tt]humbs.db
 .vscode/
 .idea/
-.ipynb_checkpoints/
+*.swp
+*.suo
+*.user
+*.pid

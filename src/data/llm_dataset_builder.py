@@ -7,8 +7,13 @@ tập dữ liệu (Dataset) chuẩn JSONL để huấn luyện mô hình ngôn n
 """
 
 import os
+import sys
 import json
 import glob
+
+# Fix python path for importing src from the root directory
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+
 from docx import Document
 from tqdm import tqdm
 
