@@ -31,7 +31,7 @@ class VietnameseOCREngine:
 
     def __init__(self, use_gpu=None, lang='vi'):
         """
-        Khởi tạo OCR engine.
+        Khởi tạo OCR engine với EasyOCR (ổn định trên Windows).
 
         Args:
             use_gpu: True/False/None (None = auto detect)
@@ -48,36 +48,14 @@ class VietnameseOCREngine:
                 use_gpu = False
 
         try:
-            from paddleocr import PaddleOCR, PPStructure
-            from src.config import Config
-
-            # Lõi Nhận diện Chữ Quốc ngữ (Standard Det & Rec)
-            self.ocr = PaddleOCR(
-                use_angle_cls=True,
-                lang=lang,
-                use_gpu=use_gpu,
-                show_log=False,
-                det_db_thresh=Config.OCR_DET_DB_THRESH,
-                det_db_box_thresh=Config.OCR_DET_DB_BOX_THRESH,
-                rec_batch_num=Config.OCR_REC_BATCH_NUM,
-                max_text_length=100,
-            )
-            
-            # Lõi Phân tích Bố cục Không gian (Spatial Layout Parser)
-            # Áp dụng cho các Bảng Biểu, Trích Yếu, Chữ Ký phức tạp
-            self.layout_engine = PPStructure(
-                show_log=False, 
-                image_orientation=True,
-                lang=lang,
-                layout=True,
-                table=True, # Bật cơ chế nhận diện Bảng biểu
-                ocr=True
-            )
-            print("✅ PaddleOCR & PP-Structure Layout Engine initialized (Vietnamese)")
+            import easyocr
+            # EasyOCR hỗ trợ tiếng Việt (vi) + tiếng Anh (en) song song
+            self.ocr = easyocr.Reader(['vi', 'en'], gpu=use_gpu, verbose=False)
+            print("✅ EasyOCR initialized (Vietnamese + English)")
         except ImportError:
-            print("⚠️ PaddleOCR not installed. Run: pip install paddlepaddle paddleocr")
+            print("⚠️ EasyOCR not installed. Run: pip install easyocr")
         except Exception as e:
-            print(f"⚠️ PaddleOCR initialization error: {e}")
+            print(f"⚠️ EasyOCR initialization error: {e}")
 
     def process_image(self, image_input):
         """
@@ -96,83 +74,30 @@ class VietnameseOCREngine:
         if self.ocr is None:
             return {'text': '', 'lines': [], 'confidence': 0.0}
 
-        # Nếu input là numpy array → lưu temp file
-        temp_path = None
-        if isinstance(image_input, np.ndarray):
-            temp_path = os.path.join(tempfile.gettempdir(), "vietidp_ocr_temp.png")
-            cv2.imwrite(temp_path, image_input)
-            image_path = temp_path
-        else:
-            image_path = image_input
-
         try:
-            # Ưu tiên sử dụng PP-Structure để phân tích Layout tổng thể
-            layout_result = self.layout_engine(image_path)
-            
             lines = []
-            all_text = []
             confidences = []
-            
-            # Nếu PP-Structure hoạt động thành công
-            if layout_result:
-                # Xử lý theo từng Vùng Không gian (Region)
-                for region in layout_result:
-                    region_type = region['type'] # e.g. text, table, figure, text_part
-                    if 'res' not in region:
-                        continue
-                        
-                    res = region['res']
-                    
-                    # Nếu là dạng text thông thường hoặc là kết quả OCR trong Table
-                    if isinstance(res, list):
-                        for line in res:
-                            # Tùy theo cấu trúc trả về (PPStructure đôi khi trả Dict hoặc Tuple)
-                            if isinstance(line, dict) and 'text' in line:
-                                bbox = line.get('text_region', [])
-                                text = line['text']
-                                conf = line.get('confidence', 0.9)
-                            elif len(line) >= 2:
-                                bbox = line[0]
-                                text = line[1][0]
-                                conf = line[1][1]
-                            else:
-                                continue
-                                
-                            text = postprocess_vietnamese(text)
-                            lines.append({'bbox': bbox, 'text': text, 'confidence': conf, 'type': region_type})
-                            confidences.append(conf)
-            
-                # Fallback Nếu layout parser trả trống (ít xảy ra)
-                if not lines:
-                    result = self.ocr.ocr(image_path, cls=True)
-                    if result and result[0]:
-                        for line in result[0]:
-                            bbox = line[0]
-                            text = postprocess_vietnamese(line[1][0])
-                            conf = line[1][1]
-                            lines.append({'bbox': bbox, 'text': text, 'confidence': conf, 'type': 'text'})
-                            confidences.append(conf)
 
-            # Phân tách logic Bảng biểu (Markdown format) và Text thường
-            # Để LLM dễ dàng hiểu quy tắc dòng và cột
-            structured_text = []
-            
-            # Sắp xếp thô theo Y coordinate (Giữ lại nếu LayoutEngine không bắt thứ tự tốt)
+            # EasyOCR nhận cả numpy array (BGR) lẫn file path
+            result = self.ocr.readtext(image_input, detail=1, paragraph=False)
+
+            for (bbox, text, conf) in result:
+                text = postprocess_vietnamese(text)
+                lines.append({'bbox': bbox, 'text': text, 'confidence': conf, 'type': 'text'})
+                confidences.append(conf)
+
+            # Sắp xếp theo Y coordinate (top → bottom)
             lines.sort(key=lambda x: x['bbox'][0][1] if x['bbox'] else 0)
-            
-            for l in lines:
-                prefix = f"[{l['type'].upper()}]: " if l['type'] != 'text' else ""
-                structured_text.append(f"{prefix}{l['text']}")
+            structured_text = [l['text'] for l in lines]
 
             return {
                 'text': '\n'.join(structured_text),
                 'lines': lines,
                 'confidence': float(np.mean(confidences)) if confidences else 0.0
             }
-            
-        finally:
-            if temp_path and os.path.exists(temp_path):
-                os.remove(temp_path)
+        except Exception as e:
+            print(f"⚠️ OCR error: {e}")
+            return {'text': '', 'lines': [], 'confidence': 0.0}
 
     def process_pdf(self, pdf_path, dpi=None):
         """

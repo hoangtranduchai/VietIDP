@@ -3,6 +3,6 @@
 
 from src.ocr.engine import VietnameseOCREngine
 from src.ocr.postprocess import postprocess_vietnamese
-from src.ocr.pdf_reader import PDFTextReader
+from src.ocr.pdf_reader import read_pdf_text
 
-__all__ = ["VietnameseOCREngine", "postprocess_vietnamese", "PDFTextReader"]
+__all__ = ["VietnameseOCREngine", "postprocess_vietnamese", "read_pdf_text"]

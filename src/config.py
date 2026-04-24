@@ -66,13 +66,13 @@ class Config:
     # ── GAN Stamp Removal ────────────────────────────────────────────────
     GAN_IMG_SIZE = 512
     GAN_BATCH_SIZE = 4
-    GAN_NUM_EPOCHS = 50
+    GAN_NUM_EPOCHS = 60
     GAN_LEARNING_RATE = 2e-4
     GAN_LAMBDA_L1 = 100
 
-    # ── LLM Fine-tuning (Qwen2.5-7B QLoRA) ──────────────────────────────
+    # ── LLM Fine-tuning (Qwen2.5-3B QLoRA) ──────────────────────────────
     LLM_BASE_MODEL = os.environ.get(
-        "LLM_BASE_MODEL", "Qwen/Qwen2.5-7B-Instruct"
+        "LLM_BASE_MODEL", "unsloth/Qwen2.5-3B-Instruct-bnb-4bit"
     )
     LORA_R = 16
     LORA_ALPHA = 32
@@ -82,8 +82,8 @@ class Config:
         "gate_proj", "up_proj", "down_proj"
     ]
     LLM_MAX_SEQ_LENGTH = 2048
-    LLM_BATCH_SIZE = 2
-    LLM_GRADIENT_ACCUM = 8
+    LLM_BATCH_SIZE = 1
+    LLM_GRADIENT_ACCUM = 4
     LLM_NUM_EPOCHS = 3
     LLM_LEARNING_RATE = 2e-4
 

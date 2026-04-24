@@ -49,6 +49,58 @@ def augment_stamp_for_patch(stamp, patch_size=512):
     
     return stamp_rotated
 
+def draw_synthetic_blue_signature(image):
+    """
+    Vẽ ngẫu nhiên các đường cong (Bezier/Polylines) màu XANH LAM giả lập chữ ký tay.
+    Giải quyết triệt để lỗi Out-of-Distribution (OOD) khi GAN xóa mất chữ ký thật.
+    """
+    h, w = image.shape[:2]
+    # Xác suất 60% sẽ vẽ chữ ký giả vào ảnh
+    if random.random() > 0.6:
+        return image
+        
+    result = image.copy()
+    
+    # Random màu xanh lam (Blue ink: B cao, G thấp, R thấp)
+    b = random.randint(150, 255)
+    g = random.randint(0, 100)
+    r = random.randint(0, 50)
+    color = (b, g, r)
+    thickness = random.randint(1, 3)
+    
+    # Tạo ngẫu nhiên 3-6 đường cong dính liền nhau mô phỏng chữ ký
+    num_strokes = random.randint(3, 6)
+    
+    # Vị trí ngẫu nhiên của chữ ký
+    start_x = random.randint(50, w - 150)
+    start_y = random.randint(50, h - 150)
+    
+    pts = [(start_x, start_y)]
+    for _ in range(num_strokes):
+        # Bước nhảy ngẫu nhiên để tạo các vòng lặp (loops) của chữ ký
+        dx = random.randint(-50, 100)
+        dy = random.randint(-50, 50)
+        
+        last_x, last_y = pts[-1]
+        new_x = max(0, min(w-1, last_x + dx))
+        new_y = max(0, min(h-1, last_y + dy))
+        pts.append((new_x, new_y))
+        
+    # Làm mượt đường gấp khúc thành đường cong (Catmull-Rom spline xấp xỉ)
+    pts_arr = np.array(pts, np.int32)
+    pts_arr = pts_arr.reshape((-1, 1, 2))
+    
+    # Vẽ chữ ký
+    cv2.polylines(result, [pts_arr], isClosed=False, color=color, thickness=thickness, lineType=cv2.LINE_AA)
+    
+    # Có thể vẽ thêm một đường gạch dưới đặc trưng của chữ ký
+    if random.random() > 0.5:
+        ul_start = (max(0, start_x - 20), min(h-1, start_y + 60))
+        ul_end = (min(w-1, start_x + 100), min(h-1, start_y + random.randint(50, 70)))
+        cv2.line(result, ul_start, ul_end, color, thickness, cv2.LINE_AA)
+        
+    return result
+
 def overlay_stamp_realistic(background_patch, stamp):
     """
     Hòa trộn theo toán học Alpha Blending (mực thấm nền) vào giữa ô patch 512x512.
@@ -109,6 +161,11 @@ def main():
         
         # 3. Augment con dấu (Scale tỷ lệ thuận với ô 512x512 và Xoay)
         stamp_aug = augment_stamp_for_patch(stamp_img, TARGET_SIZE)
+        
+        # 3.5 BƠM CHỮ KÝ XANH GIẢ LẬP VÀO NỀN (Giải cứu GAN)
+        # Ta vẽ chữ ký xanh lên nền Clean. 
+        # Nhờ đó Ground Truth (Clean) có chứa chữ ký xanh, và Input (Dơ) cũng có chữ ký xanh đè dưới dấu đỏ.
+        patch_clean = draw_synthetic_blue_signature(patch_clean)
         
         # 4. Trộn con dấu sinh ra Input (Image A - Dơ/Bị đóng dấu)
         patch_stamped = overlay_stamp_realistic(patch_clean, stamp_aug)

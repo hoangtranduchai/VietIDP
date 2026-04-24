@@ -9,15 +9,30 @@ Sử dụng máy gia tốc Unsloth để giảm một nửa lượng VRAM tiêu 
 """
 
 import os
+os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
+
 import sys
 import torch
+import pathlib
+
+# [HOTFIX] Khắc phục lỗi kinh điển của thư viện TRL trên Windows (Lỗi UnicodeDecodeError)
+_original_read_text = pathlib.Path.read_text
+def _utf8_read_text(self, encoding=None, errors=None):
+    return _original_read_text(self, encoding=encoding or "utf-8", errors=errors)
+pathlib.Path.read_text = _utf8_read_text
 
 # Fix python path for importing src from the root directory
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+# [QUAN TRỌNG] Phải import unsloth TRƯỚC KHI import transformers/trl để nó kích hoạt Ép xung VRAM
+try:
+    from unsloth import FastLanguageModel
+except ImportError:
+    pass
+
 from datasets import load_dataset
 from trl import SFTTrainer
 from transformers import TrainingArguments
-
 from src.config import Config
 
 def train_llm():
@@ -105,7 +120,7 @@ def train_llm():
             fp16 = not torch.cuda.is_bf16_supported(),
             bf16 = torch.cuda.is_bf16_supported(),
             logging_steps = 1,
-            optim = "adamw_8bit",
+            optim = "paged_adamw_8bit",
             weight_decay = 0.01,
             lr_scheduler_type = "linear",
             seed = 3407,
