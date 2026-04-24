@@ -1,7 +1,12 @@
 import cv2
 import os
+import sys
 import json
 from pathlib import Path
+
+# Thêm thư mục Root của dự án vào đường dẫn Python để fix lỗi ModuleNotFoundError
+PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+sys.path.append(str(PROJECT_ROOT))
 
 # Thư viện mạng Neural
 try:
