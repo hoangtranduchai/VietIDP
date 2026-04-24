@@ -14,74 +14,69 @@ try:
 except ImportError:
     PaddleOCR = None
 
-# Gọi module DIP thần thánh vừa tạo
+# Lõi xử lý Xử lý Ảnh V2
 from src.preprocessing.dip_extractor import DIPProcessor
 
 
 class VietIDPPipeline:
     """
-    Hệ thống End-to-End Trích xuất Thông tin Hành chính Việt Nam.
-    Kiến trúc (Architectural Flow):
-      Image -> YOLOv8 (Box) -> DIP Processor (Clean) -> PaddleOCR (Text) -> Qwen LLM (JSON)
+    Hệ thống End-to-End [Phiên bản V2] Hỗ trợ Đa Dấu và Khôi phục Toàn cục.
+    Kiến trúc: Image -> YOLOv8 (Mảng Bboxes) -> DIP (Local+Global) -> PaddleOCR -> Qwen LLM
     """
     def __init__(self, yolo_weights="models/finetuned/stamp_detector/weights/best.pt"):
         self.base_dir = Path(__file__).resolve().parent.parent.parent
         self.yolo_path = self.base_dir / yolo_weights
         
-        print("[1/4] Khởi tạo Động cơ YOLOv8 (Localization)...")
+        print("[1/4] Khởi tạo Động cơ YOLOv8 (Multi-Localization)...")
         if YOLO and self.yolo_path.exists():
             self.detector = YOLO(str(self.yolo_path))
             print("  -> Tải trọng số YOLO thành công!")
         else:
-            print("  -> ⚠️ YOLO đang chạy chế độ Offline Dummy (Chưa có Model hoặc thư viện).")
+            print("  -> ⚠️ YOLO đang chạy chế độ Offline Dummy.")
             self.detector = None
             
-        print("[2/4] Khởi tạo Lõi Xử lý Ảnh Kỹ thuật số (DIP)...")
+        print("[2/4] Khởi tạo Lõi DIP V2 (Local Filtering & Global Repair)...")
         self.dip_processor = DIPProcessor()
         
         print("[3/4] Khởi tạo Máy Dịch Quang Học (PaddleOCR)...")
         if PaddleOCR:
-            # use_angle_cls=True giúp xoay lại chữ bị ngược/nghiêng
             self.ocr = PaddleOCR(use_angle_cls=True, lang="vi", show_log=False)
         else:
             print("  -> ⚠️ Chưa cài đặt module PaddleOCR. OCR sẽ trả về chuỗi rỗng.")
             self.ocr = None
 
         print("[4/4] Khởi tạo Qwen2.5 LLM (Giao tiếp API)...")
-        # Sẽ kết nối cục bộ qua Ollama hoặc REST API của Qwen
 
     def process_file(self, image_path):
-        """
-        Thực thi toàn bộ luồng xử lý trên một tấm ảnh Đầu vào.
-        """
+        """Thực thi luồng E2E trên 1 văn bản đầu vào"""
         image_path = str(image_path)
         if not os.path.exists(image_path):
             raise FileNotFoundError(f"Không tìm thấy file: {image_path}")
             
-        # 1. Mở file ảnh
         original_img = cv2.imread(image_path)
         if original_img is None:
             raise ValueError("File ảnh bị hỏng hoặc định dạng không hỗ trợ.")
         
-        # 2. ĐỊNH VỊ CON DẤU (Localization)
-        stamp_bbox = None
+        # 2. ĐỊNH VỊ CON DẤU (MULTI-STAMP)
+        # Quét ra toàn bộ mảng [Bbox1, Bbox2,...] thay vì chỉ lấy 1 con dấu
+        stamp_bboxes = []
         if self.detector:
-            results = self.detector(original_img, verbose=False)
+            # Tham số conf=0.25 để không bỏ sót các con dấu mờ
+            results = self.detector(original_img, conf=0.25, verbose=False)
             if len(results) > 0 and len(results[0].boxes) > 0:
-                box = results[0].boxes[0]
-                x1, y1, x2, y2 = map(int, box.xyxy[0])
-                stamp_bbox = (x1, y1, x2, y2)
+                for box in results[0].boxes:
+                    x1, y1, x2, y2 = map(int, box.xyxy[0])
+                    stamp_bboxes.append((x1, y1, x2, y2))
                 
-        # 3. LÀM SẠCH VĂN BẢN (DIP Processing)
-        # Chỉ áp dụng lọc màu và hàn gắn đứt gãy ở khu vực phát hiện con dấu.
-        clean_img = self.dip_processor.process_document(original_img, bbox=stamp_bbox)
+        # 3. LÀM SẠCH VĂN BẢN (DIP Processing V2)
+        # Ném nguyên mảng array bboxes vào cho Lõi tính toán
+        clean_img = self.dip_processor.process_document(original_img, bboxes=stamp_bboxes)
         
         # 4. CHUYỂN ĐỔI CHỮ (Optical Character Recognition)
         ocr_text = ""
         if self.ocr:
             ocr_results = self.ocr.ocr(clean_img, cls=True)
             if ocr_results and ocr_results[0]:
-                # Gộp các dòng text đọc được thành một khối văn bản
                 texts = [line[1][0] for line in ocr_results[0]]
                 ocr_text = "\n".join(texts)
                 
@@ -90,20 +85,15 @@ class VietIDPPipeline:
         
         return {
             "status": "success",
-            "stamp_detected": stamp_bbox is not None,
+            "stamps_count": len(stamp_bboxes),
+            "stamp_coordinates": stamp_bboxes,
             "ocr_text_length": len(ocr_text),
             "structured_data": structured_data,
             "raw_text": ocr_text
         }
         
     def _invoke_llm_extraction(self, raw_text):
-        """
-        Hàm giao tiếp với Qwen LLM. Tương lai sẽ gắn thư viện Transformers/Ollama vào đây.
-        """
-        # Placeholder cho Mô hình ngôn ngữ lớn (LLM)
-        if not raw_text.strip():
-            return {}
-            
+        if not raw_text.strip(): return {}
         return {
             "document_type": "Tài liệu hành chính (Dự đoán)",
             "message": "Cần tích hợp Endpoint Qwen2.5 thực tế vào hàm này."
@@ -112,12 +102,10 @@ class VietIDPPipeline:
 
 if __name__ == "__main__":
     print("========================================")
-    print(" VIETIDP - SCIENTIFIC PIPELINE TESTER ")
+    print(" VIETIDP V2 - ADVANCED E2E PIPELINE ")
     print("========================================")
     
     pipeline = VietIDPPipeline()
-    
-    # Bạn có thể thay đổi đường dẫn này để Test trực tiếp trên Miniconda
     sample_path = "data/raw/sample_test.jpg"
     
     if os.path.exists(sample_path):

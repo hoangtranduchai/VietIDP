@@ -3,62 +3,57 @@ import numpy as np
 
 class DIPProcessor:
     """
-    Kỹ thuật Xử lý Ảnh Số (Digital Image Processing) thay thế GAN.
-    Đảm bảo 100% tính nguyên vẹn hình học của ký tự (Topology Integrity).
-    Dành riêng cho tiền xử lý OCR văn bản hành chính Việt Nam.
+    [V2 ARCHITECTURE] - Local Filtering & Global Restoration
+    Giải quyết dứt điểm ranh giới đứt gãy ảnh (Frankenstein Image) và hiện tượng đa dấu.
     """
     def __init__(self):
         # Dải màu chuẩn của Mực Đỏ / Hồng con dấu trong không gian HSV
-        # Do màu đỏ nằm ở 2 đầu dải Hue (0-10 và 170-180) nên cần 2 mask
         self.red_lower1 = np.array([0, 50, 50])
         self.red_upper1 = np.array([10, 255, 255])
         self.red_lower2 = np.array([170, 50, 50])
         self.red_upper2 = np.array([180, 255, 255])
 
-    def process_document(self, image_bgr, bbox=None):
+    def process_document(self, image_bgr, bboxes=None):
         """
-        Xử lý toàn bộ luồng DIP trên ảnh. 
-        Tham số bbox: (x1, y1, x2, y2) từ mô hình YOLO. Nếu có, chỉ DIP vùng đó để tốc độ đạt mili-giây.
+        Luồng xử lý V2 phân cấp:
+        - Tham số bboxes: Danh sách chứa CÁC tọa độ [(x1,y1,x2,y2), (x1,y1,x2,y2)...]
         """
-        if bbox:
-            x1, y1, x2, y2 = bbox
-            region = image_bgr[y1:y2, x1:x2].copy()
-            processed_region = self._apply_dip_pipeline(region)
-            
-            # Ghi đè vùng đã làm sạch bằng DIP lại vào trang A4 gốc
-            result = image_bgr.copy()
-            result[y1:y2, x1:x2] = processed_region
-            return result
-        else:
-            # Nếu không có YOLO (chạy thủ công), áp dụng toàn trang (Chậm hơn một chút)
-            return self._apply_dip_pipeline(image_bgr)
+        result_img = image_bgr.copy()
+        
+        # =========================================================
+        # GIAI ĐOẠN 1: LOCAL PROCESSING (Lọc màu theo Bounding Box)
+        # Mục tiêu: Đóng băng an toàn các logo đỏ trên tiêu đề, chỉ xóa màu đỏ ở vùng chữ ký.
+        # =========================================================
+        if bboxes and len(bboxes) > 0:
+            for box in bboxes:
+                x1, y1, x2, y2 = box
+                
+                # Tránh lỗi tràn viền nếu YOLO dự đoán lấn ra ngoài lề ảnh
+                x1, y1 = max(0, x1), max(0, y1)
+                x2, y2 = min(result_img.shape[1], x2), min(result_img.shape[0], y2)
+                
+                roi = result_img[y1:y2, x1:x2]
+                if roi.size == 0: continue
+                
+                hsv = cv2.cvtColor(roi, cv2.COLOR_BGR2HSV)
+                mask1 = cv2.inRange(hsv, self.red_lower1, self.red_upper1)
+                mask2 = cv2.inRange(hsv, self.red_lower2, self.red_upper2)
+                red_mask = mask1 | mask2
+                
+                # Đổi pixel đỏ thành Trắng (255, 255, 255)
+                roi[red_mask > 0] = (255, 255, 255)
+                
+                # Cập nhật ngược lại tấm ảnh gốc
+                result_img[y1:y2, x1:x2] = roi
 
-    def _apply_dip_pipeline(self, roi):
-        """Luồng thực thi Lõi (The Core Pipeline)"""
+        # =========================================================
+        # GIAI ĐOẠN 2: GLOBAL PROCESSING (Đồng bộ hóa Toàn trang A4)
+        # Mục tiêu: Toàn bộ mặt trang giấy sẽ được ép về thang xám, sau đó nhị phân 
+        # và hàn gắn nét đứt đồng loạt. Đảm bảo phông chữ đồng nhất 100% không chắp vá.
+        # =========================================================
+        gray = cv2.cvtColor(result_img, cv2.COLOR_BGR2GRAY)
         
-        # ---------------------------------------------------------
-        # Bước 1: Khử màu (HSV Color Filtering)
-        # ---------------------------------------------------------
-        hsv = cv2.cvtColor(roi, cv2.COLOR_BGR2HSV)
-        mask1 = cv2.inRange(hsv, self.red_lower1, self.red_upper1)
-        mask2 = cv2.inRange(hsv, self.red_lower2, self.red_upper2)
-        red_mask = mask1 | mask2
-        
-        # Biến toàn bộ pixel Mực Đỏ thành Nền Trắng (Tẩy dấu)
-        # Lưu ý: Chỗ chữ đen giao với mực đỏ sẽ bị thủng (trắng)
-        no_red = roi.copy()
-        no_red[red_mask > 0] = (255, 255, 255)
-        
-        # ---------------------------------------------------------
-        # Bước 2: Chuyển đổi mức Xám (Grayscale)
-        # ---------------------------------------------------------
-        gray = cv2.cvtColor(no_red, cv2.COLOR_BGR2GRAY)
-        
-        # ---------------------------------------------------------
-        # Bước 3: Nhị phân hóa Thích ứng (Adaptive Binarization)
-        # ---------------------------------------------------------
-        # Ép quang đồ về Trắng/Đen tuyệt đối. Khử nhiễu bóng râm giấy scan, 
-        # Cực kỳ tốt để OCR đọc độ nét cao.
+        # 2.1 Nhị phân hóa toàn cục (Tẩy sạch bóng đổ, nền giấy xám, v.v)
         binary = cv2.adaptiveThreshold(
             gray, 255, 
             cv2.ADAPTIVE_THRESH_GAUSSIAN_C, 
@@ -66,16 +61,12 @@ class DIPProcessor:
             blockSize=15, C=9
         )
         
-        # ---------------------------------------------------------
-        # Bước 4: Toán Hình thái học (Morphology)
-        # ---------------------------------------------------------
-        # Ảnh Binarize đang có Nền = 255 (Trắng), Chữ = 0 (Đen).
-        # Khi dùng lệnh Erode (Xói mòn) của OpenCV lên màu 255, các vùng Trắng bị thu hẹp lại.
-        # Nghĩa là Nét Chữ Đen được GIÃN NỞ (Dilation) ra.
-        # Thao tác này giúp "Hàn gắn" (Repair) các khe nứt đứt gãy do Bước 1 làm lủng nét chữ.
+        # 2.2 Hình thái học Toàn cục (Global Morphology)
+        # Lấp đầy các khe đứt gãy của chữ tại vùng bị tẩy đỏ, đồng thời làm đậm đều nét chữ in toàn trang
         kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (2, 2))
         repaired = cv2.erode(binary, kernel, iterations=1)
         
-        # Chuyển về định dạng BGR 3 kênh để dễ dàng hiển thị hoặc nối vào các Pipeline khác
+        # Chuyển về BGR để output
         final_bgr = cv2.cvtColor(repaired, cv2.COLOR_GRAY2BGR)
+        
         return final_bgr
