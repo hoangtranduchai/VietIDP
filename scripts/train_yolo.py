@@ -18,17 +18,16 @@ if __name__ == '__main__':
 
     print("🚀 KHỞI ĐỘNG LÒ LUYỆN ĐAN: YOLOv8 MLOPS DETECTOR 🚀")
     
-    # Tải trọng số khởi tạo YOLOv8 hệ Nano (siêu nhẹ, siêu nhạy). 
-    # Framework sẽ tự tải 'yolov8n.pt' từ Internet nếu chưa có trong thư mục.
-    model = YOLO('yolov8n.pt') 
+    # Nâng cấp phần cứng: Dùng YOLOv8x (Extra Large) mạnh nhất thế giới.
+    model = YOLO('yolov8x.pt') 
 
-    # Các thông số huấn luyện (Hyper-parameters) tối ưu cho siêu máy tính Miniconda
+    # Các thông số huấn luyện ép xung cho RTX 5070 8GB VRAM
     results = model.train(
         data=str(DATASET_YAML),
-        epochs=50,             # Chạy 50 vòng hội tụ (có Early Stopping tự ngắt nếu loss không giảm)
-        imgsz=1024,            # CỰC QUAN TRỌNG: A4 rất to, nâng imgsz lên 1024 để máy học nhìn ra con dấu nhỏ
-        batch=16,              # Nhồi 16 ảnh A4 1 lúc (Yêu cầu khoảng 8-12GB VRAM GPU)
-        name='stamp_detector', # Checkpoint name
+        epochs=50,             
+        imgsz=1024,            # Bắt buộc 1024 để nhìn rõ con dấu trên A4
+        batch=4,               # Hạ xuống 4 vì bản X cực kỳ nặng, batch=16 sẽ gây OOM trên 8GB VRAM
+        name='stamp_detector',
         project=str(MODEL_OUTPUT_DIR),
         device=0,              # Buộc sử dụng Card Đồ Họa Cụm 0 (NVIDIA)
         patience=10,           # Ngừng ngay nếu 10 Epoch không khôn lên được
