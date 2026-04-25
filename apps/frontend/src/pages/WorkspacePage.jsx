@@ -1,132 +1,111 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import axios from 'axios'
+import { useLocale } from '../LocaleContext'
+import { useApi } from '../hooks/useApi'
+import { getDocument, updateDocument, getExportUrl } from '../services/api'
+import TopBar from '../layouts/TopBar'
 import DocumentViewer from '../components/DocumentViewer'
 import ExtractionPanel from '../components/ExtractionPanel'
+import Skeleton from '../ui/Skeleton'
+import { toast } from 'react-toastify'
 
-const API_BASE = 'http://localhost:8000'
-
-const PIPELINE_STAGES = [
-  { key: 'input', label: 'Input', icon: 'check_circle' },
-  { key: 'ocr', label: 'OCR', icon: 'document_scanner' },
-  { key: 'llm', label: 'LLM', icon: 'psychology' },
-  { key: 'validation', label: 'Validation', icon: 'fact_check' },
-  { key: 'storage', label: 'Storage', icon: 'database' },
-]
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
 export default function WorkspacePage() {
   const { id } = useParams()
-  const [doc, setDoc] = useState(null)
+  const { t } = useLocale()
+  const docApi = useApi(getDocument)
   const [extraction, setExtraction] = useState({})
-  const [processing, setProcessing] = useState(false)
   const [currentStage, setCurrentStage] = useState('input')
-  const [processingTime, setProcessingTime] = useState(null)
+
+  const PIPELINE_STAGES = [
+    { key: 'input', label: t('stInput'), icon: 'check_circle' },
+    { key: 'ocr', label: t('stOCR'), icon: 'document_scanner' },
+    { key: 'llm', label: t('stLLM'), icon: 'psychology' },
+    { key: 'validation', label: t('stValidation'), icon: 'fact_check' },
+    { key: 'storage', label: t('stStorage'), icon: 'database' },
+  ]
 
   useEffect(() => {
-    if (id) loadDocument(id)
-  }, [id])
-
-  const loadDocument = async (docId) => {
-    try {
-      const res = await axios.get(`${API_BASE}/api/documents/${docId}`)
-      setDoc(res.data)
-      if (res.data.extraction) {
-        setExtraction(res.data.extraction)
-        setCurrentStage('storage')
-      }
-    } catch (err) {
-      console.error('Failed to load document:', err)
+    if (id) {
+      docApi.execute(id).then(doc => {
+        if (doc?.extraction) {
+          setExtraction(doc.extraction)
+          setCurrentStage('storage')
+        }
+      }).catch(() => {})
     }
-  }
+  }, [id])
 
   const handleSave = async () => {
     if (!id) return
     try {
-      await axios.put(`${API_BASE}/api/documents/${id}`, extraction)
-      alert('Đã lưu thành công!')
-    } catch (err) {
-      alert('Lỗi khi lưu: ' + err.message)
-    }
+      await updateDocument(id, extraction)
+    } catch {}
   }
 
   const handleExport = (format) => {
     if (!id) return
-    window.open(`${API_BASE}/api/export/${id}?format=${format}`, '_blank')
+    window.open(getExportUrl(id, format), '_blank')
   }
 
-  const completedStages = PIPELINE_STAGES.findIndex(s => s.key === currentStage)
+  const completedIdx = PIPELINE_STAGES.findIndex(s => s.key === currentStage)
+  const pipeline = PIPELINE_STAGES.map((s, i) => ({
+    ...s,
+    completed: i < completedIdx,
+    active: i === completedIdx,
+  }))
+
+  const doc = docApi.data
 
   return (
     <>
-      {/* TopBar */}
-      <header className="topbar">
-        <h1 className="topbar-title">NeuralIDP Enterprise</h1>
+      <TopBar pipeline={pipeline} />
 
-        {/* Pipeline Status Bar */}
-        <div className="pipeline-bar">
-          {PIPELINE_STAGES.map((stage, i) => (
-            <div key={stage.key}>
-              <div className={`pipeline-stage ${
-                i < completedStages ? 'completed' :
-                i === completedStages ? 'active' : ''
-              }`}>
-                <span className={`material-symbols-outlined ${
-                  i === completedStages && processing ? 'animate-pulse' : ''
-                }`}>{
-                  i < completedStages ? 'check_circle' :
-                  i === completedStages && processing ? 'autorenew' :
-                  stage.icon
-                }</span>
-                {stage.label}
-              </div>
-              {i < PIPELINE_STAGES.length - 1 && <span className="pipeline-divider" />}
-            </div>
-          ))}
-        </div>
-
-        <div className="topbar-status">
-          <span className="topbar-status-dot" />
-          Local Node: Active
-        </div>
-      </header>
-
-      {/* Workspace Actions */}
       <div className="workspace-bar">
         <div>
-          <h2>{doc?.filename || 'Select a document'}</h2>
+          <h2>{doc?.filename || t('selectDoc')}</h2>
           <p>
-            {processingTime ? `Processing time: ${processingTime}s` : ''}
-            {extraction?.ocr_confidence ? ` • Confidence: ${Math.round(extraction.ocr_confidence * 100)}%` : ''}
+            {extraction?.processing_time ? `${extraction.processing_time}s` : ''}
+            {extraction?.ocr_confidence ? ` • ${Math.round(extraction.ocr_confidence * 100)}%` : ''}
           </p>
         </div>
         <div className="workspace-actions">
           <button className="btn" onClick={() => handleExport('csv')}>
             <span className="material-symbols-outlined">table_view</span>
-            Export to Excel
+            {t('exportExcel')}
           </button>
           <button className="btn" onClick={handleSave}>
             <span className="material-symbols-outlined">save</span>
-            Save to DB
+            {t('saveToDB')}
           </button>
-          <button className="btn btn-primary" onClick={() => id && loadDocument(id)}>
+          <button className="btn btn-primary" onClick={() => id && docApi.execute(id)}>
             <span className="material-symbols-outlined">play_arrow</span>
-            Run Validation
+            {t('runValidation')}
           </button>
         </div>
       </div>
 
-      {/* Dual-Pane Viewer */}
       <main className="dual-pane">
-        <DocumentViewer
-          imageUrl={doc?.file_path ? `${API_BASE}/uploads/${doc.filename}` : null}
-          stamps={extraction?.stamp_coordinates || []}
-          filename={doc?.filename}
-        />
-        <ExtractionPanel
-          data={extraction}
-          onUpdate={setExtraction}
-          processing={processing}
-        />
+        {docApi.loading ? (
+          <>
+            <div className="pane pane-source"><div style={{ padding: 32 }}><Skeleton variant="card" height={500} /></div></div>
+            <div className="pane pane-extraction"><div style={{ padding: 20 }}><Skeleton rows={6} style={{ marginBottom: 16 }} /></div></div>
+          </>
+        ) : (
+          <>
+            <DocumentViewer
+              imageUrl={doc?.file_path ? `${API_BASE}/uploads/${doc.filename}` : null}
+              stamps={extraction?.stamp_coordinates || []}
+              filename={doc?.filename}
+            />
+            <ExtractionPanel
+              data={extraction}
+              onUpdate={setExtraction}
+              processing={docApi.loading}
+            />
+          </>
+        )}
       </main>
     </>
   )

@@ -1,115 +1,91 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
-
-const API_BASE = 'http://localhost:8000'
+import { useLocale } from '../LocaleContext'
+import { useDocuments } from '../hooks/useDocuments'
+import TopBar from '../layouts/TopBar'
+import Skeleton, { SkeletonRow } from '../ui/Skeleton'
+import EmptyState from '../ui/EmptyState'
+import Modal from '../ui/Modal'
+import { toast } from 'react-toastify'
 
 export default function HistoryPage() {
-  const [docs, setDocs] = useState([])
-  const [loading, setLoading] = useState(true)
   const navigate = useNavigate()
+  const { t } = useLocale()
+  const { documents, loading, deleteDoc, refresh } = useDocuments()
+  const [deleteTarget, setDeleteTarget] = useState(null)
 
-  useEffect(() => {
-    loadDocuments()
-  }, [])
-
-  const loadDocuments = async () => {
+  const handleDelete = async () => {
+    if (!deleteTarget) return
     try {
-      const res = await axios.get(`${API_BASE}/api/documents?limit=50`)
-      setDocs(res.data.documents || [])
-    } catch (err) {
-      console.error('Failed to load documents:', err)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const handleDelete = async (id) => {
-    if (!window.confirm('Xóa tài liệu này?')) return
-    try {
-      await axios.delete(`${API_BASE}/api/documents/${id}`)
-      setDocs(docs.filter(d => d.id !== id))
-    } catch (err) {
-      alert('Lỗi xóa: ' + err.message)
-    }
+      await deleteDoc(deleteTarget.id)
+      toast.success(`Deleted "${deleteTarget.filename}"`)
+    } catch {}
+    setDeleteTarget(null)
   }
 
   const formatDate = (iso) => {
     if (!iso) return ''
     return new Date(iso).toLocaleString('vi-VN', {
-      day: '2-digit', month: '2-digit', year: 'numeric',
-      hour: '2-digit', minute: '2-digit'
+      day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
     })
   }
-
-  const formatSize = (bytes) => {
-    if (!bytes) return ''
-    return (bytes / 1024).toFixed(0) + ' KB'
-  }
+  const formatSize = (bytes) => bytes ? (bytes / 1024).toFixed(0) + ' KB' : ''
 
   return (
     <>
-      <header className="topbar">
-        <h1 className="topbar-title">NeuralIDP Enterprise</h1>
-        <div className="topbar-status">
-          <span className="topbar-status-dot" />
-          Local Node: Active
-        </div>
-      </header>
-
+      <TopBar />
       <div className="page-container">
-        <h1>Document History</h1>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+          <h1 style={{ marginBottom: 0 }}>{t('historyTitle')}</h1>
+          <button className="btn" onClick={refresh}>
+            <span className="material-symbols-outlined" style={{ fontSize: 16 }}>refresh</span>
+            Refresh
+          </button>
+        </div>
 
         {loading ? (
-          <div style={{textAlign: 'center', padding: 60, color: 'var(--outline)'}}>
-            <span className="material-symbols-outlined animate-spin" style={{fontSize: 40}}>autorenew</span>
-            <p style={{marginTop: 16}}>Loading documents...</p>
-          </div>
-        ) : docs.length === 0 ? (
-          <div style={{textAlign: 'center', padding: 60, color: 'var(--outline)'}}>
-            <span className="material-symbols-outlined" style={{fontSize: 56, opacity: 0.3}}>folder_open</span>
-            <p style={{marginTop: 16}}>No documents processed yet</p>
-          </div>
+          <table className="doc-table">
+            <thead><tr><th>{t('colId')}</th><th>{t('colFile')}</th><th>{t('colType')}</th><th>{t('colSize')}</th><th>{t('colStatus')}</th><th>{t('colDate')}</th><th>{t('colActions')}</th></tr></thead>
+            <tbody>{[1,2,3,4,5].map(i => <SkeletonRow key={i} cols={7} />)}</tbody>
+          </table>
+        ) : documents.length === 0 ? (
+          <EmptyState
+            icon="folder_open"
+            title={t('noHistory')}
+            subtitle="Upload a document to start processing"
+            action={<button className="btn btn-primary" onClick={() => navigate('/')}>
+              <span className="material-symbols-outlined" style={{ fontSize: 16 }}>add</span> Upload Document
+            </button>}
+          />
         ) : (
           <table className="doc-table">
             <thead>
               <tr>
-                <th>ID</th>
-                <th>Filename</th>
-                <th>Type</th>
-                <th>Size</th>
-                <th>Pages</th>
-                <th>Status</th>
-                <th>Uploaded</th>
-                <th>Actions</th>
+                <th>{t('colId')}</th><th>{t('colFile')}</th><th>{t('colType')}</th>
+                <th>{t('colSize')}</th><th>{t('colStatus')}</th><th>{t('colDate')}</th><th>{t('colActions')}</th>
               </tr>
             </thead>
             <tbody>
-              {docs.map(doc => (
+              {documents.map(doc => (
                 <tr key={doc.id}>
-                  <td style={{fontFamily: 'monospace'}}>#{doc.id}</td>
+                  <td style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-muted)', fontSize: 12 }}>#{doc.id}</td>
                   <td>
-                    <span
-                      style={{color: 'var(--primary-container)', cursor: 'pointer', fontWeight: 500}}
-                      onClick={() => navigate(`/workspace/${doc.id}`)}
-                    >
-                      {doc.filename}
-                    </span>
+                    <span style={{ color: 'var(--accent)', cursor: 'pointer', fontWeight: 500 }}
+                      onClick={() => navigate(`/workspace/${doc.id}`)}>{doc.filename}</span>
                   </td>
-                  <td><span style={{textTransform: 'uppercase', fontSize: 12}}>{doc.file_type}</span></td>
+                  <td><span style={{ textTransform: 'uppercase', fontSize: 11, fontFamily: 'var(--font-mono)' }}>{doc.file_type}</span></td>
                   <td>{formatSize(doc.file_size)}</td>
-                  <td>{doc.num_pages}</td>
                   <td><span className={`status-badge ${doc.status}`}>{doc.status}</span></td>
-                  <td style={{fontSize: 13, color: 'var(--outline)'}}>{formatDate(doc.created_at)}</td>
+                  <td style={{ fontSize: 12, color: 'var(--text-muted)' }}>{formatDate(doc.created_at)}</td>
                   <td>
-                    <div style={{display: 'flex', gap: 4}}>
-                      <button className="btn" style={{padding: '4px 8px'}}
+                    <div style={{ display: 'flex', gap: 4 }}>
+                      <button className="btn" style={{ padding: '4px 8px' }}
                         onClick={() => navigate(`/workspace/${doc.id}`)}>
-                        <span className="material-symbols-outlined" style={{fontSize: 16}}>open_in_new</span>
+                        <span className="material-symbols-outlined" style={{ fontSize: 16 }}>open_in_new</span>
                       </button>
-                      <button className="btn" style={{padding: '4px 8px', color: 'var(--error)'}}
-                        onClick={() => handleDelete(doc.id)}>
-                        <span className="material-symbols-outlined" style={{fontSize: 16}}>delete</span>
+                      <button className="btn btn-danger" style={{ padding: '4px 8px' }}
+                        onClick={() => setDeleteTarget(doc)}>
+                        <span className="material-symbols-outlined" style={{ fontSize: 16 }}>delete</span>
                       </button>
                     </div>
                   </td>
@@ -119,6 +95,20 @@ export default function HistoryPage() {
           </table>
         )}
       </div>
+
+      {/* Delete confirmation modal */}
+      <Modal open={!!deleteTarget} onClose={() => setDeleteTarget(null)} title="Confirm Delete" width={420}>
+        <p style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: 20 }}>
+          Are you sure you want to delete <strong style={{ color: 'var(--text-primary)' }}>"{deleteTarget?.filename}"</strong>?
+          This action cannot be undone.
+        </p>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
+          <button className="btn" onClick={() => setDeleteTarget(null)}>Cancel</button>
+          <button className="btn btn-danger" onClick={handleDelete} style={{ background: 'var(--accent-error-muted)' }}>
+            <span className="material-symbols-outlined" style={{ fontSize: 16 }}>delete</span> Delete
+          </button>
+        </div>
+      </Modal>
     </>
   )
 }

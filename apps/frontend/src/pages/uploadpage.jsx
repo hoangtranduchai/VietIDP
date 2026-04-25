@@ -1,40 +1,37 @@
 import { useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDropzone } from 'react-dropzone'
-import axios from 'axios'
+import { useLocale } from '../LocaleContext'
+import TopBar from '../layouts/TopBar'
+import { processDocument } from '../services/api'
+import { toast } from 'react-toastify'
 
-const API_BASE = 'http://localhost:8000'
+const PIPELINE = ['YOLOv8', 'VietOCR', 'Qwen2.5-7B', 'JSON']
 
 export default function UploadPage() {
   const navigate = useNavigate()
+  const { t } = useLocale()
   const [uploading, setUploading] = useState(false)
   const [progress, setProgress] = useState(0)
 
   const onDrop = useCallback(async (files) => {
     if (files.length === 0) return
-
     setUploading(true)
     setProgress(10)
 
-    const formData = new FormData()
-    formData.append('file', files[0])
-
     try {
       setProgress(30)
-      const res = await axios.post(`${API_BASE}/api/process_document`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-        onUploadProgress: (e) => {
-          const pct = Math.round((e.loaded / e.total) * 40) + 30
-          setProgress(pct)
-        }
+      const res = await processDocument(files[0], (e) => {
+        const pct = Math.round((e.loaded / e.total) * 40) + 30
+        setProgress(pct)
       })
-
       setProgress(100)
-      if (res.data.document_id) {
-        navigate(`/workspace/${res.data.document_id}`)
+      toast.success('Processing complete!')
+      if (res.document_id) {
+        navigate(`/workspace/${res.document_id}`)
       }
-    } catch (err) {
-      alert('Lỗi xử lý: ' + (err.response?.data?.detail || err.message))
+    } catch {
+      // Error handled by API interceptor toast
     } finally {
       setUploading(false)
       setProgress(0)
@@ -53,45 +50,81 @@ export default function UploadPage() {
 
   return (
     <>
-      <header className="topbar">
-        <h1 className="topbar-title">NeuralIDP Enterprise</h1>
-        <div className="topbar-status">
-          <span className="topbar-status-dot" />
-          Local Node: Active
-        </div>
-      </header>
+      <TopBar />
 
       <div className="upload-page">
         {uploading ? (
-          <div style={{textAlign: 'center'}}>
-            <span className="material-symbols-outlined animate-spin" style={{fontSize: 56, color: 'var(--primary-container)'}}>autorenew</span>
-            <h3 style={{fontFamily: 'Epilogue', fontSize: 22, fontWeight: 600, color: 'var(--primary)', margin: '20px 0 8px'}}>
-              Processing Document...
-            </h3>
-            <p style={{color: 'var(--outline)', marginBottom: 24}}>
-              Running YOLO → OCR → LLM pipeline
-            </p>
-            <div style={{
-              width: 400, height: 6, background: 'var(--surface-container)',
-              borderRadius: 3, overflow: 'hidden', margin: '0 auto',
+          <div style={{ textAlign: 'center', animation: 'fadeIn 0.4s ease' }}>
+            <span className="material-symbols-outlined spin" style={{
+              fontSize: 56, color: 'var(--accent)',
+              filter: 'drop-shadow(0 0 20px rgba(96,165,250,0.4))'
+            }}>autorenew</span>
+            <h3 style={{
+              fontFamily: 'var(--font-display)', fontSize: 22, fontWeight: 700,
+              color: 'var(--text-primary)', margin: '20px 0 8px'
             }}>
-              <div style={{
-                height: '100%', background: 'var(--secondary-container)',
-                borderRadius: 3, width: `${progress}%`,
-                transition: 'width 0.3s ease',
-              }} />
+              {t('processing')}
+            </h3>
+            <p style={{ color: 'var(--text-muted)', marginBottom: 24, fontSize: 13 }}>
+              {t('pipelineRun')}
+            </p>
+
+            {/* Progress bar */}
+            <div className="progress-bar" style={{ width: 400, margin: '0 auto' }}>
+              <div className="progress-fill" style={{ width: `${progress}%` }} />
             </div>
-            <p style={{color: 'var(--outline)', fontSize: 13, marginTop: 8}}>{progress}%</p>
+            <p style={{ color: 'var(--text-muted)', fontSize: 12, marginTop: 8 }}>{progress}%</p>
+
+            {/* Pipeline stages */}
+            <div style={{
+              display: 'flex', justifyContent: 'center', gap: 12,
+              marginTop: 28, flexWrap: 'wrap'
+            }}>
+              {PIPELINE.map((stage, i) => {
+                const done = progress > (i + 1) * 22
+                const active = !done && progress > i * 22
+                return (
+                  <div key={stage} style={{
+                    display: 'flex', alignItems: 'center', gap: 6,
+                    padding: '6px 14px', borderRadius: 'var(--radius-full)',
+                    background: done ? 'var(--accent-success-muted)' : active ? 'var(--accent-muted)' : 'rgba(255,255,255,0.03)',
+                    border: `1px solid ${done ? 'rgba(52,211,153,0.2)' : active ? 'rgba(96,165,250,0.2)' : 'var(--border)'}`,
+                    fontSize: 11, fontWeight: 600,
+                    color: done ? 'var(--accent-success)' : active ? 'var(--accent)' : 'var(--text-muted)',
+                    transition: 'all 0.3s',
+                  }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 14 }}>
+                      {done ? 'check_circle' : active ? 'autorenew' : 'radio_button_unchecked'}
+                    </span>
+                    {stage}
+                  </div>
+                )
+              })}
+            </div>
           </div>
         ) : (
           <div {...getRootProps()} className={`dropzone ${isDragActive ? 'active' : ''}`}>
             <input {...getInputProps()} />
             <span className="material-symbols-outlined">cloud_upload</span>
-            <h3>Drop your document here</h3>
-            <p>Support PDF, PNG, JPG, TIFF • Max 20MB</p>
-            <p style={{marginTop: 16, fontSize: 12, color: 'var(--outline)'}}>
-              100% offline processing — data never leaves your machine
-            </p>
+            <h3>{t('dropTitle')}</h3>
+            <p>{t('dropSub')}</p>
+
+            <div style={{ display: 'flex', justifyContent: 'center', gap: 6, marginTop: 16, flexWrap: 'wrap' }}>
+              {['PDF', 'PNG', 'JPG', 'TIFF'].map(fmt => (
+                <span key={fmt} className="badge badge-blue">{fmt}</span>
+              ))}
+            </div>
+
+            <div style={{
+              display: 'inline-flex', alignItems: 'center', gap: 6,
+              marginTop: 20, padding: '6px 14px', borderRadius: 'var(--radius-full)',
+              background: 'var(--accent-success-muted)',
+              border: '1px solid rgba(52,211,153,0.15)',
+              fontSize: 11, color: 'var(--accent-success)', fontWeight: 600,
+            }}>
+              <span className="material-symbols-outlined" style={{ fontSize: 14 }}>lock</span>
+              {t('dropSecurity')}
+            </div>
           </div>
         )}
       </div>

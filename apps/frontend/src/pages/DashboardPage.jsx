@@ -1,74 +1,59 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import { useLocale } from '../LocaleContext'
+import { useDocuments } from '../hooks/useDocuments'
+import { useApi } from '../hooks/useApi'
+import { healthCheck } from '../services/api'
+import TopBar from '../layouts/TopBar'
+import Skeleton from '../ui/Skeleton'
+import StatusDot from '../ui/StatusDot'
 
-const API_BASE = 'http://localhost:8000'
-
-function StatCard({ icon, label, value, sub, color }) {
+function StatCard({ icon, label, value, sub, glowColor }) {
   return (
-    <div style={{
-      background: 'white', borderRadius: 12, padding: '24px 20px',
-      border: '1px solid var(--border-subtle)', boxShadow: 'var(--shadow-sm)',
-      flex: '1 1 200px', minWidth: 200,
-    }}>
-      <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start'}}>
+    <div className="stat-card fade-in-up" style={{ '--glow': glowColor }}
+      onMouseEnter={e => { e.currentTarget.style.borderColor = glowColor; e.currentTarget.style.boxShadow = `0 0 25px ${glowColor}22` }}
+      onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--glass-border)'; e.currentTarget.style.boxShadow = 'none' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <div>
-          <p style={{fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--outline)', marginBottom: 8}}>{label}</p>
-          <p style={{fontSize: 32, fontWeight: 700, fontFamily: 'Epilogue', color: 'var(--primary)', lineHeight: 1}}>{value}</p>
-          {sub && <p style={{fontSize: 12, color: 'var(--outline)', marginTop: 4}}>{sub}</p>}
+          <p className="stat-label">{label}</p>
+          <p className="stat-value">{value}</p>
+          {sub && <p className="stat-sub">{sub}</p>}
         </div>
-        <div style={{
-          width: 44, height: 44, borderRadius: 10,
-          background: color || 'rgba(0,51,102,0.08)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-        }}>
-          <span className="material-symbols-outlined" style={{fontSize: 22, color: 'var(--primary-container)'}}>{icon}</span>
+        <div style={{ width: 42, height: 42, borderRadius: 10, background: `${glowColor}14`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <span className="material-symbols-outlined" style={{ fontSize: 22, color: glowColor }}>{icon}</span>
         </div>
       </div>
     </div>
   )
 }
 
-function MiniBar({ data, maxVal }) {
-  const max = maxVal || Math.max(...data.map(d => d.value), 1)
+function MiniBar({ data }) {
+  const max = Math.max(...data.map(d => d.value), 1)
   return (
-    <div style={{display: 'flex', alignItems: 'flex-end', gap: 3, height: 80}}>
+    <div style={{ display: 'flex', alignItems: 'flex-end', gap: 4, height: 80 }}>
       {data.map((d, i) => (
-        <div key={i} style={{flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4}}>
+        <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
           <div style={{
             width: '100%', borderRadius: 3,
             height: Math.max(4, (d.value / max) * 70),
-            background: d.color || 'var(--secondary-container)',
-            transition: 'height 0.3s ease',
+            background: d.active ? 'linear-gradient(180deg, var(--accent), var(--accent-cyan))' : 'rgba(96,165,250,0.2)',
+            transition: 'height 0.5s var(--ease)',
+            boxShadow: d.active ? '0 0 8px rgba(96,165,250,0.3)' : 'none',
           }} />
-          <span style={{fontSize: 9, color: 'var(--outline)'}}>{d.label}</span>
+          <span style={{ fontSize: 9, color: 'var(--text-muted)' }}>{d.label}</span>
         </div>
       ))}
     </div>
   )
 }
 
-function SystemStatusRow({ label, status, detail }) {
-  const colors = {
-    active: { bg: '#f0fdf4', text: '#15803d', dot: '#22c55e' },
-    inactive: { bg: '#fef2f2', text: '#dc2626', dot: '#ef4444' },
-    standby: { bg: '#fefce8', text: '#ca8a04', dot: '#eab308' },
-  }
-  const c = colors[status] || colors.standby
+function SystemRow({ label, status, detail }) {
   return (
-    <div style={{
-      display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-      padding: '12px 0', borderBottom: '1px solid var(--border-subtle)',
-    }}>
-      <span style={{fontSize: 14, color: 'var(--on-surface)', fontWeight: 500}}>{label}</span>
-      <div style={{display: 'flex', alignItems: 'center', gap: 12}}>
-        <span style={{fontSize: 12, color: 'var(--outline)'}}>{detail}</span>
-        <span style={{
-          display: 'inline-flex', alignItems: 'center', gap: 6,
-          padding: '3px 10px', borderRadius: 999,
-          background: c.bg, color: c.text, fontSize: 11, fontWeight: 600,
-        }}>
-          <span style={{width: 6, height: 6, borderRadius: '50%', background: c.dot}} />
-          {status}
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 0', borderBottom: '1px solid var(--border)' }}>
+      <span style={{ fontSize: 14, color: 'var(--text-primary)', fontWeight: 500 }}>{label}</span>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <span style={{ fontSize: 12, color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>{detail}</span>
+        <span className={`status-badge ${status === 'active' ? 'completed' : status === 'inactive' ? 'failed' : 'pending'}`}>
+          <StatusDot status={status} size={6} /> {status}
         </span>
       </div>
     </div>
@@ -76,113 +61,68 @@ function SystemStatusRow({ label, status, detail }) {
 }
 
 export default function DashboardPage() {
-  const [stats, setStats] = useState({ total: 0, completed: 0, failed: 0, avgTime: 0 })
-  const [docs, setDocs] = useState([])
-  const [systemStatus, setSystemStatus] = useState({})
+  const { t } = useLocale()
+  const { documents, loading: docsLoading } = useDocuments(100)
+  const healthApi = useApi(healthCheck)
 
-  useEffect(() => {
-    loadStats()
-    checkSystem()
-  }, [])
+  useEffect(() => { healthApi.execute() }, [])
 
-  const loadStats = async () => {
-    try {
-      const res = await axios.get(`${API_BASE}/api/documents?limit=100`)
-      const allDocs = res.data.documents || []
-      const completed = allDocs.filter(d => d.status === 'completed')
-      const failed = allDocs.filter(d => d.status === 'failed')
+  const completed = documents.filter(d => d.status === 'completed')
+  const failed = documents.filter(d => d.status === 'failed')
+  const avgTime = completed.length > 0
+    ? (completed.reduce((s, d) => s + (d.extraction?.processing_time || 0), 0) / completed.length).toFixed(1)
+    : '0'
 
-      const avgTime = completed.length > 0
-        ? completed.reduce((sum, d) => sum + (d.extraction?.processing_time || 0), 0) / completed.length
-        : 0
-
-      setStats({
-        total: allDocs.length,
-        completed: completed.length,
-        failed: failed.length,
-        avgTime: avgTime.toFixed(1),
-      })
-      setDocs(allDocs)
-    } catch (err) {
-      console.error('Stats load error:', err)
-    }
-  }
-
-  const checkSystem = async () => {
-    try {
-      const res = await axios.get(`${API_BASE}/api/health`)
-      setSystemStatus(res.data.services || {})
-    } catch {
-      setSystemStatus({ ollama: 'inactive', database: 'inactive' })
-    }
-  }
-
-  // Build weekly chart data from docs
-  const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
   const today = new Date().getDay()
-  const weeklyData = weekDays.map((label, i) => {
-    const dayDocs = docs.filter(d => {
-      if (!d.created_at) return false
-      return new Date(d.created_at).getDay() === ((i + 1) % 7)
-    })
-    return { label, value: dayDocs.length, color: i === ((today + 6) % 7) ? 'var(--primary-container)' : 'var(--secondary-container)' }
-  })
+  const weeklyData = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((label, i) => ({
+    label,
+    value: documents.filter(d => d.created_at && new Date(d.created_at).getDay() === ((i + 1) % 7)).length,
+    active: i === ((today + 6) % 7),
+  }))
 
-  const typeData = (() => {
-    const types = {}
-    docs.forEach(d => {
-      const t = d.extraction?.loai_van_ban || 'Khác'
-      types[t] = (types[t] || 0) + 1
-    })
-    return Object.entries(types).map(([label, value]) => ({ label: label.substring(0, 6), value }))
-  })()
+  const sys = healthApi.data?.services || {}
 
   return (
     <>
-      <header className="topbar">
-        <h1 className="topbar-title">NeuralIDP Enterprise</h1>
-        <div className="topbar-status">
-          <span className="topbar-status-dot" />
-          Local Node: Active
-        </div>
-      </header>
-
+      <TopBar />
       <div className="page-container">
-        <h1>System Dashboard</h1>
+        <h1>{t('dashTitle')}</h1>
 
-        {/* Stat Cards */}
-        <div style={{display: 'flex', gap: 16, marginBottom: 24, flexWrap: 'wrap'}}>
-          <StatCard icon="description" label="Total Documents" value={stats.total} sub="All time" />
-          <StatCard icon="check_circle" label="Completed" value={stats.completed} sub={`${stats.total ? Math.round(stats.completed/stats.total*100) : 0}% success rate`} color="rgba(22,163,74,0.1)" />
-          <StatCard icon="error" label="Failed" value={stats.failed} sub="Need attention" color="rgba(220,38,38,0.1)" />
-          <StatCard icon="speed" label="Avg Processing" value={`${stats.avgTime}s`} sub="Per document" color="rgba(0,210,255,0.1)" />
-        </div>
+        {/* Stats */}
+        {docsLoading ? (
+          <div style={{ display: 'flex', gap: 14, marginBottom: 24 }}>
+            {[1,2,3,4].map(i => <Skeleton key={i} variant="card" height={110} style={{ flex: 1 }} />)}
+          </div>
+        ) : (
+          <div className="stagger" style={{ display: 'flex', gap: 14, marginBottom: 24, flexWrap: 'wrap' }}>
+            <StatCard icon="description" label={t('totalDocs')} value={documents.length} sub={t('allTime')} glowColor="#60a5fa" />
+            <StatCard icon="check_circle" label={t('completed')} value={completed.length} sub={`${documents.length ? Math.round(completed.length / documents.length * 100) : 0}% ${t('successRate')}`} glowColor="#34d399" />
+            <StatCard icon="error" label={t('failed')} value={failed.length} sub={t('needAttention')} glowColor="#f87171" />
+            <StatCard icon="speed" label={t('avgTime')} value={`${avgTime}s`} sub={t('perDoc')} glowColor="#22d3ee" />
+          </div>
+        )}
 
-        <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, marginBottom: 24}}>
-          {/* Weekly Activity */}
-          <div style={{background: 'white', borderRadius: 12, padding: 20, border: '1px solid var(--border-subtle)', boxShadow: 'var(--shadow-sm)'}}>
-            <p style={{fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--outline)', marginBottom: 16}}>Weekly Activity</p>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 24 }}>
+          <div className="card card-glow">
+            <p style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-muted)', marginBottom: 16 }}>{t('weeklyAct')}</p>
             <MiniBar data={weeklyData} />
           </div>
-
-          {/* Document Types */}
-          <div style={{background: 'white', borderRadius: 12, padding: 20, border: '1px solid var(--border-subtle)', boxShadow: 'var(--shadow-sm)'}}>
-            <p style={{fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--outline)', marginBottom: 16}}>Document Types</p>
-            {typeData.length > 0 ? <MiniBar data={typeData} /> : (
-              <p style={{color: 'var(--outline)', fontSize: 13, textAlign: 'center', padding: 20}}>No data yet</p>
-            )}
+          <div className="card card-glow">
+            <p style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-muted)', marginBottom: 16 }}>{t('docTypes')}</p>
+            {documents.length > 0 ? (
+              <MiniBar data={Object.entries(documents.reduce((acc, d) => { const t = d.extraction?.loai_van_ban || 'Other'; acc[t] = (acc[t]||0)+1; return acc }, {})).map(([label, value]) => ({ label: label.substring(0,6), value }))} />
+            ) : <p style={{ color: 'var(--text-muted)', fontSize: 13, textAlign: 'center', padding: 20 }}>{t('noData')}</p>}
           </div>
         </div>
 
-        {/* System Status */}
-        <div style={{background: 'white', borderRadius: 12, padding: 20, border: '1px solid var(--border-subtle)', boxShadow: 'var(--shadow-sm)'}}>
-          <p style={{fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--outline)', marginBottom: 8}}>System Components</p>
-          <SystemStatusRow label="Ollama LLM Server" status={systemStatus.ollama || 'inactive'} detail={`Model: ${systemStatus.model || 'qwen2.5:7b'}`} />
-          <SystemStatusRow label="PostgreSQL / SQLite" status={systemStatus.database || 'inactive'} detail="Document storage" />
-          <SystemStatusRow label="YOLO Stamp Detector" status="standby" detail="YOLOv8x best.pt" />
-          <SystemStatusRow label="VietOCR Engine" status="standby" detail="vgg_transformer" />
-          <SystemStatusRow label="Redis / Celery" status="standby" detail="Task queue (optional)" />
-          <SystemStatusRow label="NVIDIA RTX 5070" status="active" detail="8GB VRAM" />
+        {/* System */}
+        <div className="card">
+          <p style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-muted)', marginBottom: 8 }}>{t('sysComponents')}</p>
+          <SystemRow label="Ollama LLM Server" status={sys.ollama || 'inactive'} detail={`Model: ${sys.model || 'qwen2.5:7b'}`} />
+          <SystemRow label="PostgreSQL / SQLite" status={sys.database || 'inactive'} detail="Document storage" />
+          <SystemRow label="YOLO Stamp Detector" status="standby" detail="YOLOv8x best.pt" />
+          <SystemRow label="VietOCR Engine" status="standby" detail="vgg_transformer" />
+          <SystemRow label="NVIDIA RTX 5070" status="active" detail="8GB VRAM" />
         </div>
       </div>
     </>
