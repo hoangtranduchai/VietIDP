@@ -66,6 +66,41 @@ class HybridStampMatting:
         
         return dst
 
+    def remove_stamp(self, img_bgr: np.ndarray) -> np.ndarray:
+        """
+        Nhận vào ảnh BGR chứa con dấu đỏ, trả về ảnh BGR đã xóa con dấu (Stamp Removal).
+        Thay thế vùng màu đỏ bằng màu trắng để phục vụ OCR.
+        """
+        if img_bgr is None:
+            return None
+            
+        rembg_out = remove(img_bgr, session=self.session)
+        ai_alpha = rembg_out[:, :, 3]
+        
+        b_f, g_f, r_f = cv2.split(img_bgr.astype(float))
+        redness = r_f - np.maximum(g_f, b_f)
+        
+        RED_LOW = 15.0
+        RED_HIGH = 50.0
+        
+        ink_alpha = (redness - RED_LOW) / (RED_HIGH - RED_LOW + 1e-5)
+        ink_alpha = np.clip(ink_alpha, 0.0, 1.0) * 255.0
+        ink_alpha = ink_alpha.astype(np.uint8)
+        ink_alpha = cv2.GaussianBlur(ink_alpha, (3, 3), 0)
+        
+        if np.sum(ai_alpha > 0) < 1000:
+            final_alpha = ink_alpha
+        else:
+            final_alpha = cv2.bitwise_and(ai_alpha, ink_alpha)
+            if np.sum(final_alpha > 0) < 0.5 * np.sum(ink_alpha > 0):
+                 final_alpha = ink_alpha
+        
+        clean_img = img_bgr.copy()
+        # Những điểm có màu đỏ của con dấu sẽ được làm trắng
+        clean_img[final_alpha > 20] = (255, 255, 255)
+        return clean_img
+
+
 def test_matting():
     # Helper để test module
     import argparse
