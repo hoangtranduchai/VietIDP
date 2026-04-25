@@ -1,38 +1,34 @@
-# OCR-LLM Research System - Task Breakdown
+# 📋 Theo dõi Tiến độ Dự án NCKH (OCR-LLM 2.0 SOTA)
 
-## Phase 0: Environment Setup
-- [x] Create project directory structure
-- [x] Create [requirements.txt](file:///e:/OCR-LLM_Research/requirements.txt)
-- [x] All 5 phase notebooks created for Colab
+Danh sách công việc bám sát theo kiến trúc mới (Qwen2-VL, YOLOv11 TensorRT). Cập nhật `[x]` khi hoàn thành, `[/]` khi đang thực hiện.
 
-## Phase 1: Data Preparation & Synthetic Data Generation
-- [x] [Phase1_Data_Preparation.py](file:///e:/OCR-LLM_Research/notebooks/Phase1_Data_Preparation.py) - stamp extractor, synthetic stamp generator, docx→image, LLM dataset builder
-- [ ] Run on Colab: Extract stamps from 150 PDFs
-- [ ] Run on Colab: Generate 200 synthetic stamps
-- [ ] Run on Colab: Create training pairs (docx → image + stamp overlay)
-- [ ] Run on Colab: Build LLM instruction dataset from 2000 docx
+- [x] **Giai đoạn 1: Chuẩn bị & Xử lý Dữ liệu (Dataset)**
+  - [x] Thu thập nguồn dữ liệu văn bản thô (2000 - 3000 mẫu).
+  - [x] Xây dựng công cụ/script để làm mờ thông tin nhạy cảm (PII Redaction) hoặc xử lý docx to pdf.
+  - [x] Cài đặt công cụ gán nhãn (Label Studio hoặc PPOCRLabel) / tạo tool sinh JSON chuẩn tự động.
+  - [x] Thực hiện gán nhãn vị trí hộp thoại (Bounding box) cho OCR / tạo ảnh có dấu mô phỏng.
+  - [x] Thực hiện gán nhãn thực thể (Key-value JSON) cho phần LLM (llm_dataset_builder).
+  - [x] **(Update 2.0)** Chuyển đổi format JSON text sang định dạng VQA (Visual Question Answering) cho VLM.
 
-## Phase 2: Stamp Removal GAN (The Eye - Part 1)
-- [x] [Phase2_Stamp_Removal_GAN.py](file:///e:/OCR-LLM_Research/notebooks/Phase2_Stamp_Removal_GAN.py) - Pix2Pix (U-Net + PatchGAN)
-- [ ] Run on Colab: Train stamp removal GAN (~100 epochs)
-- [ ] Evaluate with SSIM/PSNR
+- [x] **Giai đoạn 2: Stamp Detection & Zero-VRAM Matting**
+  - [x] Viết các script tiền xử lý (Auto-Deskew, Denoising).
+  - [x] **(Update 2.0)** Giữ thuật toán HybridStampMatting (Color Matting R-max) thay vì DocRes để đạt VRAM=0MB. Đã đạt F1-score > 0.86.
+  - [x] Giữ nguyên phiên bản YOLOv8x (theo yêu cầu) để đảm bảo tính ổn định và không cần cài đặt TensorRT phức tạp trên Windows.
 
-## Phase 3: OCR Engine (The Eye - Part 2)
-- [x] [Phase3_OCR_Engine.py](file:///e:/OCR-LLM_Research/notebooks/Phase3_OCR_Engine.py) - PaddleOCR Vietnamese wrapper + CER/WER evaluation
-- [ ] Run on Colab: Batch OCR 150 test PDFs
-- [ ] Evaluate OCR accuracy
+- [x] **Giai đoạn 3: End-to-End Document AI (The Brain & Eye)**
+  - [x] **(Update 2.0)** Tích hợp mô hình VLM: Qwen2-VL-2B-Instruct hoặc Qwen2-VL-7B (Q5_K_M).
+  - [x] **(Update 2.0)** Cài đặt Inference Engine: Sử dụng `transformers` + `qwen-vl-utils` với `attn_implementation="sdpa"` tối ưu siêu việt cho Windows Native.
+  - [x] Xây dựng file System Prompt đặc thù cho việc trích xuất văn bản hành chính Việt Nam.
+  - [ ] (Tuỳ chọn) Chạy pipeline sinh data để QLoRA fine-tuning VLM trên tập dữ liệu đặc thù.
 
-## Phase 4: LLM Fine-tuning (The Brain)
-- [x] [Phase4_LLM_Finetuning.py](file:///e:/OCR-LLM_Research/notebooks/Phase4_LLM_Finetuning.py) - Qwen-2.5-7B QLoRA fine-tuning pipeline
-- [ ] Run on Colab: Fine-tune Qwen on instruction dataset
-- [ ] Evaluate Precision/Recall/F1
+- [ ] **Giai đoạn 4: Fullstack WebApp & Multimodal Chat**
+  - [x] Khởi tạo dự án React (Vite/Next.js) và FastAPI.
+  - [x] Xây dựng UI Component: Upload File, Preview tài liệu.
+  - [ ] Xây dựng Endpoint FastAPI bất đồng bộ (Streaming) nhận ảnh, trả về chuỗi JSON từ VLM.
+  - [ ] **(Update 2.0)** Mở rộng React UI: Thêm cửa sổ Chat đa phương thức (Chatbot) để hỏi đáp trực tiếp với tài liệu.
+  - [ ] Hoàn thiện hiển thị kết quả (Bảng JSON/Key-Value đẹp mắt).
 
-## Phase 5: End-to-End Pipeline & Web App
-- [x] [Phase5_End_to_End_Pipeline.py](file:///e:/OCR-LLM_Research/notebooks/Phase5_End_to_End_Pipeline.py) - Full pipeline + FastAPI
-- [ ] Run end-to-end test on sample PDFs
-- [ ] Deploy API server
-
-## Phase 6: Evaluation & Report
-- [ ] Run comprehensive benchmarks on 150 test PDFs
-- [ ] Generate performance report
-- [ ] Create walkthrough document
+- [ ] **Giai đoạn 5: Evaluation & Self-Correction**
+  - [ ] Thêm Regex/Fuzzy Matching để kiểm tra chéo (Verify) kết quả JSON.
+  - [ ] Đo đạc các chỉ số F1-Score (Extraction) trên 150 file test.
+  - [ ] Đo Latency và Peak VRAM Usage, quay video demo hệ thống (Walkthrough).

@@ -31,8 +31,8 @@ try:
 except ImportError:
     Predictor = None
 
-# Lõi xử lý Xử lý Ảnh V2
-from src.preprocessing.dip_extractor import DIPProcessor
+# Lõi xử lý Xử lý Ảnh V2 (Chuyển sang dùng HybridStampMatting theo Đề tài 2026)
+from src.preprocessing.stamp_matting import HybridStampMatting
 
 
 class VietIDPPipeline:
@@ -52,8 +52,8 @@ class VietIDPPipeline:
             print("  -> ⚠️ YOLO đang chạy chế độ Offline Dummy.")
             self.detector = None
             
-        print("[2/4] Khởi tạo Lõi DIP V2 (Local Filtering & Global Repair)...")
-        self.dip_processor = DIPProcessor()
+        print("[2/4] Khởi tạo Lõi Xóa Dấu (Hybrid Stamp Matting)...")
+        self.stamp_matter = HybridStampMatting()
         
         print("[3/4] Khởi tạo Máy Dịch Quang Học (VietOCR VGG-Transformer Thuần PyTorch)...")
         if Predictor and easyocr:
@@ -119,8 +119,20 @@ class VietIDPPipeline:
                     x1, y1, x2, y2 = map(int, box.xyxy[0])
                     stamp_bboxes.append((x1, y1, x2, y2))
                 
-        # 3. LÀM SẠCH VĂN BẢN (DIP Processing V2)
-        clean_img = self.dip_processor.process_document(original_img, bboxes=stamp_bboxes)
+        # 3. LÀM SẠCH VĂN BẢN (Xóa con dấu đỏ bằng HybridStampMatting)
+        # Sử dụng stamp_matting lên toàn bộ ảnh (được tối ưu hóa bằng YOLO bounding box nếu có)
+        clean_img = original_img.copy()
+        for box in stamp_bboxes:
+            x1, y1, x2, y2 = box
+            x1, y1 = max(0, x1), max(0, y1)
+            x2, y2 = min(clean_img.shape[1], x2), min(clean_img.shape[0], y2)
+            
+            roi = clean_img[y1:y2, x1:x2]
+            if roi.size > 0:
+                clean_roi = self.stamp_matter.remove_stamp(roi)
+                if clean_roi is not None:
+                    clean_img[y1:y2, x1:x2] = clean_roi
+                    
         
         # 4. CHUYỂN ĐỔI CHỮ (VietOCR Hybrid)
         ocr_text = ""
