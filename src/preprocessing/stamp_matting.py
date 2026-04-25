@@ -21,41 +21,44 @@ class HybridStampMatting:
         if img_bgr is None:
             return None
             
-        # 1. Dùng AI (Rembg) để cắt hình khối con dấu
+        # 1. Dùng AI (Rembg) để cắt hình khối con dấu sơ bộ
+        # Bước này loại bỏ các nhiễu đỏ rác nằm rải rác ngoài vùng chữ ký/dấu
         rembg_out = remove(img_bgr, session=self.session)
-        
-        # Kênh Alpha của rembg (Mặt nạ bao quanh con dấu)
         ai_alpha = rembg_out[:, :, 3]
         
-        # Nếu AI không tìm thấy gì, trả về ảnh gốc từ AI
         if not np.any(ai_alpha > 0):
             return rembg_out
 
-        # 2. Xử lý khoét nền giấy bên trong bằng Toán học (Cường độ sáng)
-        bgr = rembg_out[:, :, :3]
-        gray = cv2.cvtColor(bgr, cv2.COLOR_BGR2GRAY).astype(float)
+        # 2. TOÁN HỌC MÀU SẮC (Color Matting) - Tuyệt đối loại bỏ nền trắng và chữ đen
+        b_f, g_f, r_f = cv2.split(img_bgr.astype(float))
         
-        # Chỉ tính màu nền ở khu vực BÊN TRONG con dấu (do AI đã cắt)
-        mask = ai_alpha > 128
-        if np.sum(mask) == 0: 
-            mask = ai_alpha > 0
-            
-        bg_intensity = np.median(gray[mask])
+        # Chỉ số "Đỏ" (Redness): Mực đỏ có R cao, G và B thấp.
+        # Chữ đen (R,G,B đều thấp) -> redness ≈ 0
+        # Nền trắng (R,G,B đều cao) -> redness ≈ 0
+        redness = r_f - np.maximum(g_f, b_f)
         
-        if bg_intensity > 128:
-            WHITE = min(255.0, bg_intensity + 15)
-            DARK = max(0.0, bg_intensity - 60)
-            ink_alpha = (WHITE - gray) / (WHITE - DARK + 1e-5) * 255.0
-        else:
-            BLACK = max(0.0, bg_intensity - 15)
-            LIGHT = min(255.0, bg_intensity + 60)
-            ink_alpha = (gray - BLACK) / (LIGHT - BLACK + 1e-5) * 255.0
-            
-        ink_alpha = np.clip(ink_alpha, 0, 255).astype(np.uint8)
+        # Tạo Soft Alpha Mask (Khử răng cưa cực mịn)
+        # Ngưỡng tối ưu: <15 là rác/đen/trắng, >50 là đỏ rõ rệt
+        RED_LOW = 15.0
+        RED_HIGH = 50.0
+        
+        ink_alpha = (redness - RED_LOW) / (RED_HIGH - RED_LOW + 1e-5)
+        ink_alpha = np.clip(ink_alpha, 0.0, 1.0) * 255.0
+        ink_alpha = ink_alpha.astype(np.uint8)
+        
+        # Làm mịn nhẹ mask để viền chữ đen đè lên không bị sắc cạnh (aliasing)
         ink_alpha = cv2.GaussianBlur(ink_alpha, (3, 3), 0)
         
         # 3. KẾT HỢP
-        final_alpha = cv2.bitwise_and(ai_alpha, ink_alpha)
+        # Vì Rembg có thể không ổn định trên nền giấy có nhiều chữ,
+        # Nếu AI cắt sai (quá ít pixel), ta sẽ fallback dùng hoàn toàn ink_alpha (Color Matting)
+        if np.sum(ai_alpha > 0) < 1000:
+            final_alpha = ink_alpha
+        else:
+            final_alpha = cv2.bitwise_and(ai_alpha, ink_alpha)
+            # Nếu bitwise_and làm mất mát quá nhiều (ví dụ AI cắt quá chặt)
+            if np.sum(final_alpha > 0) < 0.5 * np.sum(ink_alpha > 0):
+                 final_alpha = ink_alpha
         
         b, g, r = cv2.split(img_bgr)
         rgba = [b, g, r, final_alpha]
