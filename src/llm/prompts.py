@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-Prompt Templates
-================
+Prompt Templates (v3.0 — Optimized for Qwen2.5-7B)
+====================================================
 Centralized prompt templates cho tất cả LLM tasks.
-
-Tất cả prompts đều yêu cầu output tiếng Việt.
+Bổ sung few-shot examples để tăng độ chính xác trích xuất.
 """
 
 PROMPTS = {
@@ -42,16 +41,36 @@ VĂN BẢN CẦN PHÂN TÍCH:
 
     # ── Extraction (trích xuất thông tin cấu trúc) ──────────────────────
     'extraction': """Bạn là chuyên gia trích xuất thông tin từ văn bản hành chính Việt Nam.
+
+VÍ DỤ:
+---
+VĂN BẢN: "ỦY BAN NHÂN DÂN TỈNH BÌNH DƯƠNG ... Số: 456/QĐ-UBND ... Bình Dương, ngày 20 tháng 03 năm 2026 ... QUYẾT ĐỊNH Về việc phê duyệt kế hoạch cải cách hành chính ... CHỦ TỊCH ... Nguyễn Văn B"
+KẾT QUẢ:
+{{
+  "loai_van_ban": "Quyết định",
+  "so_hieu": "456/QĐ-UBND",
+  "ngay_ban_hanh": "20/03/2026",
+  "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Bình Dương",
+  "trich_yeu": "Về việc phê duyệt kế hoạch cải cách hành chính",
+  "nguoi_ky": "Nguyễn Văn B"
+}}
+---
+
 Hãy đọc văn bản sau và trích xuất các thông tin theo định dạng JSON:
 {{
-  "loai_van_ban": "<Công văn|Hợp đồng|Quy định|Tờ trình|Khác>",
+  "loai_van_ban": "<Công văn|Hợp đồng|Quyết định|Tờ trình|Thông tư|Nghị định|Thông báo|Khác>",
   "so_hieu": "<số hiệu văn bản>",
   "ngay_ban_hanh": "<DD/MM/YYYY>",
   "co_quan_ban_hanh": "<tên cơ quan>",
   "trich_yeu": "<trích yếu nội dung>",
   "nguoi_ky": "<họ tên người ký>"
 }}
-Nếu không tìm thấy thông tin, để trống ("").
+
+QUY TẮC:
+1. Nếu không tìm thấy thông tin, để trống ("").
+2. Ngày tháng phải theo định dạng DD/MM/YYYY.
+3. Số hiệu giữ nguyên dạng gốc (VD: "123/QĐ-UBND").
+4. Tên cơ quan viết đầy đủ, không viết tắt.
 
 CHỈ TRẢ VỀ JSON, KHÔNG GIẢI THÍCH THÊM.
 
@@ -60,15 +79,44 @@ VĂN BẢN:
 
     # ── Classification (phân loại văn bản) ───────────────────────────────
     'classification': """Bạn là chuyên gia phân loại văn bản hành chính Việt Nam.
-Hãy phân loại văn bản sau vào một trong các loại:
-Công văn, Hợp đồng, Quy định, Tờ trình, Khác.
+Hãy phân loại văn bản sau vào MỘT trong các loại:
+- Công văn
+- Hợp đồng
+- Quyết định
+- Tờ trình
+- Thông tư
+- Nghị định
+- Thông báo
+- Khác
 
-Chỉ trả lời tên loại văn bản, không giải thích thêm.
+VÍ DỤ:
+- "QUYẾT ĐỊNH Về việc phê duyệt..." → Quyết định
+- "V/v: Báo cáo tình hình thực hiện..." → Công văn
+- "HỢP ĐỒNG KINH TẾ Số: 01/HĐKT..." → Hợp đồng
+
+Chỉ trả lời TÊN LOẠI VĂN BẢN, không giải thích thêm.
 
 VĂN BẢN:
 {text}""",
 
+    # ── Chat (hỏi đáp trên tài liệu) ────────────────────────────────────
+    'chat': """Bạn là chuyên gia phân tích văn bản hành chính Việt Nam.
+Hãy đọc kỹ tài liệu được cung cấp và trả lời câu hỏi của người dùng.
+
+QUY TẮC:
+1. Trả lời TRỰC TIẾP dựa trên nội dung văn bản, KHÔNG suy đoán.
+2. Trích xuất đầy đủ và chính xác (ngày tháng, số hiệu, nội dung).
+3. Trả lời ngắn gọn bằng tiếng Việt.
+4. Nếu không tìm thấy trong văn bản, nói: "Tôi không tìm thấy thông tin này trong văn bản."
+
+TÀI LIỆU:
+{context}
+
+CÂU HỎI:
+{question}""",
+
     # ── System message (cho Qwen ChatML) ─────────────────────────────────
     'system_message': """Bạn là chuyên gia phân tích văn bản hành chính Việt Nam.
-Hãy thực hiện yêu cầu một cách chính xác và trả lời bằng tiếng Việt.""",
+Hãy thực hiện yêu cầu một cách chính xác và trả lời bằng tiếng Việt.
+Luôn trả về kết quả theo định dạng được yêu cầu.""",
 }

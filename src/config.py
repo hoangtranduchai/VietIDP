@@ -34,7 +34,7 @@ class Config:
 
     # ── Model Directories ────────────────────────────────────────────────
     MODELS_DIR = BASE_DIR / "models"
-    STAMP_DETECTION_MODEL = MODELS_DIR / "stamp_model" / "weights" / "best.pt"
+    STAMP_DETECTION_MODEL = MODELS_DIR / "finetuned" / "stamp_detector" / "weights" / "best.pt"
     STAMP_REMOVAL_MODEL = MODELS_DIR / "finetuned" / "stamp_removal_gan" / "best_generator.pth"
     LLM_ADAPTER_PATH = MODELS_DIR / "qwen_finetuned" / "lora_adapters"
     YOLO_BASE_MODEL = BASE_DIR / "yolov8n.pt"
@@ -42,7 +42,7 @@ class Config:
     # ── Results ──────────────────────────────────────────────────────────
     RESULTS_DIR = BASE_DIR / "results"
 
-    # ── Ollama LLM Configuration ─────────────────────────────────────────
+    # ── Ollama LLM Configuration (Qwen2.5-7B) ───────────────────────────
     OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://localhost:11434/api/generate")
     OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "qwen2.5:7b")
     OLLAMA_MAX_CHARS = int(os.environ.get("OLLAMA_MAX_CHARS", "32000"))
@@ -51,28 +51,31 @@ class Config:
     OLLAMA_TIMEOUT = int(os.environ.get("OLLAMA_TIMEOUT", "300"))
     OLLAMA_MAX_RETRIES = int(os.environ.get("OLLAMA_MAX_RETRIES", "3"))
 
-    # ── OCR Configuration ────────────────────────────────────────────────
+    # ── OCR Configuration (VietOCR + EasyOCR) ────────────────────────────
     OCR_DPI = int(os.environ.get("OCR_DPI", "200"))
     OCR_LANG = os.environ.get("OCR_LANG", "vi")
     OCR_MIN_TEXT_THRESHOLD = int(os.environ.get("OCR_MIN_TEXT_THRESHOLD", "100"))
-    OCR_DET_DB_THRESH = 0.3
-    OCR_DET_DB_BOX_THRESH = 0.5
-    OCR_REC_BATCH_NUM = 16
+    # VietOCR settings
+    VIETOCR_MODEL = os.environ.get("VIETOCR_MODEL", "vgg_transformer")
+    VIETOCR_DEVICE = os.environ.get("VIETOCR_DEVICE", "cuda:0")
+    # EasyOCR settings (used as text line detector only)
+    EASYOCR_LANGS = ["vi"]
+    EASYOCR_GPU = True
 
     # ── YOLO Stamp Detection ─────────────────────────────────────────────
-    YOLO_CONF_THRESHOLD = float(os.environ.get("YOLO_CONF_THRESHOLD", "0.5"))
+    YOLO_CONF_THRESHOLD = float(os.environ.get("YOLO_CONF_THRESHOLD", "0.25"))
     YOLO_IMG_SIZE = int(os.environ.get("YOLO_IMG_SIZE", "640"))
 
-    # ── GAN Stamp Removal ────────────────────────────────────────────────
+    # ── GAN Stamp Removal (deprecated - using HybridStampMatting) ────────
     GAN_IMG_SIZE = 512
     GAN_BATCH_SIZE = 4
     GAN_NUM_EPOCHS = 60
     GAN_LEARNING_RATE = 2e-4
     GAN_LAMBDA_L1 = 100
 
-    # ── LLM Fine-tuning (Qwen2.5-3B QLoRA) ──────────────────────────────
+    # ── LLM Fine-tuning (Qwen2.5-7B QLoRA) ──────────────────────────────
     LLM_BASE_MODEL = os.environ.get(
-        "LLM_BASE_MODEL", "unsloth/Qwen2.5-3B-Instruct-bnb-4bit"
+        "LLM_BASE_MODEL", "unsloth/Qwen2.5-7B-Instruct-bnb-4bit"
     )
     LORA_R = 16
     LORA_ALPHA = 32
@@ -86,6 +89,18 @@ class Config:
     LLM_GRADIENT_ACCUM = 4
     LLM_NUM_EPOCHS = 3
     LLM_LEARNING_RATE = 2e-4
+
+    # ── PostgreSQL Database ──────────────────────────────────────────────
+    DATABASE_URL = os.environ.get(
+        "DATABASE_URL",
+        "postgresql://vietidp:vietidp@localhost:5432/vietidp"
+    )
+    DATABASE_ECHO = os.environ.get("DATABASE_ECHO", "false").lower() == "true"
+
+    # ── Celery / Redis Task Queue ────────────────────────────────────────
+    REDIS_URL = os.environ.get("REDIS_URL", "redis://localhost:6379/0")
+    CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL", REDIS_URL)
+    CELERY_RESULT_BACKEND = os.environ.get("CELERY_RESULT_BACKEND", REDIS_URL)
 
     # ── Security ─────────────────────────────────────────────────────────
     API_KEY = os.environ.get("VIETIDP_API_KEY", "")

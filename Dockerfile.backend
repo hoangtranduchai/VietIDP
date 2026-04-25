@@ -1,0 +1,45 @@
+# ═══════════════════════════════════════════════════════════════
+# VietIDP Backend — NVIDIA CUDA Docker Image
+# Chạy trên GPU (RTX 5070) với CUDA 12.8
+# ═══════════════════════════════════════════════════════════════
+FROM nvidia/cuda:12.8.0-runtime-ubuntu22.04
+
+LABEL maintainer="VietIDP Team"
+LABEL description="VietIDP Backend API with GPU support"
+
+# Avoid interactive prompts
+ENV DEBIAN_FRONTEND=noninteractive
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+
+# System deps
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3.10 python3-pip python3.10-venv \
+    libglib2.0-0 libsm6 libxext6 libxrender-dev libgl1-mesa-glx \
+    curl wget git \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN ln -sf /usr/bin/python3.10 /usr/bin/python
+
+WORKDIR /app
+
+# Install Python dependencies
+COPY requirements.txt requirements-gpu.txt ./
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt && \
+    pip install --no-cache-dir -r requirements-gpu.txt
+
+# Copy source code
+COPY src/ ./src/
+COPY models/ ./models/
+COPY data/ ./data/
+
+# Expose port
+EXPOSE 8000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
+    CMD curl -f http://localhost:8000/api/health || exit 1
+
+# Start FastAPI
+CMD ["uvicorn", "src.api.fastapi_app:app", "--host", "0.0.0.0", "--port", "8000"]

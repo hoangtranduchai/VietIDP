@@ -1,0 +1,141 @@
+# ═══════════════════════════════════════════════════════════════
+# VietIDP NeuralIDP Enterprise — Docker Compose
+# ═══════════════════════════════════════════════════════════════
+# Khởi chạy: docker compose up -d
+# Dừng:      docker compose down
+# GPU:       Yêu cầu nvidia-container-toolkit
+# ═══════════════════════════════════════════════════════════════
+
+services:
+  # ── Backend FastAPI (GPU) ────────────────────────────────────
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: vietidp-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+      - ./results:/app/results
+    environment:
+      - DATABASE_URL=postgresql://vietidp:vietidp@postgres:5432/vietidp
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+      - OLLAMA_URL=http://ollama:11434/api/generate
+      - OLLAMA_MODEL=qwen2.5:7b
+      - VIETIDP_API_KEY=${VIETIDP_API_KEY:-}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      ollama:
+        condition: service_started
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    restart: unless-stopped
+
+  # ── Celery Worker (GPU) ─────────────────────────────────────
+  celery-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: vietidp-celery
+    command: celery -A src.api.tasks worker --loglevel=info --pool=solo --concurrency=1
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+      - ./results:/app/results
+    environment:
+      - DATABASE_URL=postgresql://vietidp:vietidp@postgres:5432/vietidp
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+      - OLLAMA_URL=http://ollama:11434/api/generate
+      - OLLAMA_MODEL=qwen2.5:7b
+    depends_on:
+      - backend
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    restart: unless-stopped
+
+  # ── Frontend (Nginx) ────────────────────────────────────────
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: vietidp-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  # ── PostgreSQL ──────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: vietidp-postgres
+    environment:
+      POSTGRES_USER: vietidp
+      POSTGRES_PASSWORD: vietidp
+      POSTGRES_DB: vietidp
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vietidp"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # ── Redis ───────────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: vietidp-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # ── Ollama LLM Server (GPU) ────────────────────────────────
+  ollama:
+    image: ollama/ollama:latest
+    container_name: vietidp-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:
+  ollama_data:

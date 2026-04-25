@@ -1,27 +1,14 @@
 # -*- coding: utf-8 -*-
-"""
-API Key Authentication
-=======================
-Optional API key authentication for VietIDP endpoints.
+"""API Key Authentication middleware."""
 
-Set VIETIDP_API_KEY environment variable to enable.
-"""
-
-import os
+from fastapi import Header, HTTPException
 from src.config import Config
 
 
-def verify_api_key(api_key: str = None) -> bool:
-    """
-    Verify API key nếu được cấu hình.
-
-    Args:
-        api_key: Key từ request header
-
-    Returns:
-        True nếu hợp lệ hoặc không cần auth
-    """
-    configured_key = Config.API_KEY
-    if not configured_key:
-        return True  # No auth required
-    return api_key == configured_key
+async def verify_api_key(x_api_key: str = Header(None)):
+    """Verify API key nếu được cấu hình."""
+    if not Config.API_KEY:
+        return True  # No API key configured = open access
+    if x_api_key != Config.API_KEY:
+        raise HTTPException(status_code=403, detail="Invalid API key")
+    return True

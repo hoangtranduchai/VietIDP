@@ -1,43 +1,39 @@
-# ==============================================================================
-# VietIDP - Requirements (OCR-LLM)
-# ==============================================================================
-# Cài đặt: pip install -r requirements.txt
-# Lưu ý: PyTorch và thư viện GPU nên được cài đặt trước bằng setup_env.py hoặc script riêng để đảm bảo CUDA tương thích.
+# ═══════════════════════════════════════════════════════════════
+# VietIDP — Core Dependencies
+# pip install -r requirements.txt
+# ═══════════════════════════════════════════════════════════════
 
-# --- Core ML & Deep Learning ---
-# PyTorch (Nên cài đặt qua conda hoặc pip index riêng cho CUDA)
-# torch>=2.1.0
-# torchvision>=0.16.0
-# --- Large Language Model (LLM/VLM) ---
-transformers>=4.45.0
-accelerate>=0.30.0
-qwen-vl-utils
-bitsandbytes>=0.43.0 # Tùy chọn lượng tử hóa 4-bit/8-bit trên Windows2
-peft>=0.9.0
+# Web Framework
+fastapi>=0.100.0
+uvicorn[standard]>=0.23.0
+python-multipart>=0.0.6
 
-# --- OCR Engine & Computer Vision ---
-paddlepaddle-gpu>=2.6.0; sys_platform == "linux" or sys_platform == "win32"
-paddleocr>=2.7.0.3
-ultralytics>=8.1.0 # YOLOv8
-rembg>=2.0.50 # Bóc tách nền con dấu
-opencv-python-headless>=4.8.0
+# Database
+sqlalchemy>=2.0.0
+psycopg2-binary>=2.9.0
+
+# Task Queue
+celery>=5.3.0
+redis>=5.0.0
+
+# AI / ML
+ultralytics>=8.1.0
+easyocr>=1.7.0
+vietocr>=0.3.5
 Pillow>=10.0.0
-
-# --- Document Processing & Data ---
-PyMuPDF>=1.23.0 # Xử lý PDF cực nhanh (fitz)
-pdf2image>=1.17.0
-docx2pdf>=0.1.8 # Convert DOCX to PDF tự động
-python-docx>=1.0.0
+opencv-python>=4.8.0
 numpy>=1.24.0
-pandas>=2.0.0
-scikit-learn>=1.3.0
-matplotlib>=3.8.0
-tqdm>=4.65.0
 
-# --- Web Backend API ---
-fastapi>=0.110.0
-uvicorn[standard]>=0.29.0
-python-multipart>=0.0.9
-pydantic>=2.6.0
+# LLM
 requests>=2.31.0
-aiofiles>=23.2.1
+chromadb>=0.4.0
+
+# PDF Processing
+PyMuPDF>=1.23.0
+
+# Background removal (stamp matting)
+rembg>=2.0.50
+
+# Utilities
+pydantic>=2.0.0
+python-dotenv>=1.0.0

@@ -126,7 +126,7 @@ app.post('/api/chat', (req, res) => {
   if (!question || !context) return res.status(400).json({ error: 'Thiếu question hoặc context' });
 
   const payload = JSON.stringify({
-    model: 'qwen2.5:1.5b',
+    model: 'qwen2.5:7b',
     messages: [
       {
         role: "system",

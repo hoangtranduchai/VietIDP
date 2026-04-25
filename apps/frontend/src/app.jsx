@@ -1,38 +1,30 @@
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import Sidebar from './components/Sidebar'
-import UploadPage from './pages/UploadPage'
-import ProcessingPage from './pages/ProcessingPage'
-import ResultsPage from './pages/ResultsPage'
-import HistoryPage from './pages/HistoryPage'
-import SummarizePage from './pages/SummarizePage'
-import './App.css'
-
-function AppLayout() {
-  const location = useLocation();
-  const hideSidebar = location.pathname.startsWith('/results');
-
-  return (
-    <div className="app-layout">
-      {!hideSidebar && <Sidebar />}
-      <main className="main-content" style={hideSidebar ? { marginLeft: 0, width: '100%' } : {}}>
-        <Routes>
-          <Route path="/" element={<UploadPage />} />
-          <Route path="/processing/:id" element={<ProcessingPage />} />
-          <Route path="/results/:id" element={<ResultsPage />} />
-          <Route path="/history" element={<HistoryPage />} />
-          <Route path="/summarize" element={<SummarizePage />} />
-        </Routes>
-      </main>
-    </div>
-  );
-}
+import SideNavBar from './components/SideNavBar'
+import UploadPage from './pages/uploadpage'
+import WorkspacePage from './pages/WorkspacePage'
+import HistoryPage from './pages/historypage'
+import DashboardPage from './pages/DashboardPage'
+import ChatPage from './pages/ChatPage'
+import './app.css'
 
 function App() {
   return (
     <Router>
-      <AppLayout />
+      <div className="app-layout">
+        <SideNavBar />
+        <main className="main-content">
+          <Routes>
+            <Route path="/" element={<UploadPage />} />
+            <Route path="/workspace/:id" element={<WorkspacePage />} />
+            <Route path="/workspace" element={<WorkspacePage />} />
+            <Route path="/history" element={<HistoryPage />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/chat" element={<ChatPage />} />
+          </Routes>
+        </main>
+      </div>
       <ToastContainer position="bottom-right" theme="dark" />
     </Router>
   )

@@ -1,3 +1,11 @@
+# -*- coding: utf-8 -*-
+# ⚠️ DEPRECATED — Sử dụng src.pipeline.ocr_llm_pipeline.VietIDPPipeline thay thế.
+# File này giữ lại để tương thích ngược với demo_app.py cũ.
+import warnings
+warnings.warn(
+    "end_to_end.py is deprecated. Use src.pipeline.ocr_llm_pipeline.VietIDPPipeline.",
+    DeprecationWarning, stacklevel=2
+)
 import cv2
 import os
 import sys

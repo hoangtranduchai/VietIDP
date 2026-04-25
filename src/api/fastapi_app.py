@@ -1,90 +1,85 @@
 # -*- coding: utf-8 -*-
 """
-FastAPI Web Service for Stamp Extraction
-========================================
-API kết nối Frontend với The Extractor (YOLOv8 + Hybrid Matting)
+FastAPI Application — VietIDP v3.0
+====================================
+Main application entry point. Tích hợp:
+- Routes API (process, documents CRUD, chat, export)
+- Database (SQLAlchemy + PostgreSQL/SQLite)
+- CORS + Security middleware
+- Static file serving cho uploaded images
+
+Chạy: uvicorn src.api.fastapi_app:app --host 0.0.0.0 --port 8000 --reload
 """
 
 import os
-import json
-import base64
-from fastapi import FastAPI, UploadFile, File, HTTPException
-from fastapi.responses import JSONResponse
+from datetime import datetime
+
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import JSONResponse
+
 from src.config import Config
+from src.api.routes import router as api_router
+from src.api.database import init_db
 
-def create_api_app():
-    """
-    Khởi tạo FastAPI web service.
+# ═══════════════════════════════════════════════════════════════════════
+# FastAPI App
+# ═══════════════════════════════════════════════════════════════════════
 
-    Endpoints:
-    - POST /api/extract_stamp : Upload PDF/Image, trả về Base64 Stamp Overlay
-    - GET  /api/health       : Health check
-    """
-    app = FastAPI(
-        title="VietIDP - Stamp Extraction API",
-        description="API bóc tách và trích xuất nền con dấu trong suốt",
-        version="3.0.0"
+app = FastAPI(
+    title="VietIDP — Vietnamese Intelligent Document Processing",
+    description="Hệ thống trích xuất thông tin tự động từ văn bản hành chính Việt Nam",
+    version="3.0.0",
+    docs_url="/docs",
+    redoc_url="/redoc",
+)
+
+# ── CORS ─────────────────────────────────────────────────────────────
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=Config.CORS_ORIGINS,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# ── Static files (uploaded documents, images) ────────────────────────
+upload_dir = Config.DATA_DIR / "uploads"
+upload_dir.mkdir(parents=True, exist_ok=True)
+app.mount("/uploads", StaticFiles(directory=str(upload_dir)), name="uploads")
+
+# ── Routes ───────────────────────────────────────────────────────────
+app.include_router(api_router)
+
+
+# ── Startup Event ────────────────────────────────────────────────────
+@app.on_event("startup")
+async def startup_event():
+    """Khởi tạo database khi server start."""
+    print("=" * 60)
+    print(" VietIDP FastAPI Server v3.0")
+    print(f" LLM Model: {Config.OLLAMA_MODEL}")
+    print(f" Database: {Config.DATABASE_URL[:50]}...")
+    print("=" * 60)
+    init_db()
+
+
+# ── Error Handlers ───────────────────────────────────────────────────
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    return JSONResponse(
+        status_code=500,
+        content={"error": str(exc), "timestamp": datetime.utcnow().isoformat()}
     )
 
-    # CORS — Cho phép React Frontend kết nối
-    app.add_middleware(
-        CORSMiddleware,
-        allow_origins=Config.CORS_ORIGINS,
-        allow_methods=["GET", "POST"],
-        allow_headers=["*"],
-    )
 
-    # Cấu trúc Pipeline Tĩnh (Nạp vào RAM 1 lần duy nhất)
-    pipeline = None
-
-    @app.on_event("startup")
-    async def startup():
-        nonlocal pipeline
-        from src.pipeline.stamp_pipeline import StampDetectorPipeline
-        # Khởi tạo sẽ pre-load YOLOv8 và Rembg ONNX Session
-        pipeline = StampDetectorPipeline()
-
-    @app.get("/api/health")
-    async def health_check():
-        """Health check endpoint."""
-        import torch
-        return {
-            "status": "healthy",
-            "version": "3.0.0",
-            "gpu_available": torch.cuda.is_available() if hasattr(torch, "cuda") else False,
-            "models_loaded": pipeline.is_loaded if pipeline else False
-        }
-
-    @app.post("/api/extract_stamp")
-    async def extract_stamp(file: UploadFile = File(...)):
-        """
-        Nhận file Upload (PDF hoặc Image).
-        Lưu ý: Hiện tại Test API hỗ trợ Image, với PDF cần thêm thư viện pdf2image
-        chuyển trang đầu tiên thành ảnh trước khi đẩy vào pipeline.
-        """
-        allowed = {'.pdf', '.png', '.jpg', '.jpeg', '.tiff'}
-        ext = os.path.splitext(file.filename or '')[1].lower()
-        if ext not in allowed:
-            raise HTTPException(400, f"Unsupported file type: {ext}")
-
-        contents = await file.read()
-        if len(contents) > 20 * 1024 * 1024:
-            raise HTTPException(400, "File too large. Max 20MB.")
-
-        # Xử lý PDF (convert to image) -> Tương lai nếu upload PDF trực tiếp
-        if ext == '.pdf':
-            # Todo: Cần pdf2image ở đây nếu test trực tiếp file PDF
-            raise HTTPException(400, "PDF not fully supported in simple Matting endpoint yet. Please upload an image.")
-
-        try:
-            # Truyền mảng byte trực tiếp vào Pipeline
-            result = pipeline.process_image(contents)
-            if not result.get("success"):
-                raise HTTPException(500, result.get("error", "Failed to process image"))
-                
-            return JSONResponse(content=result)
-        except Exception as e:
-            raise HTTPException(500, f"Processing error: {str(e)}")
-
-    return app
+# ── Root endpoint ────────────────────────────────────────────────────
+@app.get("/")
+async def root():
+    return {
+        "name": "VietIDP API",
+        "version": "3.0.0",
+        "docs": "/docs",
+        "status": "active"
+    }
