@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import { useLocale } from '../LocaleContext'
 import { chatWithDocument } from '../services/api'
 
-export default function ChatPanel({ documentId, context, initialSummary }) {
+export default function ChatPanel({ documentId, context }) {
   const [messages, setMessages] = useState([])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
@@ -20,32 +20,23 @@ export default function ChatPanel({ documentId, context, initialSummary }) {
     if (documentId && context && autoSummarizedDocId.current !== documentId && messages.length === 0) {
       autoSummarizedDocId.current = documentId
       
-      // If we already have a summary from OCR Pipeline, show it instantly
-      if (initialSummary && initialSummary.trim() !== '') {
-        setMessages([{ 
-          role: 'assistant', 
-          text: `👋 Chào bạn, tôi đã đọc xong tài liệu. Dưới đây là tóm tắt nhanh nội dung:\n\n**${initialSummary}**\n\nBạn có muốn tôi phân tích sâu hơn hay tìm kiếm thông tin gì cụ thể trong văn bản này không?` 
-        }])
-      } else {
-        // Fallback: Generate summary via LLM if initialSummary is missing
-        const generateSummary = async () => {
-          setLoading(true)
-          setMessages([{ role: 'assistant', text: '👋 Chào bạn, tôi đang đọc và tóm tắt tài liệu này...' }])
-          
-          try {
-            const prompt = "Hãy đóng vai một trợ lý AI thông minh. Viết một đoạn tóm tắt siêu ngắn gọn nhưng đầy đủ ý chính (loại văn bản, nội dung trọng tâm) của tài liệu này. Xuống dòng và hỏi người dùng xem họ có cần bạn trích xuất hay tìm kiếm thông tin gì cụ thể không."
-            const res = await chatWithDocument(prompt, documentId, context)
-            setMessages([{ role: 'assistant', text: res.answer }])
-          } catch {
-            setMessages([])
-          } finally {
-            setLoading(false)
-          }
+      const generateSummary = async () => {
+        setLoading(true)
+        setMessages([{ role: 'assistant', text: '👋 Chào bạn, tôi đang đọc và tóm tắt tài liệu này...' }])
+        
+        try {
+          const prompt = "Hãy đóng vai một trợ lý AI thông minh. Viết một đoạn tóm tắt siêu ngắn gọn nhưng đầy đủ ý chính (loại văn bản, nội dung trọng tâm) của tài liệu này. Xuống dòng và hỏi người dùng xem họ có cần bạn trích xuất hay tìm kiếm thông tin gì cụ thể không."
+          const res = await chatWithDocument(prompt, documentId, context)
+          setMessages([{ role: 'assistant', text: res.answer }])
+        } catch {
+          setMessages([])
+        } finally {
+          setLoading(false)
         }
-        generateSummary()
       }
+      generateSummary()
     }
-  }, [documentId, context, initialSummary, messages.length])
+  }, [documentId, context, messages.length])
 
   const sendMessage = async () => {
     if (!input.trim()) return

@@ -289,7 +289,7 @@ export default function WorkspacePage() {
                 />
               </div>
               <div style={{ display: activeTab === 'chat' ? 'flex' : 'none', flex: 1, overflow: 'hidden', flexDirection: 'column' }}>
-                <ChatPanel documentId={parseInt(id)} context={extraction?.full_text} initialSummary={extraction?.trich_yeu} />
+                <ChatPanel documentId={parseInt(id)} context={extraction?.full_text} />
               </div>
             </div>
           </>
