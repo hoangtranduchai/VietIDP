@@ -1,0 +1,28 @@
+{
+  "status": "success",
+  "num_pages": 1,
+  "total_stamps": 1,
+  "stamp_coordinates": [
+    {
+      "box": [
+        623,
+        1277,
+        830,
+        1484
+      ],
+      "confidence": 0.9749
+    }
+  ],
+  "full_text": "ĐẠI HỌC ĐÀ NĂNG\nCỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nTRƯỜNG ĐẠI HỌC BÁCH KHOA\nĐộc lập\nTự do\nHạnh phúc\nSố: 1830/TB-ĐHBK\nĐà\nngày 14\n4 năm 2026\nTHÔNG BÁO\nThời gian nghỉ lễ Giỗ Tổ\nngày Chiến\n30/4 và ngày Quốc tế Lao động 61/5 năm 2026\nCăn cứ Bộ luật Lao\nsố 45/2019/QH14 ngày 20/11/2019 của Quốc\nhội nước\nCộng hòa xã hội chủ nghĩa Việt Nam;\nCăn cứ\nVăn số 3383/BNV-CVL ngày 10/4/2026 của Bộ Nội vụ về\nviệc\ntin về lịch nghỉ dịp Giỗ Tổ\nngày Chiến\n30/4 và Ngày Quốc\ntế\n01/5 năm 2026;\nTrường Đại học Bách khoa\nbáo thời gian nghi lễ Giỗ Tổ\nngày Chiến\n30/4 và ngày Quốc tế Lao động 01/5 năm 2026 như\nsau:\n1. Thời gian nghỉ lễ Giỗ Tổ\nviên\nngười lao\nvà người\nhọc\nnghi 02 ngày: ngày 26/4/2026 (Chủ nhật) và ngày 27/4/2026 (thứ 2)\n2. Thời gian\nlễ ngày Chiến\n30/4 và ngày Quốc tế Lao\nđộng 01/5\nnăm 2026: viên chức, người lao động và người học được nghi 02\nngày: ngày\n30/4/2026 (thứ 5) và ngày 01/5/2026 (thứ 6).\nthời gian nghỉ Lễ, viên\nngười lao\nvà\nngười học chấp hành\nnghiêm chỉnh\ncác\nquy định\ncủa\nNhà nước\nvà\ncác nội\ntại\nvăn số\n1829/ĐHBK-TCHC ngày 14\n4 năm 2026 của\nĐại học bách khoa.\nĐại\nBách khoa\nbáo đến các đơn vị thuộc, trực thuộc Nhà\nngười học\nbiết và thực hiện/q\nKT. HIỆU TRƯỞNG\nPHÓ HIỆU TRƯỞNG\nNơi nhận:\nĐHĐN (để báo cáo);\nHiệu\n(để báo cáo);\nCác Phó Hiệu\n(để biết);\nCác đơn vị (để thực\n6.06\nCTSV (thông báo sinh\nLưu VT, TCHC\nPGS.TS. Huỳnh\nNam",
+  "extraction": {
+    "loai_van_ban": "Thông báo",
+    "so_hieu": "1830/TB-ĐHBK",
+    "ngay_ban_hanh": "14/04/2026",
+    "co_quan_ban_hanh": "Trường Đại học Bách Khoa",
+    "trich_yeu": "Thông báo về thời gian nghỉ lễ Giỗ Tổ Hùng Vương và Quốc tế Lao động năm 2026",
+    "nguoi_ky": ""
+  },
+  "processing_time_seconds": 20.72,
+  "source_file": "1777141227437_sample_test.jpg",
+  "processed_at": "2026-04-26T01:20:57.033068"
+}
