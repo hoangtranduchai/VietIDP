@@ -23,6 +23,7 @@ export default function WorkspacePage() {
   const [extraction, setExtraction] = useState({})
   const [currentStage, setCurrentStage] = useState('input')
   const [activeTab, setActiveTab] = useState('extraction') // 'extraction' | 'chat'
+  const [hasUnreadChat, setHasUnreadChat] = useState(false)
   
   const uploadDialogOpened = useRef(false)
 
@@ -51,6 +52,7 @@ export default function WorkspacePage() {
       if (doc?.extraction) {
         setExtraction(doc.extraction)
         setCurrentStage('storage')
+        if (doc.extraction.trich_yeu) setHasUnreadChat(true)
       }
     }).catch(() => {})
 
@@ -269,10 +271,13 @@ export default function WorkspacePage() {
                   Extraction
                 </button>
                 <button 
-                  style={{ flex: 1, padding: '12px', border: 'none', background: activeTab === 'chat' ? 'var(--bg-card)' : 'transparent', color: activeTab === 'chat' ? 'var(--text-primary)' : 'var(--text-muted)', borderBottom: activeTab === 'chat' ? '2px solid var(--accent)' : '2px solid transparent', cursor: 'pointer', fontWeight: 600, fontSize: 13, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}
-                  onClick={() => setActiveTab('chat')}>
+                  style={{ flex: 1, padding: '12px', border: 'none', background: activeTab === 'chat' ? 'var(--bg-card)' : 'transparent', color: activeTab === 'chat' ? 'var(--text-primary)' : 'var(--text-muted)', borderBottom: activeTab === 'chat' ? '2px solid var(--accent)' : '2px solid transparent', cursor: 'pointer', fontWeight: 600, fontSize: 13, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, position: 'relative' }}
+                  onClick={() => { setActiveTab('chat'); setHasUnreadChat(false); }}>
                   <span className="material-symbols-outlined" style={{ fontSize: 16 }}>forum</span>
                   Chat / Summarize
+                  {hasUnreadChat && activeTab !== 'chat' && (
+                    <span style={{ position: 'absolute', top: 10, right: 10, width: 8, height: 8, borderRadius: '50%', background: 'var(--accent-error)', boxShadow: '0 0 6px var(--accent-error)' }} />
+                  )}
                 </button>
               </div>
               
@@ -284,7 +289,7 @@ export default function WorkspacePage() {
                 />
               </div>
               <div style={{ display: activeTab === 'chat' ? 'flex' : 'none', flex: 1, overflow: 'hidden', flexDirection: 'column' }}>
-                <ChatPanel documentId={parseInt(id)} context={extraction?.full_text} />
+                <ChatPanel documentId={parseInt(id)} context={extraction?.full_text} initialSummary={extraction?.trich_yeu} />
               </div>
             </div>
           </>
