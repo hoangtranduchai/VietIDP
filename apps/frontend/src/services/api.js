@@ -23,7 +23,7 @@ api.interceptors.response.use(
       || 'Unknown error'
 
     // Don't toast on cancelled requests or background health checks
-    if (!axios.isCancel(err) && !err.config?.url?.includes('/health')) {
+    if (!axios.isCancel(err) && !err.config?.url?.includes('/health') && !err.config?.skipToast) {
       toast.error(msg, { toastId: msg.slice(0, 30) })
     }
     return Promise.reject(err)
@@ -102,8 +102,14 @@ export async function chatWithDocument(question, documentId, context) {
 // ═══════════════════════════════════════════════════════════════
 
 export async function healthCheck() {
-  const res = await api.get('/api/health')
-  return res.data
+  try {
+    // Pass a custom config flag to explicitly skip toast if needed, though interceptor checks url
+    const res = await api.get('/api/health', { skipToast: true })
+    return res.data
+  } catch (err) {
+    // Swallow the error so it doesn't propagate to the hook unhandled
+    throw err
+  }
 }
 
 export default api

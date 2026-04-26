@@ -2,6 +2,7 @@ import { NavLink, useNavigate, useLocation } from 'react-router-dom'
 import { useLocale } from '../LocaleContext'
 import { useTheme } from '../ThemeContext'
 import { useMobileSidebar } from '../hooks/useMobileSidebar'
+import { useSystemStatus } from '../hooks/useSystemStatus'
 import StatusDot from '../ui/StatusDot'
 
 const getNavItems = (t) => [
@@ -19,6 +20,7 @@ export default function SideNavBar() {
   const { locale, toggleLocale, t } = useLocale()
   const { isDark, toggleTheme } = useTheme()
   const { isOpen, close } = useMobileSidebar()
+  const systemStatus = useSystemStatus()
 
   // Close sidebar on route change (mobile)
   const handleNavClick = () => close()
@@ -87,7 +89,7 @@ export default function SideNavBar() {
 
           {/* Status Indicator (Mobile Only) */}
           <div className="mobile-status">
-            <StatusDot status="active" />
+            <StatusDot status={systemStatus} />
             {t('localNode')}
           </div>
 

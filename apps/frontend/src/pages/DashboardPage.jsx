@@ -70,10 +70,14 @@ export default function DashboardPage() {
   const healthApi = useApi(healthCheck)
 
   useEffect(() => {
-    // Note: If useApi doesn't use the abort signal, this controller does nothing,
-    // but we add healthApi to the dependency array to fix the lint warning.
+    // Run once on mount and then every 5 seconds to update dashboard system status
     healthApi.execute()
-  }, [healthApi])
+    const interval = setInterval(() => {
+      healthApi.execute()
+    }, 5000)
+    return () => clearInterval(interval)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const completed = documents.filter(d => d.status === 'completed')
   const failed = documents.filter(d => d.status === 'failed')

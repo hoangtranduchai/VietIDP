@@ -1,5 +1,6 @@
 import { useLocale } from '../LocaleContext'
 import { useMobileSidebar } from '../hooks/useMobileSidebar'
+import { useSystemStatus } from '../hooks/useSystemStatus'
 import StatusDot from '../ui/StatusDot'
 
 /**
@@ -12,6 +13,7 @@ import StatusDot from '../ui/StatusDot'
 export default function TopBar({ title, pipeline, children }) {
   const { t } = useLocale()
   const { toggle } = useMobileSidebar()
+  const systemStatus = useSystemStatus()
 
   return (
     <header className="topbar">
@@ -47,7 +49,7 @@ export default function TopBar({ title, pipeline, children }) {
 
       {children || (
         <div className="topbar-status">
-          <StatusDot status="active" />
+          <StatusDot status={systemStatus} />
           {t('localNode')}
         </div>
       )}
