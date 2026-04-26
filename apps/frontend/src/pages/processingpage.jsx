@@ -11,6 +11,7 @@ export default function ProcessingPage() {
   const navigate = useNavigate()
   const { t } = useLocale()
   const [currentStep, setCurrentStep] = useState(0)
+  const [docName, setDocName] = useState(null)
   const [logs, setLogs] = useState([
     { time: new Date().toLocaleTimeString(), text: `${t('procReceived')} Task #${id.slice(0,8)}...`, type: 'info' }
   ])
@@ -25,6 +26,14 @@ export default function ProcessingPage() {
   const addLog = (text, type = 'info') => {
     setLogs(prev => [...prev, { time: new Date().toLocaleTimeString(), text, type }])
   }
+
+  useEffect(() => {
+    if (docId) {
+      import('../services/api').then(({ getDocument }) => {
+        getDocument(docId).then(doc => setDocName(doc.filename)).catch(() => {})
+      })
+    }
+  }, [docId])
 
   useEffect(() => {
     if (!id) return;
@@ -81,7 +90,9 @@ export default function ProcessingPage() {
       <TopBar pipeline={pipeline} />
 
       <div className="page-container" style={{ maxWidth: 800, margin: '0 auto' }}>
-        <h1 style={{ marginBottom: 8 }}>{t('procTitle')} #{id}</h1>
+        <h1 style={{ marginBottom: 8 }}>
+          {docName ? `${t('procTitle')}: ${docName}` : `${t('procTitle')} #${id.slice(0, 8)}...`}
+        </h1>
         <p style={{ color: 'var(--text-muted)', marginBottom: 28, fontSize: 13 }}>
           {t('procSub')}
         </p>

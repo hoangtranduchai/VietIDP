@@ -50,7 +50,7 @@ export default function TopBar({ title, pipeline, children }) {
       {children || (
         <div className="topbar-status">
           <StatusDot status={systemStatus} />
-          {t('localNode')}
+          {t(systemStatus === 'active' ? 'localNodeActive' : 'localNodeInactive')}
         </div>
       )}
     </header>

@@ -20,8 +20,8 @@ export function useSystemStatus() {
     // Initial check
     check()
 
-    // Poll every 5 seconds
-    intervalId = setInterval(check, 5000)
+    // Poll every 60 seconds
+    intervalId = setInterval(check, 60000)
 
     return () => {
       mounted = false

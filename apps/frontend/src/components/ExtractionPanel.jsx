@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useLocale } from '../LocaleContext'
 
 function ConfidenceBadge({ value }) {
@@ -17,6 +17,10 @@ export default function ExtractionPanel({ data = {}, onUpdate, processing = fals
   const [showJson, setShowJson] = useState(false)
   const [editData, setEditData] = useState(data)
   const { t } = useLocale()
+
+  useEffect(() => {
+    setEditData(data)
+  }, [data])
 
   const FIELDS = [
     { key: 'so_hieu', label: t('docId'), type: 'input' },

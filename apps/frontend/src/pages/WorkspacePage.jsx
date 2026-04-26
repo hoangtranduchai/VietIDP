@@ -81,7 +81,7 @@ export default function WorkspacePage() {
 
   const doc = docApi.data
 
-  const imageUrl = doc?.file_path
+  const imageUrl = doc?.filename
     ? `${api.defaults.baseURL}/uploads/${doc.filename}`
     : null
 
@@ -196,7 +196,7 @@ export default function WorkspacePage() {
                 background: 'var(--accent-success-muted)', border: '1px solid rgba(52,211,153,0.15)',
                 fontSize: 11, color: 'var(--accent-success)', fontWeight: 600,
               }}>
-                <span className="material-symbols-outlined" style={{ fontSize: 14, transform: 'translateY(-1px)' }}>lock</span>
+                <span className="material-symbols-outlined" style={{ fontSize: 14 }}>lock</span>
                 {t('dropSecurity')}
               </div>
             </div>

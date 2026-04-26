@@ -16,7 +16,8 @@ const translations = {
     navSystem: 'Hệ Thống',
     // TopBar
     appTitle: 'VietIDP Enterprise',
-    localNode: 'Máy cục bộ: Hoạt động',
+    localNodeActive: 'Máy cục bộ: Hoạt động',
+    localNodeInactive: 'Máy cục bộ: Mất kết nối',
     // Upload
     dropTitle: 'Kéo thả văn bản vào đây',
     dropSub: 'Hỗ trợ PDF, PNG, JPG, TIFF • Tối đa 20MB',
@@ -124,7 +125,8 @@ const translations = {
     navExport: 'Export',
     navSystem: 'System Health',
     appTitle: 'VietIDP Enterprise',
-    localNode: 'Local Node: Active',
+    localNodeActive: 'Local Node: Active',
+    localNodeInactive: 'Local Node: Inactive',
     dropTitle: 'Drop your document here',
     dropSub: 'Supports PDF, PNG, JPG, TIFF • Max 20MB',
     dropSecurity: '100% offline processing — data never leaves your machine',

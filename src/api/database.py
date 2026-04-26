@@ -99,6 +99,7 @@ class ExtractionResult(Base):
             "verified_by_user": self.verified_by_user,
             "raw_json": self.raw_json,
             "edited_json": self.edited_json,
+            "full_text": self.full_text,
         }
 
 
