@@ -100,10 +100,11 @@ async def process_document(file: UploadFile = File(...), async_mode: bool = Fals
     safe_name = f"{timestamp}_{file.filename}"
     file_path = UPLOAD_DIR / safe_name
 
+    content = await file.read()
+    if len(content) > MAX_FILE_SIZE:
+        raise HTTPException(400, "File quá lớn (>20MB)")
+
     with open(file_path, "wb") as f:
-        content = await file.read()
-        if len(content) > MAX_FILE_SIZE:
-            raise HTTPException(400, "File quá lớn (>20MB)")
         f.write(content)
 
     # Save to database

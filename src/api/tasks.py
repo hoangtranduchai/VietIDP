@@ -154,6 +154,7 @@ def _process_document_worker(task_id: str, document_id: int, file_path: str):
         task_manager.set_result(task_id, task_result)
 
     except Exception as e:
+        session.rollback()  # Clear aborted transaction state
         # Update status to failed
         try:
             doc = session.query(Document).get(document_id)

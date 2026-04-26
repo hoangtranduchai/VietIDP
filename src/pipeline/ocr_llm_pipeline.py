@@ -304,8 +304,10 @@ class VietIDPPipeline:
 
             if pix.n == 4:
                 img = cv2.cvtColor(img, cv2.COLOR_RGBA2BGR)
-            else:
+            elif pix.n == 3:
                 img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+            elif pix.n == 1:
+                img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
 
             # Stage 1: Preprocess
             img = self.preprocess_image(img)
