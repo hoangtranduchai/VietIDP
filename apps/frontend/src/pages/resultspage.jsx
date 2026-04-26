@@ -34,7 +34,7 @@ function InsightCard({ idx, title, body }) {
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <span style={{
             width: 26, height: 26, borderRadius: 8,
-            background: open ? 'var(--accent)' : 'rgba(255,255,255,0.04)',
+            background: open ? 'var(--accent)' : 'var(--bg-hover)',
             color: open ? 'white' : 'var(--text-muted)',
             fontSize: 12, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center',
             transition: 'all 0.2s',
@@ -102,8 +102,10 @@ export default function ResultsPage() {
     setChatLoading(true)
     setFaqs(prev => [...prev, { q, a: '⏳ Analyzing...' }])
     try {
-      const ctx = JSON.parse(localStorage.getItem('last_summary'))?.extracted_text || d.tom_tat
-      const res = await chatWithDocument(q, null, ctx)
+      // In ResultsPage, we might not have id but we use savedData text
+      // if not available, fallback to mock text
+      const context = savedData ? JSON.stringify(savedData) : JSON.stringify(MOCK)
+      const res = await chatWithDocument(q, null, context)
       setFaqs(prev => prev.map((f, i) => i === prev.length - 1 ? { q, a: res.answer } : f))
     } catch {
       setFaqs(prev => prev.map((f, i) => i === prev.length - 1 ? { q, a: '❌ Connection error' } : f))
@@ -114,13 +116,10 @@ export default function ResultsPage() {
   return (
     <>
       <TopBar />
-      <div style={{ display: 'flex', height: 'calc(100vh - var(--topbar-height))', overflow: 'hidden' }}>
+      <div className="results-layout">
 
         {/* LEFT — Document Preview */}
-        <div style={{
-          width: 300, flexShrink: 0, borderRight: '1px solid var(--border)',
-          overflowY: 'auto', padding: 16, display: 'flex', flexDirection: 'column', gap: 12,
-        }}>
+        <div className="results-sidebar">
           {/* Doc identity */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
             <div style={{ width: 36, height: 36, borderRadius: 9, background: 'var(--accent-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -134,9 +133,9 @@ export default function ResultsPage() {
 
           {/* Quick meta */}
           {[
-            { icon: 'apartment', label: d.meta.co_quan, sub: 'Issuing Authority', c: 'var(--accent)' },
-            { icon: 'person', label: d.meta.nguoi_ky, sub: 'Signer', c: 'var(--accent-purple)' },
-            { icon: 'event', label: d.meta.hieu_luc, sub: 'Effective Date', c: 'var(--accent-warning)' },
+            { icon: 'apartment', label: d.meta.co_quan, sub: t('resultsIssuingAuth'), c: 'var(--accent)' },
+            { icon: 'person', label: d.meta.nguoi_ky, sub: t('resultsSigner'), c: 'var(--accent-purple)' },
+            { icon: 'event', label: d.meta.hieu_luc, sub: t('resultsEffective'), c: 'var(--accent-warning)' },
           ].map(({ icon, label, sub, c }) => (
             <div key={sub} style={{ display: 'flex', gap: 10, padding: '8px 0', borderBottom: '1px solid var(--border)' }}>
               <div style={{ width: 28, height: 28, borderRadius: 7, background: `${c}14`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -150,14 +149,14 @@ export default function ResultsPage() {
           ))}
 
           <div style={{ marginTop: 12 }}>
-            <EntityBadges label="Organizations" icon="apartment" items={d.entities.organizations} color="#60a5fa" />
-            <EntityBadges label="People" icon="person" items={d.entities.people} color="#a78bfa" />
-            <EntityBadges label="Legal Refs" icon="gavel" items={d.entities.laws} color="#f97316" />
+            <EntityBadges label={t('resultsOrgs')} icon="apartment" items={d.entities.organizations} color="#60a5fa" />
+            <EntityBadges label={t('resultsPeople')} icon="person" items={d.entities.people} color="#a78bfa" />
+            <EntityBadges label={t('resultsLaws')} icon="gavel" items={d.entities.laws} color="#f97316" />
           </div>
 
           {d.keywords?.length > 0 && (
             <div>
-              <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: 8 }}>Keywords</div>
+              <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: 8 }}>{t('resultsKeywords')}</div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
                 {d.keywords.map((k, i) => (
                   <span key={i} className="badge badge-blue">{k}</span>
@@ -168,16 +167,16 @@ export default function ResultsPage() {
 
           <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: 8, paddingTop: 12 }}>
             <button className="btn btn-primary" style={{ justifyContent: 'center', width: '100%' }}>
-              <span className="material-symbols-outlined" style={{ fontSize: 16 }}>download</span> Export
+              <span className="material-symbols-outlined" style={{ fontSize: 16 }}>download</span> {t('resultsExport')}
             </button>
-            <button className="btn btn-ghost" style={{ justifyContent: 'center', width: '100%' }} onClick={() => navigate('/')}>
-              <span className="material-symbols-outlined" style={{ fontSize: 16 }}>refresh</span> Process Another
+            <button className="btn" style={{ justifyContent: 'center', width: '100%' }} onClick={() => navigate('/')}>
+              <span className="material-symbols-outlined" style={{ fontSize: 16 }}>refresh</span> {t('resultsProcessAnother')}
             </button>
           </div>
         </div>
 
         {/* CENTER — Analysis */}
-        <div style={{ flex: 1, overflowY: 'auto', padding: 24 }}>
+        <div className="results-main">
 
           {/* TL;DR */}
           <div style={{
@@ -186,7 +185,7 @@ export default function ResultsPage() {
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginBottom: 8 }}>
               <span className="material-symbols-outlined" style={{ fontSize: 16, color: 'var(--accent)' }}>lightbulb</span>
-              <span style={{ fontSize: 11, fontWeight: 800, color: 'var(--accent)', textTransform: 'uppercase', letterSpacing: 0.6 }}>TL;DR</span>
+              <span style={{ fontSize: 11, fontWeight: 800, color: 'var(--accent)', textTransform: 'uppercase', letterSpacing: 0.6 }}>{t('resultsTLDR')}</span>
             </div>
             <p style={{ fontSize: 15, fontWeight: 600, color: 'var(--text-primary)', lineHeight: 1.65 }}>{d.tldr}</p>
           </div>
@@ -196,7 +195,7 @@ export default function ResultsPage() {
             <section style={{ marginBottom: 28 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
                 <span className="material-symbols-outlined" style={{ fontSize: 16, color: 'var(--accent)' }}>menu_book</span>
-                <h3 style={{ fontSize: 15, fontWeight: 700 }}>Full Summary</h3>
+                <h3 style={{ fontSize: 15, fontWeight: 700 }}>{t('resultsFullSummary')}</h3>
               </div>
               <div className="card" style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.9 }}>{d.tom_tat}</div>
             </section>
@@ -207,7 +206,7 @@ export default function ResultsPage() {
             <section style={{ marginBottom: 28 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
                 <span className="material-symbols-outlined" style={{ fontSize: 16, color: 'var(--accent)' }}>tag</span>
-                <h3 style={{ fontSize: 15, fontWeight: 700 }}>Key Insights</h3>
+                <h3 style={{ fontSize: 15, fontWeight: 700 }}>{t('resultsKeyInsights')}</h3>
               </div>
               {d.insights.map((item, i) => <InsightCard key={i} idx={i} {...item} />)}
             </section>
@@ -217,7 +216,7 @@ export default function ResultsPage() {
           <section>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
               <span className="material-symbols-outlined" style={{ fontSize: 16, color: 'var(--accent)' }}>forum</span>
-              <h3 style={{ fontSize: 15, fontWeight: 700 }}>Ask AI about this document</h3>
+              <h3 style={{ fontSize: 15, fontWeight: 700 }}>{t('resultsAskAI')}</h3>
             </div>
             {faqs.map((f, i) => (
               <div key={i} className="card" style={{ marginBottom: 8 }}>
@@ -228,7 +227,7 @@ export default function ResultsPage() {
             <form onSubmit={handleAsk} style={{ display: 'flex', gap: 8, marginTop: 8 }}>
               <input
                 value={chatInput} onChange={e => setChatInput(e.target.value)}
-                placeholder="Ask AI about this document..."
+                placeholder={t('chatPlaceholder')}
                 disabled={chatLoading}
                 style={{
                   flex: 1, padding: '12px 16px', borderRadius: 'var(--radius-sm)',
@@ -237,7 +236,7 @@ export default function ResultsPage() {
                 }}
               />
               <button type="submit" disabled={chatLoading} className="btn btn-primary" style={{ padding: '0 20px' }}>
-                {chatLoading ? 'Asking...' : 'Ask AI'}
+                {chatLoading ? t('resultsAsking') : t('resultsAskBtn')}
               </button>
             </form>
           </section>

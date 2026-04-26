@@ -22,8 +22,8 @@ api.interceptors.response.use(
       || err.message
       || 'Unknown error'
 
-    // Don't toast on cancelled requests
-    if (!axios.isCancel(err)) {
+    // Don't toast on cancelled requests or background health checks
+    if (!axios.isCancel(err) && !err.config?.url?.includes('/health')) {
       toast.error(msg, { toastId: msg.slice(0, 30) })
     }
     return Promise.reject(err)
@@ -37,7 +37,7 @@ api.interceptors.response.use(
 export async function processDocument(file, onProgress) {
   const formData = new FormData()
   formData.append('file', file)
-  const res = await api.post('/api/process_document', formData, {
+  const res = await api.post('/api/process_document?async_mode=true', formData, {
     headers: { 'Content-Type': 'multipart/form-data' },
     onUploadProgress: onProgress,
   })

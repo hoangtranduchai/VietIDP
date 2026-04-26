@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useLocale } from '../LocaleContext'
 import { chatWithDocument } from '../services/api'
 
@@ -7,6 +7,40 @@ export default function ChatPanel({ documentId, context }) {
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
   const { t } = useLocale()
+  const messagesEndRef = useRef(null)
+  const autoSummarizedDocId = useRef(null)
+
+  // Bug 9 fix: Auto-scroll to latest message
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages, loading])
+
+  // Auto-Summary Feature
+  useEffect(() => {
+    if (documentId && context && autoSummarizedDocId.current !== documentId && messages.length === 0) {
+      autoSummarizedDocId.current = documentId
+      
+      const generateSummary = async () => {
+        setLoading(true)
+        // Set an optimistic loading greeting
+        setMessages([{ role: 'assistant', text: '👋 Chào bạn, tôi đang đọc và tóm tắt tài liệu này...' }])
+        
+        try {
+          const prompt = "Hãy đóng vai một trợ lý AI thông minh. Viết một đoạn tóm tắt siêu ngắn gọn nhưng đầy đủ ý chính (loại văn bản, nội dung trọng tâm) của tài liệu này. Xuống dòng và hỏi người dùng xem họ có cần bạn trích xuất hay tìm kiếm thông tin gì cụ thể không."
+          const res = await chatWithDocument(prompt, documentId, context)
+          // Replace the loading message with the actual summary
+          setMessages([{ role: 'assistant', text: res.answer }])
+        } catch {
+          // Silently fail so the user just sees an empty chat if the LLM is offline
+          setMessages([])
+        } finally {
+          setLoading(false)
+        }
+      }
+      
+      generateSummary()
+    }
+  }, [documentId, context, messages.length])
 
   const sendMessage = async () => {
     if (!input.trim()) return
@@ -56,6 +90,7 @@ export default function ChatPanel({ documentId, context }) {
             <div className="typing-dots"><span /><span /><span /></div>
           </div>
         )}
+        <div ref={messagesEndRef} />
       </div>
       <div className="chat-input-area">
         <input

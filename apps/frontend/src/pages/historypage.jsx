@@ -10,7 +10,7 @@ import { toast } from 'react-toastify'
 
 export default function HistoryPage() {
   const navigate = useNavigate()
-  const { t } = useLocale()
+  const { t, locale } = useLocale()
   const { documents, loading, deleteDoc, refresh } = useDocuments()
   const [deleteTarget, setDeleteTarget] = useState(null)
 
@@ -23,9 +23,11 @@ export default function HistoryPage() {
     setDeleteTarget(null)
   }
 
+  // Bug 5 fix: Use current locale for date formatting
   const formatDate = (iso) => {
     if (!iso) return ''
-    return new Date(iso).toLocaleString('vi-VN', {
+    const loc = locale === 'vi' ? 'vi-VN' : 'en-US'
+    return new Date(iso).toLocaleString(loc, {
       day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
     })
   }
@@ -37,9 +39,9 @@ export default function HistoryPage() {
       <div className="page-container">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
           <h1 style={{ marginBottom: 0 }}>{t('historyTitle')}</h1>
-          <button className="btn" onClick={refresh}>
+          <button className="btn" onClick={refresh} title={t('refresh')}>
             <span className="material-symbols-outlined" style={{ fontSize: 16 }}>refresh</span>
-            Refresh
+            {t('refresh')}
           </button>
         </div>
 
@@ -52,9 +54,9 @@ export default function HistoryPage() {
           <EmptyState
             icon="folder_open"
             title={t('noHistory')}
-            subtitle="Upload a document to start processing"
-            action={<button className="btn btn-primary" onClick={() => navigate('/')}>
-              <span className="material-symbols-outlined" style={{ fontSize: 16 }}>add</span> Upload Document
+            subtitle={t('emptyHistorySub')}
+            action={<button className="btn btn-primary" onClick={() => navigate('/workspace', { state: { autoOpenUpload: true } })}>
+              <span className="material-symbols-outlined" style={{ fontSize: 16 }}>add</span> {t('uploadBtn')}
             </button>}
           />
         ) : (
@@ -97,15 +99,15 @@ export default function HistoryPage() {
       </div>
 
       {/* Delete confirmation modal */}
-      <Modal open={!!deleteTarget} onClose={() => setDeleteTarget(null)} title="Confirm Delete" width={420}>
+      <Modal open={!!deleteTarget} onClose={() => setDeleteTarget(null)} title={t('deleteConfirm')} width={420}>
         <p style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: 20 }}>
-          Are you sure you want to delete <strong style={{ color: 'var(--text-primary)' }}>"{deleteTarget?.filename}"</strong>?
-          This action cannot be undone.
+          {t('deleteConfirmMsg')} <strong style={{ color: 'var(--text-primary)' }}>"{deleteTarget?.filename}"</strong>?
+          {' '}{t('deleteUndo')}
         </p>
         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
-          <button className="btn" onClick={() => setDeleteTarget(null)}>Cancel</button>
+          <button className="btn" onClick={() => setDeleteTarget(null)}>{t('deleteCancel')}</button>
           <button className="btn btn-danger" onClick={handleDelete} style={{ background: 'var(--accent-error-muted)' }}>
-            <span className="material-symbols-outlined" style={{ fontSize: 16 }}>delete</span> Delete
+            <span className="material-symbols-outlined" style={{ fontSize: 16 }}>delete</span> {t('deleteBtn')}
           </button>
         </div>
       </Modal>

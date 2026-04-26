@@ -44,7 +44,7 @@ export default function ExtractionPanel({ data = {}, onUpdate, processing = fals
   }
 
   return (
-    <div className="pane pane-extraction">
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       <div className="pane-header">
         <span className="pane-header-label">
           <span className="material-symbols-outlined" style={{fontSize: 16, color: 'var(--accent-cyan)'}}>code_blocks</span>

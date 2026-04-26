@@ -1,9 +1,9 @@
 /* ════════════════════════════════════════════════════════════════
-   VietIDP — DARK GLASSMORPHISM DESIGN SYSTEM
+   VietIDP — DUAL-THEME DESIGN SYSTEM (Dark + Light)
    Inspired by Vercel / Linear / Raycast
    ════════════════════════════════════════════════════════════════ */
 
-/* ── DESIGN TOKENS ─────────────────────────────────────────── */
+/* ── DESIGN TOKENS (Dark — default) ────────────────────────── */
 :root {
   /* Background hierarchy */
   --bg-root:       #06090f;
@@ -75,6 +75,68 @@
 
   /* Transition */
   --ease: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── LIGHT THEME OVERRIDES ─────────────────────────────────── */
+:root[data-theme="light"] {
+  /* Background hierarchy */
+  --bg-root:       #f5f5f7;
+  --bg-primary:    #ffffff;
+  --bg-secondary:  #f9fafb;
+  --bg-elevated:   #f3f4f6;
+  --bg-card:       rgba(255, 255, 255, 0.85);
+  --bg-card-solid: #ffffff;
+  --bg-hover:      rgba(0, 0, 0, 0.03);
+  --bg-active:     rgba(0, 0, 0, 0.05);
+
+  /* Glass */
+  --glass-bg:        rgba(255, 255, 255, 0.7);
+  --glass-bg-light:  rgba(255, 255, 255, 0.55);
+  --glass-border:    rgba(0, 0, 0, 0.08);
+  --glass-border-hover: rgba(0, 0, 0, 0.15);
+
+  /* Borders */
+  --border:        rgba(0, 0, 0, 0.08);
+  --border-bright: rgba(0, 0, 0, 0.15);
+  --border-glow:   rgba(59, 130, 246, 0.25);
+
+  /* Accents (slightly deeper for light-bg contrast) */
+  --accent:          #3b82f6;
+  --accent-hover:    #2563eb;
+  --accent-muted:    rgba(59, 130, 246, 0.1);
+  --accent-glow:     rgba(59, 130, 246, 0.06);
+  --accent-cyan:     #0891b2;
+  --accent-cyan-muted: rgba(8, 145, 178, 0.08);
+  --accent-purple:   #7c3aed;
+  --accent-purple-muted: rgba(124, 58, 237, 0.08);
+  --accent-success:  #059669;
+  --accent-success-muted: rgba(5, 150, 105, 0.08);
+  --accent-warning:  #d97706;
+  --accent-warning-muted: rgba(217, 119, 6, 0.08);
+  --accent-error:    #dc2626;
+  --accent-error-muted: rgba(220, 38, 38, 0.08);
+
+  /* Text */
+  --text-primary:    #111827;
+  --text-secondary:  #4b5563;
+  --text-muted:      #9ca3af;
+  --text-accent:     #3b82f6;
+
+  /* Shadows (soft, no glow) */
+  --shadow-sm:   0 1px 2px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
+  --shadow-md:   0 4px 12px rgba(0,0,0,0.08);
+  --shadow-lg:   0 12px 40px rgba(0,0,0,0.12);
+  --glow-accent: 0 2px 12px rgba(59,130,246,0.10);
+  --glow-cyan:   0 2px 12px rgba(8,145,178,0.10);
+  --glow-success:0 2px 12px rgba(5,150,105,0.10);
+}
+
+/* Light scrollbar */
+:root[data-theme="light"] ::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.12);
+}
+:root[data-theme="light"] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.2);
 }
 
 /* ── RESET & BASE ──────────────────────────────────────────── */

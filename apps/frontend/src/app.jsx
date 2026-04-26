@@ -1,21 +1,21 @@
 import { lazy, Suspense } from 'react'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { LocaleProvider } from './LocaleContext'
+import { ThemeProvider, useTheme } from './ThemeContext'
+import { MobileSidebarProvider } from './hooks/useMobileSidebar'
 import ErrorBoundary from './ui/ErrorBoundary'
 import SideNavBar from './components/SideNavBar'
 import './app.css'
 
 // ── Lazy-loaded pages (code splitting) ───────────────────────
-const UploadPage     = lazy(() => import('./pages/uploadpage'))
 const WorkspacePage  = lazy(() => import('./pages/WorkspacePage'))
 const HistoryPage    = lazy(() => import('./pages/historypage'))
 const DashboardPage  = lazy(() => import('./pages/DashboardPage'))
-const ChatPage       = lazy(() => import('./pages/ChatPage'))
 const ProcessingPage = lazy(() => import('./pages/processingpage'))
 const ResultsPage    = lazy(() => import('./pages/resultspage'))
-const SummarizePage  = lazy(() => import('./pages/summarizepage'))
+const NotFoundPage   = lazy(() => import('./pages/NotFoundPage'))
 
 /** Page-level loading fallback */
 function PageLoader() {
@@ -33,40 +33,52 @@ function PageLoader() {
   )
 }
 
+/** Inner shell — needs theme context for toast */
+function AppShell() {
+  const { isDark } = useTheme()
+
+  return (
+    <Router>
+      <MobileSidebarProvider>
+        <div className="app-layout">
+          <SideNavBar />
+          <main className="main-content">
+            <Suspense fallback={<PageLoader />}>
+              <Routes>
+                <Route path="/" element={<Navigate to="/workspace" replace />} />
+                <Route path="/workspace/:id" element={<WorkspacePage />} />
+                <Route path="/workspace" element={<WorkspacePage />} />
+                <Route path="/processing/:id" element={<ProcessingPage />} />
+                <Route path="/results/:id" element={<ResultsPage />} />
+                <Route path="/history" element={<HistoryPage />} />
+                <Route path="/dashboard" element={<DashboardPage />} />
+                <Route path="*" element={<NotFoundPage />} />
+              </Routes>
+            </Suspense>
+          </main>
+        </div>
+        <ToastContainer
+          position="bottom-right"
+          theme={isDark ? 'dark' : 'light'}
+          autoClose={4000}
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          pauseOnFocusLoss={false}
+        />
+      </MobileSidebarProvider>
+    </Router>
+  )
+}
+
 function App() {
   return (
     <ErrorBoundary>
-      <LocaleProvider>
-        <Router>
-          <div className="app-layout">
-            <SideNavBar />
-            <main className="main-content">
-              <Suspense fallback={<PageLoader />}>
-                <Routes>
-                  <Route path="/" element={<UploadPage />} />
-                  <Route path="/workspace/:id" element={<WorkspacePage />} />
-                  <Route path="/workspace" element={<WorkspacePage />} />
-                  <Route path="/processing/:id" element={<ProcessingPage />} />
-                  <Route path="/results/:id" element={<ResultsPage />} />
-                  <Route path="/summarize" element={<SummarizePage />} />
-                  <Route path="/history" element={<HistoryPage />} />
-                  <Route path="/dashboard" element={<DashboardPage />} />
-                  <Route path="/chat" element={<ChatPage />} />
-                </Routes>
-              </Suspense>
-            </main>
-          </div>
-          <ToastContainer
-            position="bottom-right"
-            theme="dark"
-            autoClose={4000}
-            hideProgressBar={false}
-            newestOnTop
-            closeOnClick
-            pauseOnFocusLoss={false}
-          />
-        </Router>
-      </LocaleProvider>
+      <ThemeProvider>
+        <LocaleProvider>
+          <AppShell />
+        </LocaleProvider>
+      </ThemeProvider>
     </ErrorBoundary>
   )
 }

@@ -35,7 +35,7 @@ function MiniBar({ data }) {
           <div style={{
             width: '100%', borderRadius: 3,
             height: Math.max(4, (d.value / max) * 70),
-            background: d.active ? 'linear-gradient(180deg, var(--accent), var(--accent-cyan))' : 'rgba(96,165,250,0.2)',
+            background: d.active ? 'linear-gradient(180deg, var(--accent), var(--accent-cyan))' : 'var(--accent-muted)',
             transition: 'height 0.5s var(--ease)',
             boxShadow: d.active ? '0 0 8px rgba(96,165,250,0.3)' : 'none',
           }} />
@@ -46,15 +46,19 @@ function MiniBar({ data }) {
   )
 }
 
-function SystemRow({ label, status, detail }) {
+function SystemRow({ label, status, detail, loading: isLoading }) {
   return (
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 0', borderBottom: '1px solid var(--border)' }}>
       <span style={{ fontSize: 14, color: 'var(--text-primary)', fontWeight: 500 }}>{label}</span>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
         <span style={{ fontSize: 12, color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>{detail}</span>
-        <span className={`status-badge ${status === 'active' ? 'completed' : status === 'inactive' ? 'failed' : 'pending'}`}>
-          <StatusDot status={status} size={6} /> {status}
-        </span>
+        {isLoading ? (
+          <Skeleton width={60} height={20} />
+        ) : (
+          <span className={`status-badge ${status === 'active' ? 'completed' : status === 'inactive' ? 'failed' : 'pending'}`}>
+            <StatusDot status={status} size={6} /> {status}
+          </span>
+        )}
       </div>
     </div>
   )
@@ -65,7 +69,11 @@ export default function DashboardPage() {
   const { documents, loading: docsLoading } = useDocuments(100)
   const healthApi = useApi(healthCheck)
 
-  useEffect(() => { healthApi.execute() }, [])
+  useEffect(() => {
+    // Note: If useApi doesn't use the abort signal, this controller does nothing,
+    // but we add healthApi to the dependency array to fix the lint warning.
+    healthApi.execute()
+  }, [healthApi])
 
   const completed = documents.filter(d => d.status === 'completed')
   const failed = documents.filter(d => d.status === 'failed')
@@ -94,7 +102,7 @@ export default function DashboardPage() {
             {[1,2,3,4].map(i => <Skeleton key={i} variant="card" height={110} style={{ flex: 1 }} />)}
           </div>
         ) : (
-          <div className="stagger" style={{ display: 'flex', gap: 14, marginBottom: 24, flexWrap: 'wrap' }}>
+          <div className="stagger stats-row">
             <StatCard icon="description" label={t('totalDocs')} value={documents.length} sub={t('allTime')} glowColor="#60a5fa" />
             <StatCard icon="check_circle" label={t('completed')} value={completed.length} sub={`${documents.length ? Math.round(completed.length / documents.length * 100) : 0}% ${t('successRate')}`} glowColor="#34d399" />
             <StatCard icon="error" label={t('failed')} value={failed.length} sub={t('needAttention')} glowColor="#f87171" />
@@ -102,7 +110,7 @@ export default function DashboardPage() {
           </div>
         )}
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 24 }}>
+        <div className="dash-grid">
           <div className="card card-glow">
             <p style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-muted)', marginBottom: 16 }}>{t('weeklyAct')}</p>
             <MiniBar data={weeklyData} />
@@ -110,19 +118,19 @@ export default function DashboardPage() {
           <div className="card card-glow">
             <p style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-muted)', marginBottom: 16 }}>{t('docTypes')}</p>
             {documents.length > 0 ? (
-              <MiniBar data={Object.entries(documents.reduce((acc, d) => { const t = d.extraction?.loai_van_ban || 'Other'; acc[t] = (acc[t]||0)+1; return acc }, {})).map(([label, value]) => ({ label: label.substring(0,6), value }))} />
+              <MiniBar data={Object.entries(documents.reduce((acc, d) => { const tp = d.extraction?.loai_van_ban || 'Other'; acc[tp] = (acc[tp]||0)+1; return acc }, {})).map(([label, value]) => ({ label: label.substring(0,6), value }))} />
             ) : <p style={{ color: 'var(--text-muted)', fontSize: 13, textAlign: 'center', padding: 20 }}>{t('noData')}</p>}
           </div>
         </div>
 
-        {/* System */}
+        {/* System — Bug 13 fix: show skeleton while health check loads */}
         <div className="card">
           <p style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-muted)', marginBottom: 8 }}>{t('sysComponents')}</p>
-          <SystemRow label="Ollama LLM Server" status={sys.ollama || 'inactive'} detail={`Model: ${sys.model || 'qwen2.5:7b'}`} />
-          <SystemRow label="PostgreSQL / SQLite" status={sys.database || 'inactive'} detail="Document storage" />
-          <SystemRow label="YOLO Stamp Detector" status="standby" detail="YOLOv8x best.pt" />
-          <SystemRow label="VietOCR Engine" status="standby" detail="vgg_transformer" />
-          <SystemRow label="NVIDIA RTX 5070" status="active" detail="8GB VRAM" />
+          <SystemRow label="Ollama LLM Server" status={sys.ollama || 'inactive'} detail={`Model: ${sys.model || 'qwen2.5:7b'}`} loading={healthApi.loading} />
+          <SystemRow label="PostgreSQL / SQLite" status={sys.database || 'inactive'} detail="Document storage" loading={healthApi.loading} />
+          <SystemRow label="YOLO Stamp Detector" status="standby" detail="YOLOv8x best.pt" loading={false} />
+          <SystemRow label="VietOCR Engine" status="standby" detail="vgg_transformer" loading={false} />
+          <SystemRow label="NVIDIA RTX 5070" status="active" detail="8GB VRAM" loading={false} />
         </div>
       </div>
     </>

@@ -36,9 +36,9 @@ export default function DocumentViewer({ imageUrl, stamps = [], filename }) {
               {stamps.map((stamp, i) => (
                 <div key={i} style={{
                   position: 'absolute',
-                  left: stamp.x1, top: stamp.y1,
-                  width: stamp.x2 - stamp.x1,
-                  height: stamp.y2 - stamp.y1,
+                  left: `${stamp.x1}px`, top: `${stamp.y1}px`,
+                  width: `${stamp.x2 - stamp.x1}px`,
+                  height: `${stamp.y2 - stamp.y1}px`,
                   border: '2px dashed var(--accent-error)',
                   borderRadius: 4,
                   background: 'rgba(248,113,113,0.08)',

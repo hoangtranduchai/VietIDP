@@ -1,4 +1,5 @@
 import { useLocale } from '../LocaleContext'
+import { useMobileSidebar } from '../hooks/useMobileSidebar'
 import StatusDot from '../ui/StatusDot'
 
 /**
@@ -10,10 +11,17 @@ import StatusDot from '../ui/StatusDot'
  */
 export default function TopBar({ title, pipeline, children }) {
   const { t } = useLocale()
+  const { toggle } = useMobileSidebar()
 
   return (
     <header className="topbar">
-      <h1 className="topbar-title">{title || t('appTitle')}</h1>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        {/* Hamburger — visible only on mobile via CSS */}
+        <button className="mobile-menu-btn" onClick={toggle} aria-label="Toggle menu">
+          <span className="material-symbols-outlined" style={{ fontSize: 22 }}>menu</span>
+        </button>
+        <h1 className="topbar-title">{title || t('appTitle')}</h1>
+      </div>
 
       {pipeline && (
         <div className="pipeline-bar">

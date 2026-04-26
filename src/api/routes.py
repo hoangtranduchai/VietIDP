@@ -272,7 +272,10 @@ async def delete_document(doc_id: int):
 
         # Delete uploaded file
         if doc.file_path and os.path.exists(doc.file_path):
-            os.remove(doc.file_path)
+            try:
+                os.remove(doc.file_path)
+            except OSError:
+                pass # Ignore file lock errors on Windows, proceed with DB delete
 
         session.delete(doc)
         session.commit()
@@ -340,8 +343,17 @@ async def chat_with_document(req: ChatRequest):
     from src.llm.ollama_client import OllamaClient
     from src.llm.prompts import PROMPTS
 
-    prompt = PROMPTS['chat'].format(context=context[:Config.OLLAMA_MAX_CHARS],
-                                     question=req.question)
+    # Lỗi 5: Safe truncation (Cắt chuỗi an toàn ở cuối từ/câu thay vì cắt ngang)
+    max_chars = Config.OLLAMA_MAX_CHARS
+    if len(context) > max_chars:
+        truncated = context[:max_chars]
+        cut_point = max(truncated.rfind(' '), truncated.rfind('\n'))
+        if cut_point > 0:
+            context = truncated[:cut_point] + "..."
+        else:
+            context = truncated + "..."
+
+    prompt = PROMPTS['chat'].format(context=context, question=req.question)
     client = OllamaClient()
     result, error = client.generate(prompt, format_json=False)
 
