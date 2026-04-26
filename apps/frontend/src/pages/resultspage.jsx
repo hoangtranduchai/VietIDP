@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useLocale } from '../LocaleContext'
 import TopBar from '../layouts/TopBar'
 import { chatWithDocument } from '../services/api'
@@ -75,7 +75,6 @@ function EntityBadges({ label, icon, items, color }) {
 }
 
 export default function ResultsPage() {
-  const { id } = useParams()
   const navigate = useNavigate()
   const { t } = useLocale()
   const [chatInput, setChatInput] = useState('')

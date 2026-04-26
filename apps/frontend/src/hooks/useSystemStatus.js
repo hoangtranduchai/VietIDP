@@ -12,7 +12,7 @@ export function useSystemStatus() {
       try {
         await healthCheck()
         if (mounted) setStatus('active')
-      } catch (err) {
+      } catch {
         if (mounted) setStatus('inactive')
       }
     }

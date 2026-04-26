@@ -1,4 +1,4 @@
-import { NavLink, useNavigate, useLocation } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import { useLocale } from '../LocaleContext'
 import { useTheme } from '../ThemeContext'
 import { useMobileSidebar } from '../hooks/useMobileSidebar'
@@ -16,7 +16,6 @@ const getFooterItems = (t) => [
 
 export default function SideNavBar() {
   const navigate = useNavigate()
-  const location = useLocation()
   const { locale, toggleLocale, t } = useLocale()
   const { isDark, toggleTheme } = useTheme()
   const { isOpen, close } = useMobileSidebar()

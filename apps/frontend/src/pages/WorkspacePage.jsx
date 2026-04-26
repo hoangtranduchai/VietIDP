@@ -57,6 +57,7 @@ export default function WorkspacePage() {
     }).catch(() => {})
 
     return () => controller.abort()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, docApi.execute])
 
   const handleSave = async () => {
