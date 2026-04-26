@@ -99,7 +99,7 @@ export default function WorkspacePage() {
       })
       setProgress(100)
       if (res.task_id) {
-        navigate(`/processing/${res.task_id}?docId=${res.document_id}`)
+        navigate(`/processing/${res.task_id}?docId=${res.document_id}`, { state: { filename: files[0].name } })
       } else if (res.document_id) {
         toast.success('Processing complete!')
         navigate(`/workspace/${res.document_id}`)

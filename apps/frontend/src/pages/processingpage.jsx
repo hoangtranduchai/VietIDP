@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
+import { useParams, useNavigate, useSearchParams, useLocation } from 'react-router-dom'
 import { useLocale } from '../LocaleContext'
 import TopBar from '../layouts/TopBar'
 import { getTaskStatus } from '../services/api'
@@ -9,9 +9,10 @@ export default function ProcessingPage() {
   const [searchParams] = useSearchParams()
   const docId = searchParams.get('docId')
   const navigate = useNavigate()
+  const location = useLocation()
   const { t } = useLocale()
   const [currentStep, setCurrentStep] = useState(0)
-  const [docName, setDocName] = useState(null)
+  const [docName, setDocName] = useState(location.state?.filename || null)
   const [logs, setLogs] = useState([
     { time: new Date().toLocaleTimeString(), text: `${t('procReceived')} Task #${id.slice(0,8)}...`, type: 'info' }
   ])
