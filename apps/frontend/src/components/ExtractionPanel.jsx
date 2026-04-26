@@ -65,6 +65,31 @@ export default function ExtractionPanel({ data = {}, onUpdate, processing = fals
             </div>
           ) : (
             <>
+              <div style={{
+                background: 'var(--bg-elevated)', border: '1px solid var(--border)',
+                borderRadius: 'var(--radius)', padding: 16, marginBottom: 20,
+                fontSize: 12
+              }}>
+                <h4 style={{ margin: '0 0 12px 0', fontSize: 13, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <span className="material-symbols-outlined" style={{ fontSize: 16, color: 'var(--accent)' }}>psychology</span>
+                  Tiến trình AI
+                </h4>
+                <ul style={{ margin: 0, paddingLeft: 20, color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  <li>Tiền xử lý & Khử nhiễu ảnh (Deskew & Denoise)</li>
+                  <li>
+                    <strong>Phát hiện dấu (YOLOv8 & HybridMatting):</strong> Tách thành công <strong style={{color: 'var(--accent-error)'}}>{data.total_stamps || 0}</strong> con dấu.
+                  </li>
+                  <li>Nhận dạng ký tự (VietOCR)</li>
+                  <li>Trích xuất thông tin (Qwen2.5-7B)</li>
+                </ul>
+                {data.processing_time && (
+                  <div style={{ marginTop: 12, paddingTop: 12, borderTop: '1px dashed var(--border)', color: 'var(--text-muted)' }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 14, verticalAlign: 'middle', marginRight: 4 }}>timer</span>
+                    Tổng thời gian: {data.processing_time} giây
+                  </div>
+                )}
+              </div>
+
               <div className="stagger">
                 {FIELDS.map(field => (
                   <div className="extraction-field fade-in-up" key={field.key}>

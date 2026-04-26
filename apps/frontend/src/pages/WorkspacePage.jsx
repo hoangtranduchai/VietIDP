@@ -192,7 +192,7 @@ export default function WorkspacePage() {
               </div>
 
               <div style={{
-                display: 'inline-flex', alignItems: 'center', gap: 6, marginTop: 20, padding: '6px 14px', borderRadius: 'var(--radius-full)',
+                display: 'inline-flex', alignItems: 'center', gap: 6, marginTop: 20, padding: '14px 14px', borderRadius: 'var(--radius-full)',
                 background: 'var(--accent-success-muted)', border: '1px solid rgba(52,211,153,0.15)',
                 fontSize: 11, color: 'var(--accent-success)', fontWeight: 600,
               }}>
@@ -239,9 +239,9 @@ export default function WorkspacePage() {
             <span className="material-symbols-outlined">table_view</span>
             {t('exportExcel')}
           </button>
-          <button className="btn" onClick={handleSave}>
+          <button className="btn" onClick={() => { handleSave(); toast.success('Đã lưu chỉnh sửa thành công!'); }}>
             <span className="material-symbols-outlined">save</span>
-            {t('saveToDB')}
+            Lưu chỉnh sửa
           </button>
           <button className="btn btn-primary" onClick={() => id && docApi.execute(id)}>
             <span className="material-symbols-outlined">play_arrow</span>
@@ -269,7 +269,7 @@ export default function WorkspacePage() {
                   style={{ flex: 1, padding: '12px', border: 'none', background: activeTab === 'extraction' ? 'var(--bg-card)' : 'transparent', color: activeTab === 'extraction' ? 'var(--text-primary)' : 'var(--text-muted)', borderBottom: activeTab === 'extraction' ? '2px solid var(--accent)' : '2px solid transparent', cursor: 'pointer', fontWeight: 600, fontSize: 13, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}
                   onClick={() => setActiveTab('extraction')}>
                   <span className="material-symbols-outlined" style={{ fontSize: 16 }}>data_object</span>
-                  Extraction
+                  Dữ liệu cấu trúc
                 </button>
                 <button 
                   style={{ flex: 1, padding: '12px', border: 'none', background: activeTab === 'chat' ? 'var(--bg-card)' : 'transparent', color: activeTab === 'chat' ? 'var(--text-primary)' : 'var(--text-muted)', borderBottom: activeTab === 'chat' ? '2px solid var(--accent)' : '2px solid transparent', cursor: 'pointer', fontWeight: 600, fontSize: 13, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, position: 'relative' }}

@@ -478,8 +478,7 @@
   box-shadow: var(--shadow-lg), 0 0 40px rgba(0, 0, 0, 0.3);
   border-radius: 4px;
   width: 100%;
-  max-width: 700px;
-  min-height: 600px;
+  margin: 0 auto;
   position: relative;
   transition: transform 0.2s var(--ease);
 }
@@ -641,7 +640,6 @@
 .dropzone .material-symbols-outlined {
   font-size: 56px;
   color: var(--accent);
-  margin-bottom: 16px;
   animation: float 3s ease-in-out infinite;
 }
 

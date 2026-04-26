@@ -123,7 +123,7 @@ class VietIDPPipeline:
                     x1, y1, x2, y2 = map(int, box.xyxy[0])
                     conf = float(box.conf[0])
                     stamp_bboxes.append({
-                        'box': (x1, y1, x2, y2),
+                        'x1': x1, 'y1': y1, 'x2': x2, 'y2': y2,
                         'confidence': round(conf, 4)
                     })
 
@@ -131,7 +131,7 @@ class VietIDPPipeline:
         clean_img = image.copy()
         if self.stamp_matter is not None and stamp_bboxes:
             for stamp in stamp_bboxes:
-                x1, y1, x2, y2 = stamp['box']
+                x1, y1, x2, y2 = stamp['x1'], stamp['y1'], stamp['x2'], stamp['y2']
                 x1, y1 = max(0, x1), max(0, y1)
                 x2, y2 = min(clean_img.shape[1], x2), min(clean_img.shape[0], y2)
 

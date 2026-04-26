@@ -126,6 +126,7 @@ def _process_document_worker(task_id: str, document_id: int, file_path: str):
             full_text=result.get('full_text', ''),
             raw_json=extraction_data,
             total_stamps=result.get('total_stamps', 0),
+            stamp_coordinates=result.get('stamp_coordinates', []),
             processing_time=round(elapsed, 2),
         )
         session.add(extraction)

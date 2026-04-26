@@ -74,6 +74,8 @@ class ExtractionResult(Base):
     ocr_confidence = Column(Float)
     llm_confidence = Column(Float)
     total_stamps = Column(Integer, default=0)
+    stamp_coordinates = Column(JSON, default=list)
+
     processing_time = Column(Float)  # seconds
 
     # Timestamps
@@ -96,6 +98,7 @@ class ExtractionResult(Base):
             "ocr_confidence": self.ocr_confidence,
             "llm_confidence": self.llm_confidence,
             "total_stamps": self.total_stamps,
+            "stamp_coordinates": self.stamp_coordinates,
             "processing_time": self.processing_time,
             "verified_by_user": self.verified_by_user,
             "raw_json": self.raw_json,
