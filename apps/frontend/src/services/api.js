@@ -38,6 +38,7 @@ export async function processDocument(file, onProgress) {
   const formData = new FormData()
   formData.append('file', file)
   const res = await api.post('/api/process_document?async_mode=true', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
     onUploadProgress: onProgress,
   })
   return res.data

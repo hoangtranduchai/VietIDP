@@ -259,7 +259,7 @@ class VietIDPPipeline:
         if file_ext == '.pdf':
             result = self._process_pdf(file_path)
         elif file_ext in ['.png', '.jpg', '.jpeg', '.tiff', '.bmp']:
-            image = cv2.imread(file_path)
+            image = cv2.imdecode(np.fromfile(file_path, dtype=np.uint8), cv2.IMREAD_COLOR)
             if image is None:
                 raise ValueError("File ảnh bị hỏng hoặc định dạng không hỗ trợ.")
             result = self._process_single_image(image)
@@ -300,7 +300,7 @@ class VietIDPPipeline:
             pix = page.get_pixmap(dpi=Config.OCR_DPI)
             img = np.frombuffer(
                 pix.samples, dtype=np.uint8
-            ).reshape(pix.height, pix.width, pix.n)
+            ).reshape(pix.height, pix.width, pix.n).copy()
 
             if pix.n == 4:
                 img = cv2.cvtColor(img, cv2.COLOR_RGBA2BGR)

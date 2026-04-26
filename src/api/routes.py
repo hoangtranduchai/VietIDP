@@ -101,6 +101,8 @@ async def process_document(file: UploadFile = File(...), async_mode: bool = Fals
     file_path = UPLOAD_DIR / safe_name
 
     content = await file.read()
+    if len(content) == 0:
+        raise HTTPException(400, "File rỗng (0 bytes)")
     if len(content) > MAX_FILE_SIZE:
         raise HTTPException(400, "File quá lớn (>20MB)")
 
@@ -174,10 +176,12 @@ async def process_document(file: UploadFile = File(...), async_mode: bool = Fals
             }
 
     except Exception as e:
-        doc_obj = session.query(Document).get(doc_id)
-        if doc_obj:
-            doc_obj.status = "failed"
-            session.commit()
+        session.rollback()
+        if 'doc_id' in locals():
+            doc_obj = session.query(Document).get(doc_id)
+            if doc_obj:
+                doc_obj.status = "failed"
+                session.commit()
         raise HTTPException(500, f"Processing error: {str(e)}")
     finally:
         session.close()
