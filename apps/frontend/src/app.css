@@ -302,9 +302,29 @@
 
 @media (max-width: 768px) {
   .topbar-status {
-    gap: 0;
-    padding: 4px;
-    font-size: 0; /* Hides the text "Máy cục bộ: Hoạt động" */
+    display: none;
+  }
+}
+
+.mobile-status {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--accent-success-muted);
+  color: var(--accent-success);
+  margin-top: 8px;
+  border: 1px solid rgba(52,211,153,0.2);
+}
+
+@media (max-width: 768px) {
+  .mobile-status {
+    display: flex;
   }
 }
 

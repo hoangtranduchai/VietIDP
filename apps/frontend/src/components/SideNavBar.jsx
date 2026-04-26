@@ -2,6 +2,7 @@ import { NavLink, useNavigate, useLocation } from 'react-router-dom'
 import { useLocale } from '../LocaleContext'
 import { useTheme } from '../ThemeContext'
 import { useMobileSidebar } from '../hooks/useMobileSidebar'
+import StatusDot from '../ui/StatusDot'
 
 const getNavItems = (t) => [
   { path: '/workspace', icon: 'document_scanner', label: t('navOCR') },
@@ -83,6 +84,12 @@ export default function SideNavBar() {
             <span className="flag">{locale === 'vi' ? '🇻🇳' : '🇺🇸'}</span>
             <span>{locale === 'vi' ? 'Tiếng Việt' : 'English'}</span>
           </button>
+
+          {/* Status Indicator (Mobile Only) */}
+          <div className="mobile-status">
+            <StatusDot status="active" />
+            {t('localNode')}
+          </div>
 
           <div style={{
             marginTop: 10, padding: '8px 12px', borderRadius: 8,
