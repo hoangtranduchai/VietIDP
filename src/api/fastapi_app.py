@@ -13,6 +13,7 @@ Chạy: uvicorn src.api.fastapi_app:app --host 0.0.0.0 --port 8000 --reload
 
 import os
 import logging
+import sys
 from datetime import datetime
 
 from fastapi import FastAPI, Request
@@ -23,6 +24,14 @@ from fastapi.responses import JSONResponse
 from src.config import Config
 from src.api.routes import router as api_router
 from src.api.database import init_db
+
+# ── Logging Setup ────────────────────────────────────────────────────
+logging.basicConfig(
+    level=logging.INFO,
+    format="[%(asctime)s] %(levelname)s - %(name)s - %(message)s",
+    datefmt="%H:%M:%S",
+    handlers=[logging.StreamHandler(sys.stdout)]
+)
 
 # ── Logging Filter ───────────────────────────────────────────────────
 class EndpointFilter(logging.Filter):

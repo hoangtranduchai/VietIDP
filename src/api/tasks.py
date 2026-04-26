@@ -114,18 +114,22 @@ def _process_document_worker(task_id: str, document_id: int, file_path: str):
         })
 
         processed_images = result.get('processed_images', [])
-        if processed_images and doc.storage_name.lower().endswith('.pdf'):
+        if processed_images and doc.file_path and doc.file_path.lower().endswith('.pdf'):
             import cv2
             import os
             from src.config import Config
             
             first_page_img = processed_images[0]
-            base_name = os.path.splitext(doc.storage_name)[0]
+            base_name = os.path.splitext(os.path.basename(doc.file_path))[0]
             preview_name = f"{base_name}_preview.jpg"
-            preview_path = os.path.join(Config.UPLOAD_DIR, preview_name)
+            upload_dir = Config.DATA_DIR / "uploads"
+            upload_dir.mkdir(parents=True, exist_ok=True)
+            preview_path = os.path.join(str(upload_dir), preview_name)
             
             cv2.imwrite(preview_path, first_page_img)
-            doc.storage_name = preview_name
+            doc.file_path = str(preview_path)
+            doc.filename = preview_name
+            doc.file_type = "jpg"
 
         extraction_data = result.get('extraction', {})
 
