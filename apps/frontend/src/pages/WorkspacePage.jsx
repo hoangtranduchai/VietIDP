@@ -81,8 +81,8 @@ export default function WorkspacePage() {
 
   const doc = docApi.data
 
-  const imageUrl = doc?.filename
-    ? `${api.defaults.baseURL}/uploads/${doc.filename}`
+  const imageUrl = doc?.storage_name
+    ? `${api.defaults.baseURL}/uploads/${doc.storage_name}`
     : null
 
   // ── Drag & Drop Logic ──────────────────────────────────────────
@@ -282,14 +282,14 @@ export default function WorkspacePage() {
                 </button>
               </div>
               
-              <div style={{ display: activeTab === 'extraction' ? 'flex' : 'none', flex: 1, overflow: 'hidden', flexDirection: 'column' }}>
+              <div style={{ display: activeTab === 'extraction' ? 'flex' : 'none', flex: 1, overflow: 'hidden', flexDirection: 'column', minHeight: 0 }}>
                 <ExtractionPanel
                   data={extraction}
                   onUpdate={setExtraction}
                   processing={docApi.loading}
                 />
               </div>
-              <div style={{ display: activeTab === 'chat' ? 'flex' : 'none', flex: 1, overflow: 'hidden', flexDirection: 'column' }}>
+              <div style={{ display: activeTab === 'chat' ? 'flex' : 'none', flex: 1, overflow: 'hidden', flexDirection: 'column', minHeight: 0 }}>
                 <ChatPanel documentId={parseInt(id)} context={extraction?.full_text} />
               </div>
             </div>

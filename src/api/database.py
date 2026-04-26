@@ -39,6 +39,7 @@ class Document(Base):
         return {
             "id": self.id,
             "filename": self.filename,
+            "storage_name": os.path.basename(self.file_path) if self.file_path else self.filename,
             "file_type": self.file_type,
             "file_size": self.file_size,
             "num_pages": self.num_pages,

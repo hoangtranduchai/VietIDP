@@ -12,6 +12,7 @@ Chạy: uvicorn src.api.fastapi_app:app --host 0.0.0.0 --port 8000 --reload
 """
 
 import os
+import logging
 from datetime import datetime
 
 from fastapi import FastAPI, Request
@@ -22,6 +23,13 @@ from fastapi.responses import JSONResponse
 from src.config import Config
 from src.api.routes import router as api_router
 from src.api.database import init_db
+
+# ── Logging Filter ───────────────────────────────────────────────────
+class EndpointFilter(logging.Filter):
+    def filter(self, record: logging.LogRecord) -> bool:
+        return record.getMessage().find("GET /api/health") == -1
+
+logging.getLogger("uvicorn.access").addFilter(EndpointFilter())
 
 # ═══════════════════════════════════════════════════════════════════════
 # FastAPI App
