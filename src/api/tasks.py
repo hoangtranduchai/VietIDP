@@ -113,6 +113,20 @@ def _process_document_worker(task_id: str, document_id: int, file_path: str):
             'message': 'Đang lưu kết quả...'
         })
 
+        processed_images = result.get('processed_images', [])
+        if processed_images and doc.storage_name.lower().endswith('.pdf'):
+            import cv2
+            import os
+            from src.config import Config
+            
+            first_page_img = processed_images[0]
+            base_name = os.path.splitext(doc.storage_name)[0]
+            preview_name = f"{base_name}_preview.jpg"
+            preview_path = os.path.join(Config.UPLOAD_DIR, preview_name)
+            
+            cv2.imwrite(preview_path, first_page_img)
+            doc.storage_name = preview_name
+
         extraction_data = result.get('extraction', {})
 
         extraction = ExtractionResult(
