@@ -276,15 +276,16 @@ export default function WorkspacePage() {
                 </button>
               </div>
               
-              {activeTab === 'extraction' ? (
+              <div style={{ display: activeTab === 'extraction' ? 'flex' : 'none', flex: 1, overflow: 'hidden', flexDirection: 'column' }}>
                 <ExtractionPanel
                   data={extraction}
                   onUpdate={setExtraction}
                   processing={docApi.loading}
                 />
-              ) : (
+              </div>
+              <div style={{ display: activeTab === 'chat' ? 'flex' : 'none', flex: 1, overflow: 'hidden', flexDirection: 'column' }}>
                 <ChatPanel documentId={parseInt(id)} context={extraction?.full_text} />
-              )}
+              </div>
             </div>
           </>
         )}
