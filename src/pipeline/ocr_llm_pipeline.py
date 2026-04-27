@@ -146,12 +146,12 @@ class VietIDPPipeline:
     # ═══════════════════════════════════════════════════════════════════
     # Stage 3: OCR
     # ═══════════════════════════════════════════════════════════════════
-    def run_ocr(self, image: np.ndarray) -> str:
+    def run_ocr(self, image: np.ndarray) -> tuple:
         """Nhận dạng text từ ảnh (VietOCR + EasyOCR)."""
         if self.ocr_engine is None or not self.ocr_engine.is_loaded:
-            return ""
+            return "", []
         result = self.ocr_engine.process_image(image)
-        return result.get('text', '')
+        return result.get('text', ''), result.get('lines', [])
 
     # ═══════════════════════════════════════════════════════════════════
     # Stage 4: LLM Extraction
@@ -293,6 +293,7 @@ class VietIDPPipeline:
         pages_results = []
         all_text = []
         all_stamps = []
+        all_ocr_lines = []
         processed_images = []
 
         for page_idx in range(len(doc)):
@@ -319,8 +320,26 @@ class VietIDPPipeline:
             all_stamps.extend(stamps)
 
             # Stage 3: OCR
-            text = self.run_ocr(clean_img)
+            text, raw_lines = self.run_ocr(clean_img)
             all_text.append(text)
+            
+            ocr_lines = []
+            for line in raw_lines:
+                bbox = line.get('bbox', [])
+                if bbox and len(bbox) == 4:
+                    xs = [pt[0] for pt in bbox]
+                    ys = [pt[1] for pt in bbox]
+                    x1, y1 = int(min(xs)), int(min(ys))
+                    x2, y2 = int(max(xs)), int(max(ys))
+                else:
+                    x1, y1, x2, y2 = 0, 0, 0, 0
+                
+                ocr_lines.append({
+                    'text': line.get('text', ''),
+                    'x1': x1, 'y1': y1, 'x2': x2, 'y2': y2,
+                    'page': page_idx + 1
+                })
+            all_ocr_lines.extend(ocr_lines)
 
             pages_results.append({
                 'page': page_idx + 1,
@@ -347,6 +366,7 @@ class VietIDPPipeline:
             'stamp_coordinates': all_stamps,
             'full_text': full_text,
             'extraction': validated,
+            'ocr_lines': all_ocr_lines,
             'processed_images': processed_images,
         }
 
@@ -357,9 +377,28 @@ class VietIDPPipeline:
 
         # Stage 2: Stamp detect + remove
         clean_img, stamps = self.detect_and_remove_stamps(image)
+        for s in stamps:
+            s['page'] = 1
 
         # Stage 3: OCR
-        text = self.run_ocr(clean_img)
+        text, raw_lines = self.run_ocr(clean_img)
+        
+        ocr_lines = []
+        for line in raw_lines:
+            bbox = line.get('bbox', [])
+            if bbox and len(bbox) == 4:
+                xs = [pt[0] for pt in bbox]
+                ys = [pt[1] for pt in bbox]
+                x1, y1 = int(min(xs)), int(min(ys))
+                x2, y2 = int(max(xs)), int(max(ys))
+            else:
+                x1, y1, x2, y2 = 0, 0, 0, 0
+            
+            ocr_lines.append({
+                'text': line.get('text', ''),
+                'x1': x1, 'y1': y1, 'x2': x2, 'y2': y2,
+                'page': 1
+            })
 
         # Stage 4+5: LLM + Validate
         extracted = self.extract_info(text)
@@ -372,6 +411,7 @@ class VietIDPPipeline:
             'stamp_coordinates': stamps,
             'full_text': text,
             'extraction': validated,
+            'ocr_lines': ocr_lines,
             'processed_images': [image],
         }
 

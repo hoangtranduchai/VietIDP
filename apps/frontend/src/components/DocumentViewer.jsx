@@ -1,15 +1,44 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useLocale } from '../LocaleContext'
 
-export default function DocumentViewer({ imageUrl, stamps = [], filename }) {
+export default function DocumentViewer({ imageUrl, stamps = [], highlightBboxes = null, filename, pages = [], style, onToggleCollapse, isCollapsed }) {
   const [zoom, setZoom] = useState(1)
   const [imgSize, setImgSize] = useState({ w: 1, h: 1 })
+  const [currentPageIndex, setCurrentPageIndex] = useState(0)
+  const [currentStampIndex, setCurrentStampIndex] = useState(-1)
   const { t } = useLocale()
   
   const isPdf = imageUrl?.toLowerCase().endsWith('.pdf')
 
+  const allPages = pages.length > 0 ? pages : (imageUrl ? [imageUrl] : [])
+  const currentImage = allPages[currentPageIndex] || imageUrl
+
+  useEffect(() => {
+    if (highlightBboxes && highlightBboxes.length > 0) {
+      const firstBbox = highlightBboxes[0]
+      const pageIdx = (firstBbox.page || 1) - 1
+      if (currentPageIndex !== pageIdx) {
+        setCurrentPageIndex(pageIdx)
+      }
+    }
+  }, [highlightBboxes, currentPageIndex])
+
+  const handleNextStamp = () => {
+    if (stamps.length === 0) return
+    const nextIdx = (currentStampIndex + 1) % stamps.length
+    setCurrentStampIndex(nextIdx)
+    if (stamps[nextIdx].page) setCurrentPageIndex(stamps[nextIdx].page - 1)
+  }
+
+  const handlePrevStamp = () => {
+    if (stamps.length === 0) return
+    const prevIdx = (currentStampIndex - 1 + stamps.length) % stamps.length
+    setCurrentStampIndex(prevIdx)
+    if (stamps[prevIdx].page) setCurrentPageIndex(stamps[prevIdx].page - 1)
+  }
+
   return (
-    <div className="pane pane-source">
+    <div className="pane pane-source" style={{ ...style, transition: isCollapsed ? 'width 0.3s var(--ease)' : 'none', position: 'relative' }}>
       <div className="pane-header">
         <span className="pane-header-label">
           <span className="material-symbols-outlined" style={{fontSize: 16, color: 'var(--accent-cyan)'}}>description</span>
@@ -28,36 +57,105 @@ export default function DocumentViewer({ imageUrl, stamps = [], filename }) {
             onClick={() => setZoom(1)}>
             <span className="material-symbols-outlined" style={{fontSize: 16}}>fit_screen</span>
           </button>
+          {onToggleCollapse && (
+            <button className="btn" style={{padding: '4px 8px', border: 'none', background: 'var(--bg-hover)', marginLeft: 8}}
+              onClick={onToggleCollapse} title={isCollapsed ? 'Mở rộng cột bên' : 'Thu gọn cột bên'}>
+              <span className="material-symbols-outlined" style={{fontSize: 16}}>
+                {isCollapsed ? 'keyboard_double_arrow_left' : 'keyboard_double_arrow_right'}
+              </span>
+            </button>
+          )}
         </div>
       </div>
-      <div className="pane-body">
-        <div className="document-viewer">
-          {imageUrl ? (
+      <div className="pane-body" style={{ display: 'flex', flexDirection: 'row', position: 'relative' }}>
+        
+        {/* Thumbnail Sidebar */}
+        {!isPdf && allPages.length > 0 && (
+          <div style={{
+            width: 80, borderRight: '1px solid var(--border)', background: 'var(--bg-elevated)',
+            display: 'flex', flexDirection: 'column', gap: 10, padding: 10, overflowY: 'auto', flexShrink: 0
+          }}>
+            {allPages.map((pageUrl, idx) => (
+              <div 
+                key={idx} 
+                onClick={() => setCurrentPageIndex(idx)}
+                style={{
+                  width: '100%', aspectRatio: '1/1.4', borderRadius: 4, cursor: 'pointer',
+                  border: currentPageIndex === idx ? '2px solid var(--accent)' : '1px solid var(--border)',
+                  overflow: 'hidden', position: 'relative',
+                  background: 'white', opacity: currentPageIndex === idx ? 1 : 0.6,
+                  transition: 'all 0.2s'
+                }}
+              >
+                <img src={pageUrl} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt={`Page ${idx + 1}`} />
+                {stamps.length > 0 && currentPageIndex === idx && (
+                  <div style={{ position: 'absolute', top: 4, right: 4, width: 8, height: 8, borderRadius: '50%', background: 'var(--accent-error)' }} />
+                )}
+                <div style={{ position: 'absolute', bottom: 0, width: '100%', background: 'rgba(0,0,0,0.6)', color: 'white', fontSize: 9, textAlign: 'center', padding: '2px 0' }}>{idx + 1}</div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Main Viewer */}
+        <div className="document-viewer" style={{ flex: 1, position: 'relative', overflow: 'auto' }}>
+          
+          {/* Stamp Navigator Overlay */}
+          {!isPdf && stamps.length > 0 && (
+            <div style={{
+              position: 'absolute', top: 16, right: 16, zIndex: 100,
+              background: 'rgba(10, 14, 23, 0.85)', backdropFilter: 'blur(10px)',
+              border: '1px solid var(--glass-border)', borderRadius: 'var(--radius-full)',
+              padding: '6px 12px', display: 'flex', alignItems: 'center', gap: 12,
+              boxShadow: '0 4px 15px rgba(0,0,0,0.2)'
+            }}>
+              <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-primary)' }}>
+                {stamps.length} Con dấu
+              </span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                <button onClick={handlePrevStamp} style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', display: 'flex' }}>
+                  <span className="material-symbols-outlined" style={{ fontSize: 18 }}>chevron_left</span>
+                </button>
+                <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--accent)', minWidth: 36, textAlign: 'center' }}>
+                  {currentStampIndex >= 0 ? currentStampIndex + 1 : '-'} / {stamps.length}
+                </span>
+                <button onClick={handleNextStamp} style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', display: 'flex' }}>
+                  <span className="material-symbols-outlined" style={{ fontSize: 18 }}>chevron_right</span>
+                </button>
+              </div>
+            </div>
+          )}
+
+          {currentImage ? (
             isPdf ? (
               <div className="document-canvas" style={{ height: '100%', minHeight: 600 }}>
                 <iframe src={`${imageUrl}#toolbar=0&navpanes=0&scrollbar=0`} width="100%" height="100%" style={{ border: 'none', borderRadius: 4 }} title="PDF Document" />
               </div>
             ) : (
-              <div className="document-canvas" style={{transform: `scale(${zoom})`, transformOrigin: 'top center'}}>
+              <div className="document-canvas" style={{ width: `${zoom * 100}%`, transition: 'width 0.2s var(--ease)', margin: '0 auto', position: 'relative' }}>
                 <img 
-                  src={imageUrl} 
+                  src={currentImage} 
                   alt={filename || 'Document'} 
                   onLoad={(e) => setImgSize({ w: e.target.naturalWidth || 1, h: e.target.naturalHeight || 1 })}
                 />
                 {/* YOLO Stamp BBox overlays */}
-                {stamps.map((stamp, i) => (
-                  <div key={i} style={{
+                {stamps.map((stamp, i) => {
+                  if ((stamp.page || 1) !== currentPageIndex + 1) return null;
+                  
+                  return (
+                    <div key={i} style={{
                     position: 'absolute',
                     left: `${(stamp.x1 / imgSize.w) * 100}%`, top: `${(stamp.y1 / imgSize.h) * 100}%`,
                     width: `${((stamp.x2 - stamp.x1) / imgSize.w) * 100}%`,
                     height: `${((stamp.y2 - stamp.y1) / imgSize.h) * 100}%`,
-                    border: '2px solid var(--accent-error)',
+                    border: currentStampIndex === i ? '3px solid var(--accent-error)' : '2px solid rgba(248,113,113,0.6)',
                     borderRadius: 4,
-                    background: 'rgba(248,113,113,0.1)',
+                    background: currentStampIndex === i ? 'rgba(248,113,113,0.2)' : 'rgba(248,113,113,0.05)',
                     pointerEvents: 'none',
-                    animation: 'glowPulse 2s ease-in-out infinite',
-                    boxShadow: '0 0 15px rgba(248,113,113,0.4), inset 0 0 10px rgba(248,113,113,0.2)',
-                    zIndex: 10
+                    animation: currentStampIndex === i ? 'glowPulse 1.5s ease-in-out infinite' : 'none',
+                    boxShadow: currentStampIndex === i ? '0 0 25px rgba(248,113,113,0.6), inset 0 0 15px rgba(248,113,113,0.3)' : 'none',
+                    zIndex: currentStampIndex === i ? 20 : 10,
+                    transition: 'all 0.3s'
                   }}>
                     <div style={{
                       position: 'absolute', top: -24, left: -2,
@@ -69,10 +167,31 @@ export default function DocumentViewer({ imageUrl, stamps = [], filename }) {
                       whiteSpace: 'nowrap'
                     }}>
                       <span className="material-symbols-outlined" style={{ fontSize: 14 }}>verified</span>
-                      YOLOv8: Stamp {Math.round(stamp.confidence * 100)}%
+                      Dấu pháp lý - Confidence: {Math.round(stamp.confidence * 100)}%
                     </div>
                   </div>
-                ))}
+                  );
+                })}
+
+                {/* Text Grounding BBox overlays */}
+                {highlightBboxes && highlightBboxes.map((bbox, i) => {
+                  if ((bbox.page || 1) !== currentPageIndex + 1) return null;
+                  
+                  return (
+                    <div key={`hl-${i}`} style={{
+                      position: 'absolute',
+                      left: `${(bbox.x1 / imgSize.w) * 100}%`, top: `${(bbox.y1 / imgSize.h) * 100}%`,
+                      width: `${((bbox.x2 - bbox.x1) / imgSize.w) * 100}%`,
+                      height: `${((bbox.y2 - bbox.y1) / imgSize.h) * 100}%`,
+                      border: '2px solid var(--accent-cyan)',
+                      borderRadius: 2,
+                      background: 'rgba(34, 211, 238, 0.2)',
+                      pointerEvents: 'none',
+                      boxShadow: '0 0 10px rgba(34, 211, 238, 0.5), inset 0 0 5px rgba(34, 211, 238, 0.3)',
+                      zIndex: 15,
+                    }} />
+                  )
+                })}
               </div>
             )
           ) : (

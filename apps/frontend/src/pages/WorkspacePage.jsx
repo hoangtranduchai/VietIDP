@@ -9,6 +9,7 @@ import TopBar from '../layouts/TopBar'
 import DocumentViewer from '../components/DocumentViewer'
 import ChatPanel from '../components/ChatPanel'
 import ExtractionPanel from '../components/ExtractionPanel'
+import InsightsPanel from '../components/InsightsPanel'
 import Skeleton from '../ui/Skeleton'
 import { toast } from 'react-toastify'
 
@@ -22,10 +23,50 @@ export default function WorkspacePage() {
   const docApi = useApi(getDocument)
   const [extraction, setExtraction] = useState({})
   const [currentStage, setCurrentStage] = useState('input')
-  const [activeTab, setActiveTab] = useState('extraction') // 'extraction' | 'chat'
+  const [activeTab, setActiveTab] = useState('extraction') // 'extraction' | 'chat' | 'insights'
   const [hasUnreadChat, setHasUnreadChat] = useState(false)
+  const [highlightBboxes, setHighlightBboxes] = useState(null)
+  
+  const [leftWidth, setLeftWidth] = useState(50)
+  const [isDragging, setIsDragging] = useState(false)
+  const [rightCollapsed, setRightCollapsed] = useState(false)
   
   const uploadDialogOpened = useRef(false)
+  const dualPaneRef = useRef(null)
+
+  const handleMouseMove = useCallback((e) => {
+    if (!isDragging || !dualPaneRef.current) return;
+    const rect = dualPaneRef.current.getBoundingClientRect();
+    const offset = e.clientX - rect.left;
+    const newLeftWidth = (offset / rect.width) * 100;
+    if (newLeftWidth > 20 && newLeftWidth < 80) {
+      setLeftWidth(newLeftWidth);
+    }
+  }, [isDragging]);
+
+  const handleMouseUp = useCallback(() => {
+    setIsDragging(false);
+  }, []);
+
+  useEffect(() => {
+    if (isDragging) {
+      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mouseup', handleMouseUp);
+      document.body.style.userSelect = 'none';
+      document.body.style.cursor = 'col-resize';
+    } else {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+      document.body.style.userSelect = '';
+      document.body.style.cursor = '';
+    }
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+      document.body.style.userSelect = '';
+      document.body.style.cursor = '';
+    };
+  }, [isDragging, handleMouseMove, handleMouseUp]);
 
   // Upload state
   const [uploading, setUploading] = useState(false)
@@ -84,6 +125,10 @@ export default function WorkspacePage() {
   const imageUrl = doc?.storage_name
     ? `${api.defaults.baseURL}/uploads/${doc.storage_name}`
     : null
+
+  const pageUrls = extraction?.raw_json?.pages 
+    ? extraction.raw_json.pages.map(p => `${api.defaults.baseURL}/uploads/${p}`)
+    : []
 
   // ── Drag & Drop Logic ──────────────────────────────────────────
   const onDrop = useCallback(async (files) => {
@@ -207,7 +252,7 @@ export default function WorkspacePage() {
   }
 
   return (
-    <div {...getRootProps()} style={{ height: '100%', outline: 'none', position: 'relative' }}>
+    <div {...getRootProps()} style={{ height: '100%', outline: 'none', position: 'relative', display: 'flex', flexDirection: 'column' }}>
       <input {...getInputProps()} />
       
       {/* Global Drag Overlay when a document is open */}
@@ -250,7 +295,7 @@ export default function WorkspacePage() {
         </div>
       </div>
 
-      <main className="dual-pane">
+      <main className={`dual-pane ${rightCollapsed ? 'right-collapsed' : ''}`} ref={dualPaneRef}>
         {docApi.loading ? (
           <>
             <div className="pane pane-source"><div style={{ padding: 32 }}><Skeleton variant="card" height={500} /></div></div>
@@ -261,15 +306,49 @@ export default function WorkspacePage() {
             <DocumentViewer
               imageUrl={imageUrl}
               stamps={extraction?.stamp_coordinates || []}
+              highlightBboxes={highlightBboxes}
               filename={doc?.filename}
+              pages={pageUrls}
+              style={{ width: rightCollapsed ? '100%' : `calc(${leftWidth}% - 10px)`, flex: 'none' }}
+              onToggleCollapse={() => setRightCollapsed(!rightCollapsed)}
+              isCollapsed={rightCollapsed}
             />
-            <div className="pane pane-extraction" style={{ display: 'flex', flexDirection: 'column' }}>
+
+            {!rightCollapsed && (
+              <>
+                <div 
+                  className="splitter"
+                  onMouseDown={() => setIsDragging(true)}
+                  style={{ 
+                    width: 20, margin: '0 -10px', zIndex: 10, cursor: 'col-resize',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center'
+                  }}
+                  title="Kéo để thay đổi kích thước"
+                >
+                  <div style={{ 
+                    width: 14, height: 48, borderRadius: 8, 
+                    background: isDragging ? 'var(--accent)' : 'var(--bg-elevated)', 
+                    border: isDragging ? 'none' : '1px solid var(--glass-border)',
+                    boxShadow: 'var(--shadow-md)',
+                    transition: 'all 0.2s var(--ease)', display: 'flex', justifyContent: 'center', alignItems: 'center'
+                  }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 14, color: isDragging ? 'white' : 'var(--text-muted)' }}>drag_indicator</span>
+                  </div>
+                </div>
+
+                <div className="pane pane-extraction" style={{ width: `calc(${100 - leftWidth}% - 10px)`, flex: 'none', display: 'flex', flexDirection: 'column' }}>
               <div style={{ display: 'flex', borderBottom: '1px solid var(--border)', background: 'var(--bg-elevated)', flexShrink: 0 }}>
                 <button 
                   style={{ flex: 1, padding: '12px', border: 'none', background: activeTab === 'extraction' ? 'var(--bg-card)' : 'transparent', color: activeTab === 'extraction' ? 'var(--text-primary)' : 'var(--text-muted)', borderBottom: activeTab === 'extraction' ? '2px solid var(--accent)' : '2px solid transparent', cursor: 'pointer', fontWeight: 600, fontSize: 13, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}
                   onClick={() => setActiveTab('extraction')}>
                   <span className="material-symbols-outlined" style={{ fontSize: 16 }}>data_object</span>
                   Dữ liệu cấu trúc
+                </button>
+                <button 
+                  style={{ flex: 1, padding: '12px', border: 'none', background: activeTab === 'insights' ? 'var(--bg-card)' : 'transparent', color: activeTab === 'insights' ? 'var(--text-primary)' : 'var(--text-muted)', borderBottom: activeTab === 'insights' ? '2px solid var(--accent)' : '2px solid transparent', cursor: 'pointer', fontWeight: 600, fontSize: 13, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}
+                  onClick={() => setActiveTab('insights')}>
+                  <span className="material-symbols-outlined" style={{ fontSize: 16 }}>insights</span>
+                  Báo cáo phân tích
                 </button>
                 <button 
                   style={{ flex: 1, padding: '12px', border: 'none', background: activeTab === 'chat' ? 'var(--bg-card)' : 'transparent', color: activeTab === 'chat' ? 'var(--text-primary)' : 'var(--text-muted)', borderBottom: activeTab === 'chat' ? '2px solid var(--accent)' : '2px solid transparent', cursor: 'pointer', fontWeight: 600, fontSize: 13, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, position: 'relative' }}
@@ -287,12 +366,18 @@ export default function WorkspacePage() {
                   data={extraction}
                   onUpdate={setExtraction}
                   processing={docApi.loading}
+                  onFocusField={setHighlightBboxes}
                 />
+              </div>
+              <div style={{ display: activeTab === 'insights' ? 'flex' : 'none', flex: 1, overflow: 'hidden', flexDirection: 'column', minHeight: 0 }}>
+                <InsightsPanel data={extraction} />
               </div>
               <div style={{ display: activeTab === 'chat' ? 'flex' : 'none', flex: 1, overflow: 'hidden', flexDirection: 'column', minHeight: 0 }}>
                 <ChatPanel documentId={parseInt(id)} context={extraction?.full_text} />
               </div>
             </div>
+            </>
+            )}
           </>
         )}
       </main>

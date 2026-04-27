@@ -48,7 +48,7 @@ export default function TopBar({ title, pipeline, children }) {
       )}
 
       {children || (
-        <div className="topbar-status">
+        <div className={`topbar-status ${systemStatus}`}>
           <StatusDot status={systemStatus} />
           {t(systemStatus === 'active' ? 'localNodeActive' : 'localNodeInactive')}
         </div>

@@ -114,24 +114,30 @@ def _process_document_worker(task_id: str, document_id: int, file_path: str):
         })
 
         processed_images = result.get('processed_images', [])
+        extraction_data = result.get('extraction', {})
+        
         if processed_images and doc.file_path and doc.file_path.lower().endswith('.pdf'):
             import cv2
             import os
             from src.config import Config
             
-            first_page_img = processed_images[0]
             base_name = os.path.splitext(os.path.basename(doc.file_path))[0]
-            preview_name = f"{base_name}_preview.jpg"
             upload_dir = Config.DATA_DIR / "uploads"
             upload_dir.mkdir(parents=True, exist_ok=True)
-            preview_path = os.path.join(str(upload_dir), preview_name)
             
-            cv2.imwrite(preview_path, first_page_img)
-            doc.file_path = str(preview_path)
-            doc.filename = preview_name
+            saved_pages = []
+            for idx, img in enumerate(processed_images):
+                page_name = f"{base_name}_page_{idx+1}.jpg"
+                page_path = os.path.join(str(upload_dir), page_name)
+                cv2.imwrite(page_path, img)
+                saved_pages.append(page_name)
+            
+            doc.file_path = str(os.path.join(str(upload_dir), saved_pages[0]))
+            doc.filename = saved_pages[0]
             doc.file_type = "jpg"
-
-        extraction_data = result.get('extraction', {})
+            
+            # Store all pages in extraction data to pass to frontend
+            extraction_data['pages'] = saved_pages
 
         extraction = ExtractionResult(
             document_id=document_id,

@@ -317,9 +317,22 @@
   text-transform: uppercase;
   padding: 4px 12px;
   border-radius: var(--radius-full);
+  border: 1px solid var(--border);
+  background: var(--bg-elevated);
+  color: var(--text-muted);
+  transition: all 0.3s var(--ease);
+}
+
+.topbar-status.active {
   border: 1px solid rgba(52, 211, 153, 0.2);
   background: var(--accent-success-muted);
   color: var(--accent-success);
+}
+
+.topbar-status.inactive {
+  border: 1px solid rgba(248, 113, 113, 0.2);
+  background: var(--accent-error-muted);
+  color: var(--accent-error);
 }
 
 @media (max-width: 768px) {
@@ -404,6 +417,10 @@
   overflow: hidden;
   padding: 20px;
   gap: 20px;
+}
+
+.dual-pane.right-collapsed {
+  gap: 0;
 }
 
 .pane {

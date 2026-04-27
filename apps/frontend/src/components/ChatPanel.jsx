@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from 'react'
 import { useLocale } from '../LocaleContext'
 import { chatWithDocument } from '../services/api'
+import ReactMarkdown from 'react-markdown'
+import { toast } from 'react-toastify'
 
 export default function ChatPanel({ documentId, context }) {
   const [messages, setMessages] = useState([])
@@ -10,10 +12,11 @@ export default function ChatPanel({ documentId, context }) {
   const messagesEndRef = useRef(null)
   const autoSummarizedDocId = useRef(null)
 
-  // Bug 9 fix: Auto-scroll to latest message
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages, loading])
+  const QUICK_ACTIONS = [
+    { label: 'Tóm tắt nội dung', prompt: 'Hãy tóm tắt ngắn gọn nội dung của tài liệu này.' },
+    { label: 'Liệt kê thực thể', prompt: 'Hãy liệt kê tất cả cá nhân, tổ chức, cơ quan liên quan trong tài liệu.' },
+    { label: 'Điểm lưu ý', prompt: 'Dựa vào nội dung tài liệu, hãy chỉ ra các điểm cần lưu ý hoặc rủi ro pháp lý tiềm ẩn.' }
+  ]
 
   // Auto-Summary Feature
   useEffect(() => {
@@ -38,15 +41,16 @@ export default function ChatPanel({ documentId, context }) {
     }
   }, [documentId, context, messages.length])
 
-  const sendMessage = async () => {
-    if (!input.trim()) return
-    const userMsg = { role: 'user', text: input }
+  const sendMessage = async (overrideInput = null) => {
+    const textToSend = typeof overrideInput === 'string' ? overrideInput : input
+    if (!textToSend.trim()) return
+    const userMsg = { role: 'user', text: textToSend }
     setMessages(prev => [...prev, userMsg])
-    setInput('')
+    if (!overrideInput) setInput('')
     setLoading(true)
 
     try {
-      const res = await chatWithDocument(input, documentId, context)
+      const res = await chatWithDocument(textToSend, documentId, context)
       setMessages(prev => [...prev, { role: 'assistant', text: res.answer }])
     } catch {
       setMessages(prev => [...prev, {
@@ -79,7 +83,28 @@ export default function ChatPanel({ documentId, context }) {
           </div>
         )}
         {messages.map((msg, i) => (
-          <div key={i} className={`chat-message ${msg.role}`}>{msg.text}</div>
+          <div key={i} className={`chat-message ${msg.role}`}>
+            {msg.role === 'assistant' && (
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8, borderBottom: '1px solid var(--border)', paddingBottom: 6 }}>
+                <span className="material-symbols-outlined" style={{ fontSize: 16, color: 'var(--accent-cyan)' }}>smart_toy</span>
+                <button 
+                  onClick={() => { navigator.clipboard.writeText(msg.text); toast.success('Đã sao chép!'); }}
+                  style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', display: 'flex', padding: 2, borderRadius: 4 }}
+                  title="Sao chép"
+                  className="hover-bg"
+                >
+                  <span className="material-symbols-outlined" style={{ fontSize: 14 }}>content_copy</span>
+                </button>
+              </div>
+            )}
+            {msg.role === 'user' ? (
+              msg.text
+            ) : (
+              <div className="markdown-body" style={{ fontSize: 13, lineHeight: 1.6, color: 'var(--text-secondary)' }}>
+                <ReactMarkdown>{msg.text}</ReactMarkdown>
+              </div>
+            )}
+          </div>
         ))}
         {loading && (
           <div className="chat-message assistant" style={{ opacity: 0.7 }}>
@@ -88,6 +113,23 @@ export default function ChatPanel({ documentId, context }) {
         )}
         <div ref={messagesEndRef} />
       </div>
+      
+      {messages.length === 1 && !loading && (
+        <div style={{ display: 'flex', gap: 8, padding: '0 16px 16px', overflowX: 'auto', flexWrap: 'wrap' }}>
+          {QUICK_ACTIONS.map((action, i) => (
+            <button 
+              key={i} 
+              onClick={() => sendMessage(action.prompt)} 
+              style={{ padding: '6px 12px', background: 'var(--bg-elevated)', border: '1px solid var(--border)', borderRadius: 'var(--radius-full)', color: 'var(--accent)', fontSize: 11, fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap', transition: 'all 0.2s', boxShadow: 'var(--shadow-sm)' }}
+              onMouseOver={e => e.currentTarget.style.borderColor = 'var(--accent)'}
+              onMouseOut={e => e.currentTarget.style.borderColor = 'var(--border)'}
+            >
+              {action.label}
+            </button>
+          ))}
+        </div>
+      )}
+
       <div className="chat-input-area">
         <input
           type="text" placeholder={t('chatPlaceholder')}

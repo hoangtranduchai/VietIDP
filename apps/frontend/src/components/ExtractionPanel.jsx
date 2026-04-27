@@ -13,8 +13,8 @@ function ConfidenceBadge({ value }) {
   )
 }
 
-export default function ExtractionPanel({ data = {}, onUpdate, processing = false }) {
-  const [showJson, setShowJson] = useState(false)
+export default function ExtractionPanel({ data = {}, onUpdate, processing = false, onFocusField }) {
+  const [showJson, setShowJson] = useState(true)
   const [editData, setEditData] = useState(data)
   const { t } = useLocale()
 
@@ -38,6 +38,48 @@ export default function ExtractionPanel({ data = {}, onUpdate, processing = fals
   }
 
   const confidence = data._confidence || {}
+
+  const handleFocus = (key, value) => {
+    if (!value || !data.ocr_lines || !onFocusField) {
+      if (onFocusField) onFocusField(null)
+      return
+    }
+    
+    const valStr = String(value).toLowerCase().trim()
+    if (!valStr) {
+      onFocusField(null)
+      return
+    }
+
+    const matches = []
+    const words = valStr.split(/\s+/).filter(w => w.length > 2)
+    
+    for (const line of data.ocr_lines) {
+      if (!line.text) continue
+      const lineStr = String(line.text).toLowerCase()
+      
+      // Exact or partial substring match
+      if (valStr.includes(lineStr) || lineStr.includes(valStr)) {
+        matches.push(line)
+        continue
+      }
+      
+      // Word overlap match (for multi-line abstracts)
+      let wordMatches = 0
+      for (const w of words) {
+        if (lineStr.includes(w)) wordMatches++
+      }
+      if (words.length > 0 && wordMatches / words.length >= 0.5) {
+        matches.push(line)
+      }
+    }
+    
+    if (matches.length > 0) {
+      onFocusField(matches)
+    } else {
+      onFocusField(null)
+    }
+  }
 
   // Simple JSON syntax highlight
   const highlightJson = (str) => {
@@ -101,6 +143,7 @@ export default function ExtractionPanel({ data = {}, onUpdate, processing = fals
                       <textarea
                         value={editData[field.key] || ''}
                         onChange={(e) => handleChange(field.key, e.target.value)}
+                        onFocus={() => handleFocus(field.key, editData[field.key])}
                         rows={3}
                       />
                     ) : (
@@ -108,6 +151,7 @@ export default function ExtractionPanel({ data = {}, onUpdate, processing = fals
                         type="text"
                         value={editData[field.key] || ''}
                         onChange={(e) => handleChange(field.key, e.target.value)}
+                        onFocus={() => handleFocus(field.key, editData[field.key])}
                       />
                     )}
                   </div>

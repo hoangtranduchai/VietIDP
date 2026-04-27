@@ -39,7 +39,7 @@ function MiniBar({ data }) {
             transition: 'height 0.5s var(--ease)',
             boxShadow: d.active ? '0 0 8px rgba(96,165,250,0.3)' : 'none',
           }} />
-          <span style={{ fontSize: 9, color: 'var(--text-muted)' }}>{d.label}</span>
+          <span style={{ fontSize: 9, color: 'var(--text-muted)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '100%', padding: '0 2px' }}>{d.label}</span>
         </div>
       ))}
     </div>
@@ -122,7 +122,7 @@ export default function DashboardPage() {
           <div className="card card-glow">
             <p style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-muted)', marginBottom: 16 }}>{t('docTypes')}</p>
             {documents.length > 0 ? (
-              <MiniBar data={Object.entries(documents.reduce((acc, d) => { const tp = d.extraction?.loai_van_ban || 'Other'; acc[tp] = (acc[tp]||0)+1; return acc }, {})).map(([label, value]) => ({ label: label.substring(0,6), value }))} />
+              <MiniBar data={Object.entries(documents.reduce((acc, d) => { const tp = d.extraction?.loai_van_ban || 'Other'; acc[tp] = (acc[tp]||0)+1; return acc }, {})).map(([label, value]) => ({ label, value }))} />
             ) : <p style={{ color: 'var(--text-muted)', fontSize: 13, textAlign: 'center', padding: 20 }}>{t('noData')}</p>}
           </div>
         </div>
