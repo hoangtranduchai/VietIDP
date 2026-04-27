@@ -9,7 +9,7 @@ import TopBar from '../layouts/TopBar'
 import DocumentViewer from '../components/DocumentViewer'
 import ChatPanel from '../components/ChatPanel'
 import ExtractionPanel from '../components/ExtractionPanel'
-import InsightsPanel from '../components/InsightsPanel'
+import OverviewPanel from '../components/OverviewPanel'
 import Skeleton from '../ui/Skeleton'
 import { toast } from 'react-toastify'
 
@@ -23,7 +23,7 @@ export default function WorkspacePage() {
   const docApi = useApi(getDocument)
   const [extraction, setExtraction] = useState({})
   const [currentStage, setCurrentStage] = useState('input')
-  const [activeTab, setActiveTab] = useState('extraction') // 'extraction' | 'chat' | 'insights'
+  const [activeTab, setActiveTab] = useState('overview') // 'overview' | 'extraction' | 'chat'
   const [hasUnreadChat, setHasUnreadChat] = useState(false)
   const [highlightBboxes, setHighlightBboxes] = useState(null)
   
@@ -272,21 +272,49 @@ export default function WorkspacePage() {
       <TopBar pipeline={pipeline} />
 
       <div className="workspace-bar">
-        <div>
-          <h2>{doc?.filename || t('selectDoc')}</h2>
-          <p>
-            {extraction?.processing_time ? `${extraction.processing_time}s` : ''}
-            {extraction?.ocr_confidence ? ` • ${Math.round(extraction.ocr_confidence * 100)}%` : ''}
-          </p>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+          {extraction?.loai_van_ban && (
+            <div className="ws-doc-badge">
+              <span className="material-symbols-outlined" style={{ fontSize: 15, color: 'var(--accent)' }}>description</span>
+              <span>{extraction.loai_van_ban}{extraction.so_hieu ? ` · ${extraction.so_hieu}` : ''}</span>
+            </div>
+          )}
+          <div>
+            <h2>{doc?.filename || t('selectDoc')}</h2>
+            <div className="ws-mini-stats">
+              {extraction?.processing_time && (
+                <span className="ws-stat-chip">
+                  <span className="material-symbols-outlined" style={{ fontSize: 12, color: 'var(--accent-cyan)' }}>timer</span>
+                  {extraction.processing_time}s
+                </span>
+              )}
+              {extraction?.ocr_confidence && (
+                <span className="ws-stat-chip">
+                  <span className="material-symbols-outlined" style={{ fontSize: 12, color: 'var(--accent-success)' }}>verified</span>
+                  {Math.round(extraction.ocr_confidence * 100)}%
+                </span>
+              )}
+              {extraction?.total_stamps > 0 && (
+                <span className="ws-stat-chip">
+                  <span className="material-symbols-outlined" style={{ fontSize: 12, color: 'var(--accent-error)' }}>stamp</span>
+                  {extraction.total_stamps}
+                </span>
+              )}
+            </div>
+          </div>
         </div>
         <div className="workspace-actions">
+          <button className="btn" onClick={() => navigate('/workspace', { state: { autoOpenUpload: true } })}>
+            <span className="material-symbols-outlined">add_circle</span>
+            {t('uploadNew')}
+          </button>
           <button className="btn" onClick={() => handleExport('csv')}>
             <span className="material-symbols-outlined">table_view</span>
             {t('exportExcel')}
           </button>
           <button className="btn" onClick={() => { handleSave(); toast.success('Đã lưu chỉnh sửa thành công!'); }}>
             <span className="material-symbols-outlined">save</span>
-            Lưu chỉnh sửa
+            {t('saveEdits')}
           </button>
           <button className="btn btn-primary" onClick={() => id && docApi.execute(id)}>
             <span className="material-symbols-outlined">play_arrow</span>
@@ -337,30 +365,33 @@ export default function WorkspacePage() {
                 </div>
 
                 <div className="pane pane-extraction" style={{ width: `calc(${100 - leftWidth}% - 10px)`, flex: 'none', display: 'flex', flexDirection: 'column' }}>
-              <div style={{ display: 'flex', borderBottom: '1px solid var(--border)', background: 'var(--bg-elevated)', flexShrink: 0 }}>
+              <div className="workspace-tabs">
                 <button 
-                  style={{ flex: 1, padding: '12px', border: 'none', background: activeTab === 'extraction' ? 'var(--bg-card)' : 'transparent', color: activeTab === 'extraction' ? 'var(--text-primary)' : 'var(--text-muted)', borderBottom: activeTab === 'extraction' ? '2px solid var(--accent)' : '2px solid transparent', cursor: 'pointer', fontWeight: 600, fontSize: 13, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}
+                  className={`workspace-tab ${activeTab === 'overview' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('overview')}>
+                  <span className="material-symbols-outlined" style={{ fontSize: 16 }}>dashboard</span>
+                  {t('tabOverview')}
+                </button>
+                <button 
+                  className={`workspace-tab ${activeTab === 'extraction' ? 'active' : ''}`}
                   onClick={() => setActiveTab('extraction')}>
                   <span className="material-symbols-outlined" style={{ fontSize: 16 }}>data_object</span>
-                  Dữ liệu cấu trúc
+                  {t('tabExtraction')}
                 </button>
                 <button 
-                  style={{ flex: 1, padding: '12px', border: 'none', background: activeTab === 'insights' ? 'var(--bg-card)' : 'transparent', color: activeTab === 'insights' ? 'var(--text-primary)' : 'var(--text-muted)', borderBottom: activeTab === 'insights' ? '2px solid var(--accent)' : '2px solid transparent', cursor: 'pointer', fontWeight: 600, fontSize: 13, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}
-                  onClick={() => setActiveTab('insights')}>
-                  <span className="material-symbols-outlined" style={{ fontSize: 16 }}>insights</span>
-                  Báo cáo phân tích
-                </button>
-                <button 
-                  style={{ flex: 1, padding: '12px', border: 'none', background: activeTab === 'chat' ? 'var(--bg-card)' : 'transparent', color: activeTab === 'chat' ? 'var(--text-primary)' : 'var(--text-muted)', borderBottom: activeTab === 'chat' ? '2px solid var(--accent)' : '2px solid transparent', cursor: 'pointer', fontWeight: 600, fontSize: 13, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, position: 'relative' }}
+                  className={`workspace-tab ${activeTab === 'chat' ? 'active' : ''}`}
                   onClick={() => { setActiveTab('chat'); setHasUnreadChat(false); }}>
                   <span className="material-symbols-outlined" style={{ fontSize: 16 }}>forum</span>
-                  Chat / Summarize
+                  {t('tabChat')}
                   {hasUnreadChat && activeTab !== 'chat' && (
-                    <span style={{ position: 'absolute', top: 10, right: 10, width: 8, height: 8, borderRadius: '50%', background: 'var(--accent-error)', boxShadow: '0 0 6px var(--accent-error)' }} />
+                    <span className="ws-unread-dot" />
                   )}
                 </button>
               </div>
               
+              <div style={{ display: activeTab === 'overview' ? 'flex' : 'none', flex: 1, overflow: 'hidden', flexDirection: 'column', minHeight: 0 }}>
+                <OverviewPanel data={extraction} />
+              </div>
               <div style={{ display: activeTab === 'extraction' ? 'flex' : 'none', flex: 1, overflow: 'hidden', flexDirection: 'column', minHeight: 0 }}>
                 <ExtractionPanel
                   data={extraction}
@@ -368,9 +399,6 @@ export default function WorkspacePage() {
                   processing={docApi.loading}
                   onFocusField={setHighlightBboxes}
                 />
-              </div>
-              <div style={{ display: activeTab === 'insights' ? 'flex' : 'none', flex: 1, overflow: 'hidden', flexDirection: 'column', minHeight: 0 }}>
-                <InsightsPanel data={extraction} />
               </div>
               <div style={{ display: activeTab === 'chat' ? 'flex' : 'none', flex: 1, overflow: 'hidden', flexDirection: 'column', minHeight: 0 }}>
                 <ChatPanel documentId={parseInt(id)} context={extraction?.full_text} />

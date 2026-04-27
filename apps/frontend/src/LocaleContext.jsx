@@ -99,6 +99,10 @@ const translations = {
     stInput: 'Nạp', stOCR: 'OCR', stLLM: 'LLM', stValidation: 'Xác thực', stStorage: 'Lưu trữ',
     // Theme toggle
     themeLight: 'Chế độ sáng', themeDark: 'Chế độ tối',
+    // Workspace tabs & actions
+    tabOverview: 'Tổng quan', tabExtraction: 'Dữ liệu', tabChat: 'Chat AI',
+    uploadNew: 'Tải mới', saveEdits: 'Lưu chỉnh sửa',
+    insightPoint: 'Điểm', stampsFound: 'con dấu', entitiesTitle: 'Thực thể pháp lý',
     // Results buttons
     resultsAsking: 'Đang hỏi...', resultsAskBtn: 'Hỏi AI',
     // Processing page
@@ -202,6 +206,10 @@ const translations = {
     noData: 'No data yet',
     stInput: 'Input', stOCR: 'OCR', stLLM: 'LLM', stValidation: 'Validation', stStorage: 'Storage',
     themeLight: 'Light Mode', themeDark: 'Dark Mode',
+    // Workspace tabs & actions
+    tabOverview: 'Overview', tabExtraction: 'Extraction', tabChat: 'Chat AI',
+    uploadNew: 'Upload New', saveEdits: 'Save Edits',
+    insightPoint: 'Point', stampsFound: 'stamps', entitiesTitle: 'Legal Entities',
     resultsAsking: 'Asking...', resultsAskBtn: 'Ask AI',
     procTitle: 'Processing Document',
     procSub: 'Running YOLOv8 → VietOCR → Qwen2.5-7B pipeline',

@@ -1030,6 +1030,411 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════
+   Workspace Tabs (Upgraded)
+   ═══════════════════════════════════════════════════════════════ */
+.workspace-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-elevated);
+  flex-shrink: 0;
+  gap: 0;
+}
+
+.workspace-tab {
+  flex: 1;
+  padding: 12px 8px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 12px;
+  font-family: var(--font);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  position: relative;
+  transition: all 0.2s var(--ease);
+  letter-spacing: 0.01em;
+}
+
+.workspace-tab:hover {
+  color: var(--text-secondary);
+  background: var(--bg-hover);
+}
+
+.workspace-tab.active {
+  color: var(--accent);
+  background: var(--bg-card);
+  border-bottom: 2px solid var(--accent);
+  box-shadow: inset 0 -1px 0 var(--accent);
+}
+
+.workspace-tab .material-symbols-outlined {
+  font-size: 16px;
+}
+
+/* Workspace bar — doc badge & mini stats */
+.ws-doc-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  background: var(--accent-muted);
+  border: 1px solid rgba(96,165,250,0.2);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.ws-mini-stats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 3px;
+}
+
+.ws-stat-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.ws-unread-dot {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-error);
+  box-shadow: 0 0 6px var(--accent-error);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Overview Panel
+   ═══════════════════════════════════════════════════════════════ */
+.overview-panel {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.overview-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.overview-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Document Identity Card */
+.doc-identity-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  border-radius: var(--radius);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+}
+
+.doc-identity-card:hover {
+  border-color: var(--border-bright);
+  box-shadow: var(--shadow-sm);
+}
+
+.doc-identity-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: var(--accent-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 0 12px rgba(96,165,250,0.1);
+}
+
+.doc-identity-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.doc-identity-title {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
+}
+
+.doc-identity-date {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* Quick Meta Row */
+.meta-cards-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.meta-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  transition: all 0.2s var(--ease);
+}
+
+.meta-card:hover {
+  border-color: var(--border-bright);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.meta-card-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.meta-card-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.meta-card-label {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+.meta-card-value {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Quick Stats Bar */
+.quick-stats-bar {
+  display: flex;
+  gap: 12px;
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+}
+
+.quick-stat {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+}
+
+/* TL;DR Hero Card */
+.tldr-hero {
+  background: linear-gradient(135deg, rgba(96,165,250,0.08), rgba(52,211,153,0.06));
+  border: 1px solid rgba(96,165,250,0.15);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+  transition: box-shadow 0.3s var(--ease);
+}
+
+.tldr-hero:hover {
+  box-shadow: 0 0 20px rgba(96,165,250,0.08);
+}
+
+.tldr-hero-label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 10px;
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.tldr-hero-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.7;
+}
+
+/* Entity Section */
+.entity-section {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+}
+
+.entity-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.entity-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid;
+  transition: all 0.2s var(--ease);
+}
+
+.entity-badge:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Section Title */
+.section-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+/* Summary Card */
+.summary-card {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.9;
+  background: var(--bg-elevated);
+  padding: 16px 18px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+
+/* Insight Accordion */
+.insight-accordion {
+  border-radius: var(--radius-sm);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  margin-bottom: 8px;
+  transition: border-color 0.2s var(--ease);
+}
+
+.insight-accordion:hover {
+  border-color: var(--border-bright);
+}
+
+.insight-accordion-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px 16px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font);
+  text-align: left;
+  gap: 12px;
+  color: var(--text-primary);
+  transition: background 0.15s var(--ease);
+}
+
+.insight-accordion-header:hover {
+  background: var(--bg-hover);
+}
+
+.insight-num {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  background: var(--bg-hover);
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s var(--ease);
+  flex-shrink: 0;
+}
+
+.insight-num.active {
+  background: var(--accent);
+  color: white;
+  box-shadow: 0 0 10px rgba(96,165,250,0.3);
+}
+
+.insight-accordion-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s var(--ease);
+}
+
+.insight-accordion-body.open {
+  max-height: 500px;
+}
+
+.insight-accordion-content {
+  padding: 0 16px 16px 54px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.85;
+}
+
+/* ═══════════════════════════════════════════════════════════════
    Responsive Utility Classes
    ═══════════════════════════════════════════════════════════════ */
 .results-layout {
@@ -1147,6 +1552,25 @@
 
   .results-main {
     padding: 20px;
+  }
+
+  .meta-cards-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .overview-content {
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .ws-doc-badge {
+    display: none;
+  }
+
+  .workspace-tab {
+    font-size: 11px;
+    padding: 10px 6px;
   }
 }
 
@@ -1281,6 +1705,24 @@
 
   .workspace-bar h2 {
     font-size: 17px;
+  }
+
+  .ws-doc-badge {
+    display: none;
+  }
+
+  .ws-mini-stats {
+    display: none;
+  }
+
+  .workspace-tab {
+    font-size: 11px;
+    padding: 10px 4px;
+    gap: 4px;
+  }
+
+  .meta-cards-row {
+    grid-template-columns: 1fr;
   }
 
   .workspace-actions {
@@ -1486,6 +1928,36 @@
 
   .extraction-field label {
     font-size: 9px;
+  }
+
+  .overview-content {
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .doc-identity-card {
+    padding: 12px 14px;
+  }
+
+  .doc-identity-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .meta-card {
+    padding: 10px 12px;
+  }
+
+  .tldr-hero {
+    padding: 14px 16px;
+  }
+
+  .tldr-hero-text {
+    font-size: 13px;
+  }
+
+  .workspace-tab .material-symbols-outlined {
+    font-size: 14px;
   }
 
   .extraction-field input,
@@ -1702,4 +2174,66 @@
 :root[data-theme="light"] [style*="shimmer"] {
   background: linear-gradient(90deg, rgba(0, 0, 0, 0.04) 25%, rgba(0, 0, 0, 0.08) 50%, rgba(0, 0, 0, 0.04) 75%) !important;
   background-size: 200% 100% !important;
+}
+
+/* ── Light theme: Overview Panel & Workspace upgrades ─────── */
+:root[data-theme="light"] .workspace-tabs {
+  background: rgba(255, 255, 255, 0.7);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+:root[data-theme="light"] .workspace-tab.active {
+  background: #ffffff;
+  color: var(--accent);
+}
+
+:root[data-theme="light"] .ws-doc-badge {
+  background: rgba(59, 130, 246, 0.08);
+  border-color: rgba(59, 130, 246, 0.15);
+}
+
+:root[data-theme="light"] .doc-identity-card {
+  background: #f9fafb;
+  border-color: rgba(0, 0, 0, 0.08);
+  border-left-color: var(--accent);
+}
+
+:root[data-theme="light"] .meta-card {
+  background: #f9fafb;
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+:root[data-theme="light"] .meta-card:hover {
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+:root[data-theme="light"] .tldr-hero {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.06), rgba(5, 150, 105, 0.04));
+  border-color: rgba(59, 130, 246, 0.12);
+}
+
+:root[data-theme="light"] .entity-section {
+  background: #f9fafb;
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+:root[data-theme="light"] .summary-card {
+  background: #f9fafb;
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+:root[data-theme="light"] .insight-accordion {
+  background: #f9fafb;
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+:root[data-theme="light"] .insight-num.active {
+  background: var(--accent);
+  color: white;
+}
+
+:root[data-theme="light"] .quick-stats-bar {
+  background: #f9fafb;
+  border-color: rgba(0, 0, 0, 0.08);
 }
