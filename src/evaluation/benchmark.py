@@ -6,6 +6,7 @@ Chạy pipeline trên tập dữ liệu test, tính CER/WER/F1.
 
 Sử dụng:
     conda activate vietidp
+    cd /d E:\OCR-LLM_Research\OCR-LLM_Research
     python src/evaluation/benchmark.py --input data/test --ground-truth data/test/labels
 """
 

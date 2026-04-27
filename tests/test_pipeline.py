@@ -169,7 +169,7 @@ class TestPrompts:
         from src.llm.prompts import PROMPTS
         assert 'extraction' in PROMPTS
         assert 'summarize' in PROMPTS
-        assert 'classify' in PROMPTS
+        assert 'classification' in PROMPTS
 
     def test_prompt_format(self):
         from src.llm.prompts import PROMPTS

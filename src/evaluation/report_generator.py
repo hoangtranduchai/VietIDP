@@ -5,6 +5,8 @@ VietIDP Report Generator
 Sinh báo cáo HTML tự động từ kết quả benchmark.
 
 Sử dụng:
+    conda activate vietidp
+    cd /d E:\OCR-LLM_Research\OCR-LLM_Research
     python src/evaluation/report_generator.py --input results/benchmark/benchmark_results.json
 """
 

@@ -1,0 +1,661 @@
+{
+  "status": "success",
+  "num_pages": 1,
+  "total_stamps": 1,
+  "stamp_coordinates": [
+    {
+      "x1": 623,
+      "y1": 1277,
+      "x2": 830,
+      "y2": 1484,
+      "confidence": 0.9749,
+      "page": 1
+    }
+  ],
+  "full_text": "ĐẠI HỌC ĐÀ NĂNG\nCỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nTRƯỜNG ĐẠI HỌC BÁCH KHOA\nĐộc lập\nTự do\nHạnh phúc\nSố: 1830/TB-ĐHBK\nĐà\nngày 14\n4 năm 2026\nTHÔNG BÁO\nThời gian nghỉ lễ Giỗ Tổ\nngày Chiến\n30/4 và ngày Quốc tế Lao động 61/5 năm 2026\nCăn cứ Bộ luật Lao\nsố 45/2019/QH14 ngày 20/11/2019 của Quốc\nhội nước\nCộng hòa xã hội chủ nghĩa Việt Nam;\nCăn cứ\nVăn số 3383/BNV-CVL ngày 10/4/2026 của Bộ Nội vụ về\nviệc\ntin về lịch nghỉ dịp Giỗ Tổ\nngày Chiến\n30/4 và Ngày Quốc\ntế\n01/5 năm 2026;\nTrường Đại học Bách khoa\nbáo thời gian nghi lễ Giỗ Tổ\nngày Chiến\n30/4 và ngày Quốc tế Lao động 01/5 năm 2026 như\nsau:\n1. Thời gian nghỉ lễ Giỗ Tổ\nviên\nngười lao\nvà người\nhọc\nnghi 02 ngày: ngày 26/4/2026 (Chủ nhật) và ngày 27/4/2026 (thứ 2)\n2. Thời gian\nlễ ngày Chiến\n30/4 và ngày Quốc tế Lao\nđộng 01/5\nnăm 2026: viên chức, người lao động và người học được nghi 02\nngày: ngày\n30/4/2026 (thứ 5) và ngày 01/5/2026 (thứ 6).\nthời gian nghỉ Lễ, viên\nngười lao\nvà\nngười học chấp hành\nnghiêm chỉnh\ncác\nquy định\ncủa\nNhà nước\nvà\ncác nội\ntại\nvăn số\n1829/ĐHBK-TCHC ngày 14\n4 năm 2026 của\nĐại học bách khoa.\nĐại\nBách khoa\nbáo đến các đơn vị thuộc, trực thuộc Nhà\nngười học\nbiết và thực hiện/q\nKT. HIỆU TRƯỞNG\nPHÓ HIỆU TRƯỞNG\nNơi nhận:\nĐHĐN (để báo cáo);\nHiệu\n(để báo cáo);\nCác Phó Hiệu\n(để biết);\nCác đơn vị (để thực\n6.06\nCTSV (thông báo sinh\nLưu VT, TCHC\nPGS.TS. Huỳnh\nNam",
+  "extraction": {
+    "loai_van_ban": "Thông báo",
+    "so_hieu": "1830/TB-ĐHBK",
+    "ngay_ban_hanh": "14/04/2026",
+    "co_quan_ban_hanh": "Trường Đại học Bách Khoa",
+    "trich_yeu": "Thông báo về thời gian nghỉ lễ Giỗ Tổ Hùng Vương và Quốc tế Lao động năm 2026",
+    "nguoi_ky": ""
+  },
+  "ocr_lines": [
+    {
+      "text": "ĐẠI HỌC ĐÀ NĂNG",
+      "x1": 281,
+      "y1": 119,
+      "x2": 529,
+      "y2": 157,
+      "page": 1
+    },
+    {
+      "text": "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM",
+      "x1": 606,
+      "y1": 126,
+      "x2": 1166,
+      "y2": 176,
+      "page": 1
+    },
+    {
+      "text": "TRƯỜNG ĐẠI HỌC BÁCH KHOA",
+      "x1": 189,
+      "y1": 143,
+      "x2": 608,
+      "y2": 194,
+      "page": 1
+    },
+    {
+      "text": "Độc lập",
+      "x1": 730,
+      "y1": 168,
+      "x2": 826,
+      "y2": 200,
+      "page": 1
+    },
+    {
+      "text": "Tự do",
+      "x1": 844,
+      "y1": 172,
+      "x2": 920,
+      "y2": 202,
+      "page": 1
+    },
+    {
+      "text": "Hạnh phúc",
+      "x1": 937,
+      "y1": 173,
+      "x2": 1073,
+      "y2": 209,
+      "page": 1
+    },
+    {
+      "text": "Số: 1830/TB-ĐHBK",
+      "x1": 287,
+      "y1": 193,
+      "x2": 515,
+      "y2": 235,
+      "page": 1
+    },
+    {
+      "text": "Đà",
+      "x1": 698,
+      "y1": 210,
+      "x2": 740,
+      "y2": 240,
+      "page": 1
+    },
+    {
+      "text": "ngày 14",
+      "x1": 808,
+      "y1": 216,
+      "x2": 900,
+      "y2": 248,
+      "page": 1
+    },
+    {
+      "text": "4 năm 2026",
+      "x1": 970,
+      "y1": 220,
+      "x2": 1100,
+      "y2": 250,
+      "page": 1
+    },
+    {
+      "text": "THÔNG BÁO",
+      "x1": 541,
+      "y1": 254,
+      "x2": 779,
+      "y2": 310,
+      "page": 1
+    },
+    {
+      "text": "Thời gian nghỉ lễ Giỗ Tổ",
+      "x1": 420,
+      "y1": 300,
+      "x2": 727,
+      "y2": 343,
+      "page": 1
+    },
+    {
+      "text": "ngày Chiến",
+      "x1": 263,
+      "y1": 327,
+      "x2": 413,
+      "y2": 367,
+      "page": 1
+    },
+    {
+      "text": "30/4 và ngày Quốc tế Lao động 61/5 năm 2026",
+      "x1": 486,
+      "y1": 334,
+      "x2": 1054,
+      "y2": 387,
+      "page": 1
+    },
+    {
+      "text": "Căn cứ Bộ luật Lao",
+      "x1": 219,
+      "y1": 405,
+      "x2": 451,
+      "y2": 443,
+      "page": 1
+    },
+    {
+      "text": "số 45/2019/QH14 ngày 20/11/2019 của Quốc",
+      "x1": 514,
+      "y1": 408,
+      "x2": 1044,
+      "y2": 464,
+      "page": 1
+    },
+    {
+      "text": "hội nước",
+      "x1": 1039,
+      "y1": 429,
+      "x2": 1149,
+      "y2": 465,
+      "page": 1
+    },
+    {
+      "text": "Cộng hòa xã hội chủ nghĩa Việt Nam;",
+      "x1": 158,
+      "y1": 445,
+      "x2": 606,
+      "y2": 498,
+      "page": 1
+    },
+    {
+      "text": "Căn cứ",
+      "x1": 218,
+      "y1": 498,
+      "x2": 310,
+      "y2": 528,
+      "page": 1
+    },
+    {
+      "text": "Văn số 3383/BNV-CVL ngày 10/4/2026 của Bộ Nội vụ về",
+      "x1": 383,
+      "y1": 497,
+      "x2": 1093,
+      "y2": 557,
+      "page": 1
+    },
+    {
+      "text": "việc",
+      "x1": 1092,
+      "y1": 526,
+      "x2": 1148,
+      "y2": 558,
+      "page": 1
+    },
+    {
+      "text": "tin về lịch nghỉ dịp Giỗ Tổ",
+      "x1": 228,
+      "y1": 538,
+      "x2": 546,
+      "y2": 586,
+      "page": 1
+    },
+    {
+      "text": "ngày Chiến",
+      "x1": 705,
+      "y1": 555,
+      "x2": 847,
+      "y2": 595,
+      "page": 1
+    },
+    {
+      "text": "30/4 và Ngày Quốc",
+      "x1": 915,
+      "y1": 563,
+      "x2": 1147,
+      "y2": 605,
+      "page": 1
+    },
+    {
+      "text": "tế",
+      "x1": 156,
+      "y1": 582,
+      "x2": 188,
+      "y2": 616,
+      "page": 1
+    },
+    {
+      "text": "01/5 năm 2026;",
+      "x1": 299,
+      "y1": 590,
+      "x2": 490,
+      "y2": 629,
+      "page": 1
+    },
+    {
+      "text": "Trường Đại học Bách khoa",
+      "x1": 210,
+      "y1": 629,
+      "x2": 546,
+      "y2": 673,
+      "page": 1
+    },
+    {
+      "text": "báo thời gian nghi lễ Giỗ Tổ",
+      "x1": 619,
+      "y1": 644,
+      "x2": 973,
+      "y2": 689,
+      "page": 1
+    },
+    {
+      "text": "ngày Chiến",
+      "x1": 153,
+      "y1": 675,
+      "x2": 293,
+      "y2": 713,
+      "page": 1
+    },
+    {
+      "text": "30/4 và ngày Quốc tế Lao động 01/5 năm 2026 như",
+      "x1": 362,
+      "y1": 680,
+      "x2": 960,
+      "y2": 733,
+      "page": 1
+    },
+    {
+      "text": "sau:",
+      "x1": 956,
+      "y1": 708,
+      "x2": 1010,
+      "y2": 732,
+      "page": 1
+    },
+    {
+      "text": "1. Thời gian nghỉ lễ Giỗ Tổ",
+      "x1": 211,
+      "y1": 725,
+      "x2": 549,
+      "y2": 767,
+      "page": 1
+    },
+    {
+      "text": "viên",
+      "x1": 724,
+      "y1": 740,
+      "x2": 780,
+      "y2": 772,
+      "page": 1
+    },
+    {
+      "text": "người lao",
+      "x1": 845,
+      "y1": 743,
+      "x2": 969,
+      "y2": 782,
+      "page": 1
+    },
+    {
+      "text": "và người",
+      "x1": 1031,
+      "y1": 751,
+      "x2": 1142,
+      "y2": 790,
+      "page": 1
+    },
+    {
+      "text": "học",
+      "x1": 210,
+      "y1": 772,
+      "x2": 258,
+      "y2": 804,
+      "page": 1
+    },
+    {
+      "text": "nghi 02 ngày: ngày 26/4/2026 (Chủ nhật) và ngày 27/4/2026 (thứ 2)",
+      "x1": 317,
+      "y1": 773,
+      "x2": 1109,
+      "y2": 835,
+      "page": 1
+    },
+    {
+      "text": "2. Thời gian",
+      "x1": 207,
+      "y1": 817,
+      "x2": 365,
+      "y2": 857,
+      "page": 1
+    },
+    {
+      "text": "lễ ngày Chiến",
+      "x1": 425,
+      "y1": 819,
+      "x2": 607,
+      "y2": 863,
+      "page": 1
+    },
+    {
+      "text": "30/4 và ngày Quốc tế Lao",
+      "x1": 683,
+      "y1": 831,
+      "x2": 1009,
+      "y2": 873,
+      "page": 1
+    },
+    {
+      "text": "động 01/5",
+      "x1": 1007,
+      "y1": 840,
+      "x2": 1139,
+      "y2": 882,
+      "page": 1
+    },
+    {
+      "text": "năm 2026: viên chức, người lao động và người học được nghi 02",
+      "x1": 203,
+      "y1": 859,
+      "x2": 999,
+      "y2": 923,
+      "page": 1
+    },
+    {
+      "text": "ngày: ngày",
+      "x1": 997,
+      "y1": 889,
+      "x2": 1135,
+      "y2": 929,
+      "page": 1
+    },
+    {
+      "text": "30/4/2026 (thứ 5) và ngày 01/5/2026 (thứ 6).",
+      "x1": 201,
+      "y1": 905,
+      "x2": 720,
+      "y2": 960,
+      "page": 1
+    },
+    {
+      "text": "thời gian nghỉ Lễ, viên",
+      "x1": 281,
+      "y1": 957,
+      "x2": 569,
+      "y2": 997,
+      "page": 1
+    },
+    {
+      "text": "người lao",
+      "x1": 641,
+      "y1": 966,
+      "x2": 765,
+      "y2": 1007,
+      "page": 1
+    },
+    {
+      "text": "và",
+      "x1": 836,
+      "y1": 976,
+      "x2": 870,
+      "y2": 1004,
+      "page": 1
+    },
+    {
+      "text": "người học chấp hành",
+      "x1": 871,
+      "y1": 972,
+      "x2": 1134,
+      "y2": 1017,
+      "page": 1
+    },
+    {
+      "text": "nghiêm chỉnh",
+      "x1": 143,
+      "y1": 997,
+      "x2": 317,
+      "y2": 1033,
+      "page": 1
+    },
+    {
+      "text": "các",
+      "x1": 324,
+      "y1": 1004,
+      "x2": 370,
+      "y2": 1032,
+      "page": 1
+    },
+    {
+      "text": "quy định",
+      "x1": 380,
+      "y1": 1008,
+      "x2": 496,
+      "y2": 1040,
+      "page": 1
+    },
+    {
+      "text": "của",
+      "x1": 504,
+      "y1": 1010,
+      "x2": 550,
+      "y2": 1038,
+      "page": 1
+    },
+    {
+      "text": "Nhà nước",
+      "x1": 562,
+      "y1": 1012,
+      "x2": 688,
+      "y2": 1042,
+      "page": 1
+    },
+    {
+      "text": "và",
+      "x1": 696,
+      "y1": 1018,
+      "x2": 730,
+      "y2": 1044,
+      "page": 1
+    },
+    {
+      "text": "các nội",
+      "x1": 737,
+      "y1": 1017,
+      "x2": 839,
+      "y2": 1053,
+      "page": 1
+    },
+    {
+      "text": "tại",
+      "x1": 918,
+      "y1": 1024,
+      "x2": 954,
+      "y2": 1054,
+      "page": 1
+    },
+    {
+      "text": "văn số",
+      "x1": 1041,
+      "y1": 1025,
+      "x2": 1131,
+      "y2": 1061,
+      "page": 1
+    },
+    {
+      "text": "1829/ĐHBK-TCHC ngày 14",
+      "x1": 141,
+      "y1": 1039,
+      "x2": 482,
+      "y2": 1088,
+      "page": 1
+    },
+    {
+      "text": "4 năm 2026 của",
+      "x1": 549,
+      "y1": 1057,
+      "x2": 739,
+      "y2": 1093,
+      "page": 1
+    },
+    {
+      "text": "Đại học bách khoa.",
+      "x1": 829,
+      "y1": 1065,
+      "x2": 1062,
+      "y2": 1103,
+      "page": 1
+    },
+    {
+      "text": "Đại",
+      "x1": 296,
+      "y1": 1094,
+      "x2": 346,
+      "y2": 1126,
+      "page": 1
+    },
+    {
+      "text": "Bách khoa",
+      "x1": 402,
+      "y1": 1098,
+      "x2": 535,
+      "y2": 1130,
+      "page": 1
+    },
+    {
+      "text": "báo đến các đơn vị thuộc, trực thuộc Nhà",
+      "x1": 612,
+      "y1": 1100,
+      "x2": 1130,
+      "y2": 1152,
+      "page": 1
+    },
+    {
+      "text": "người học",
+      "x1": 225,
+      "y1": 1134,
+      "x2": 355,
+      "y2": 1175,
+      "page": 1
+    },
+    {
+      "text": "biết và thực hiện/q",
+      "x1": 414,
+      "y1": 1138,
+      "x2": 660,
+      "y2": 1190,
+      "page": 1
+    },
+    {
+      "text": "KT. HIỆU TRƯỞNG",
+      "x1": 743,
+      "y1": 1199,
+      "x2": 1015,
+      "y2": 1239,
+      "page": 1
+    },
+    {
+      "text": "PHÓ HIỆU TRƯỞNG",
+      "x1": 735,
+      "y1": 1231,
+      "x2": 1021,
+      "y2": 1276,
+      "page": 1
+    },
+    {
+      "text": "Nơi nhận:",
+      "x1": 176,
+      "y1": 1250,
+      "x2": 286,
+      "y2": 1282,
+      "page": 1
+    },
+    {
+      "text": "ĐHĐN (để báo cáo);",
+      "x1": 183,
+      "y1": 1277,
+      "x2": 379,
+      "y2": 1315,
+      "page": 1
+    },
+    {
+      "text": "Hiệu",
+      "x1": 182,
+      "y1": 1308,
+      "x2": 234,
+      "y2": 1336,
+      "page": 1
+    },
+    {
+      "text": "(để báo cáo);",
+      "x1": 297,
+      "y1": 1307,
+      "x2": 423,
+      "y2": 1345,
+      "page": 1
+    },
+    {
+      "text": "Các Phó Hiệu",
+      "x1": 184,
+      "y1": 1336,
+      "x2": 314,
+      "y2": 1366,
+      "page": 1
+    },
+    {
+      "text": "(để biết);",
+      "x1": 377,
+      "y1": 1339,
+      "x2": 469,
+      "y2": 1375,
+      "page": 1
+    },
+    {
+      "text": "Các đơn vị (để thực",
+      "x1": 181,
+      "y1": 1361,
+      "x2": 367,
+      "y2": 1397,
+      "page": 1
+    },
+    {
+      "text": "6.06",
+      "x1": 695,
+      "y1": 1357,
+      "x2": 783,
+      "y2": 1401,
+      "page": 1
+    },
+    {
+      "text": "CTSV (thông báo sinh",
+      "x1": 243,
+      "y1": 1391,
+      "x2": 455,
+      "y2": 1427,
+      "page": 1
+    },
+    {
+      "text": "Lưu VT, TCHC",
+      "x1": 182,
+      "y1": 1420,
+      "x2": 338,
+      "y2": 1448,
+      "page": 1
+    },
+    {
+      "text": "PGS.TS. Huỳnh",
+      "x1": 681,
+      "y1": 1477,
+      "x2": 885,
+      "y2": 1515,
+      "page": 1
+    },
+    {
+      "text": "Nam",
+      "x1": 988,
+      "y1": 1488,
+      "x2": 1050,
+      "y2": 1516,
+      "page": 1
+    }
+  ],
+  "processing_time_seconds": 31.86,
+  "source_file": "sample_test.jpg",
+  "processed_at": "2026-04-27T17:00:21.636154"
+}
