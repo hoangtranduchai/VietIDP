@@ -1,0 +1,12 @@
+{
+    "source_file": "bench_070",
+    "ocr_raw_text": "TRƯỜNG ĐH BÁCH KHOA\nCỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nSố: 782/TB-KHOA\nĐộc lập\nTự do\nHạnh phúc\n02 năm 2024\nNgày 03\nKẾ HOẠCH\nVề việc bổ nhiệm cán bộ\nlý\nCăn cứ vào Luật Tổ chức chính phủ ngày 19 tháng\nnăm 2015;\nCăn cứ vào nghị định số 123/2016/NĐ-CP của Chính phủ;\nXét đề\ncủa Giám đốc Sở Nội vụ và Trưởng phòng Hành chính,\nQUYẾT ĐỊNH/THÔNG BÁO:\nĐiều\n1. Phê duyệt về việc bổ nhiệm cản bộ quản lý đối với các cơ quan, đơn vị trực thuộc\nĐiều 2. Giao cho phòng Tài chính\nKế toán chịu trách nhiệm thi hành.\nĐiều 3. Quyết định/Thông báo này có hiệu lực kể tư ngày ký.\nTỔNG GIÁM ĐỐC",
+    "extraction_result": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "782/TB-KHOA",
+        "ngay_ban_hanh": "03/02/2024",
+        "co_quan_ban_hanh": "TRƯỜNG ĐH BÁCH KHOA",
+        "trich_yeu": "Về việc bổ nhiệm cán bộ quản lý đối với các cơ quan, đơn vị trực thuộc",
+        "nguoi_ky": ""
+    }
+}

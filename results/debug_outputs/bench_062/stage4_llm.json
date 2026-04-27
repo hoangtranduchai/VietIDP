@@ -1,0 +1,12 @@
+{
+    "source_file": "bench_062",
+    "ocr_raw_text": "SỞ Y TẾ TP.HCM\nCỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nSố: 405/TB-TP.HCM\nHạnh\nĐộc lập\nTự do\n05 năm 2025\nNgày 16\nTHÔNG BÁO\nnhà thầu\nPhê duyệt kết\nlya\n6 năm 2015;\nCăn cứ vào Luật Tổ chức chính phủ ngày 19\nCăn cứ vào nghị định số 123/2016/NĐ-CP của Chính phủ;\nXét đề nghị của Giám đốc Sở Nội vụ và Trưởng phòng Hành chính,\nQUYẾT ĐỊNH/THÔNG BÁO:\nĐiều\nLầ\nxã duyệt kết quả lựa chọn nhà thầu đối với các cơ quan, đơn vị trực thuông\nPhê duyệt\nĐiều 2. Giao cho phòng Tài chính\nKế toán chịu trách nhiệm thi hành\nĐiều 3. Quyết định/Thông báo này có hiệu lực kể từ ngày ký.\nHIỆU TRƯỞNG",
+    "extraction_result": {
+        "loai_van_ban": "Thông báo",
+        "so_hieu": "405/TB-TP.HCM",
+        "ngay_ban_hanh": "",
+        "co_quan_ban_hanh": "Sở Y tế TP.HCM",
+        "trich_yeu": "Phê duyệt kết quả lựa chọn nhà thầu đối với các cơ quan, đơn vị trực thuộc",
+        "nguoi_ky": ""
+    }
+}

@@ -1,0 +1,12 @@
+{
+    "source_file": "bench_039",
+    "ocr_raw_text": "SỞ Y TẾ TP.HCM\nCỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nSố: 232/QĐ-TP.HCM\nĐộc lập\nTự do\nHạnh phúc\nNgày 15 tháng 05 năm 2022\nQUYẾT ĐỊNH\nTriển khai\ntác\nsinh năm\nmới\nCăn cứ vào Luật Tổ chức chính phủ ngày 19 tháng 6 năm 2015;\nCăn cứ vào nghị định số 123/2016/NĐ-CP của Chính phủ;\nXét đề nghị của Giám đốc Sở Nội vụ và Trưởng phòng Hành chính,\nQUYẾT ĐỊNH/THÔNG BÁO:\nĐiều\nL\nPhê duyệt triển khai công tác tuyển sinh năm học mới đối với các cơ quan, đơn vị\nĐiều 2. Giao cho phòng Tài chính\nKế toán chịu trách nhiệm thi hành.\nĐiều 3. Quyết định/Thông báo này có hiệu lực kể từ ngày ký.\nHIỆU TRƯỞNG\nsau",
+    "extraction_result": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "232/QĐ-TP.HCM",
+        "ngay_ban_hanh": "15/05/2022",
+        "co_quan_ban_hanh": "Sở Y tế TP.HCM",
+        "trich_yeu": "Phê duyệt triển khai công tác tuyển sinh năm học mới đối với các cơ quan, đơn vị",
+        "nguoi_ky": ""
+    }
+}

@@ -1,0 +1,12 @@
+{
+    "source_file": "bench_060",
+    "ocr_raw_text": "TRƯỜNG ĐH BÁCH KHOA\nCỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nSố: 104/QĐ-KHOA\nTự do\nĐộc lập\nHạnh phúc\nNgày 07 tháng 12 năm 2026\nQUYẾT ĐỊNH\nVề việc bổ nhiệm cán bộ quản lý\nCăn cứ vào Luật Tổ chức chính\n6 năm 2015;\nngày 19\nđịnh số 123/2016/NĐ-CP của Chính phủ;\nCăn cứ vào\nXét đề nghị của Giám đốc Sở Nội vụ và Trưởng phòng Hành chính,\nQUYẾT ĐỊNH/THÔNG BÁO\nĐiều 1. Phê duyệt về việc bồ nhiệm cán bộ quản lý đối với các cơ quan, đơn vị trực thuộc.\nĐiều 2. Giao cho phòng Tài chính\nKế toán chịu trách nhiệm thi hành.\nĐiều 3\nđịnh/Thông báo nay có hiệu lực kế từ ngày\nTỔNG GIÁM ĐỐC",
+    "extraction_result": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "104/QĐ-KHOA",
+        "ngay_ban_hanh": "07/12/2026",
+        "co_quan_ban_hanh": "TRƯỜNG ĐH BÁCH KHOA",
+        "trich_yeu": "Về việc bổ nhiệm cán bộ quản lý",
+        "nguoi_ky": ""
+    }
+}

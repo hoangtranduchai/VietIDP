@@ -1,0 +1,12 @@
+{
+    "source_file": "bench_004",
+    "ocr_raw_text": "TRƯỜNG ĐH BÁCH KHOA\nCỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nSố: 891/TB-KHOA\nTự do\nHạnh phúc\nĐộc lập\n10 năm 2024\nNgày 03\nTHÔNG BÁO\nvề việc nghỉ lễ Quốc khánh 2/9\nCăn cứ vào Luật Tổ chức chính phủ ngày 19\nnăm 2015;\nCăn cứ vào nghị định số 123/2016/NĐ-CP của Chính phủ;\nXét đề nghị của Giám đốc Sở Nội vụ và Trưởng phòng Hành chính,\nQUYẾT ĐỊNH/THÔNG BÁO:\nĐiều 1. Phê duyệt về việc nghi lễ\nkhánh 2/9 đối với các cơ quan, đơn vị\nthuộc.\nĐiều\nKế toán chịu trách nhiệm thi hành.\nGiao cho phòng Tài chính\nĐiều 3. Quyết định/Thông báo này có hiệu lực kể từ ngày ký.\nGIÁM ĐỐC\nLane",
+    "extraction_result": {
+        "loai_van_ban": "Thông báo",
+        "so_hieu": "891/TB-KHOA",
+        "ngay_ban_hanh": "",
+        "co_quan_ban_hanh": "TRƯỜNG ĐH BÁCH KHOA",
+        "trich_yeu": "về việc nghỉ lễ Quốc khánh 2/9",
+        "nguoi_ky": ""
+    }
+}

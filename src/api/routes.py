@@ -12,7 +12,7 @@ import time
 import shutil
 import tempfile
 from typing import Optional
-from datetime import datetime
+from datetime import datetime, timezone
 
 from fastapi import APIRouter, UploadFile, File, HTTPException, Query, Depends
 from fastapi.responses import StreamingResponse, JSONResponse
@@ -69,7 +69,7 @@ async def health_check():
     return {
         "status": "healthy",
         "version": "3.0.0",
-        "timestamp": datetime.utcnow().isoformat(),
+        "timestamp": datetime.now(timezone.utc).isoformat(),
         "services": {
             "ollama": "active" if ollama_ok else "inactive",
             "database": "active",
@@ -138,8 +138,8 @@ async def process_document(file: UploadFile = File(...), async_mode: bool = Fals
             doc.status = "processing"
             session.commit()
 
-            from src.pipeline.ocr_llm_pipeline import VietIDPPipeline
-            pipeline = VietIDPPipeline(load_yolo=True, load_ocr=True, load_llm=True)
+            from src.api.fastapi_app import get_pipeline
+            pipeline = get_pipeline()
 
             start_time = time.time()
             result = pipeline.process_file(str(file_path), save_result=True)

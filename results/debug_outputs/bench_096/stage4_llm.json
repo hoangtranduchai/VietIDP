@@ -1,0 +1,12 @@
+{
+    "source_file": "bench_096",
+    "ocr_raw_text": "ong tycp vinamilk\nCỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nSố: 938/QĐ-VINAMILK\nĐộc\nTự do\nHạnh phúc\n04 năm 2026\nNgày 19\nQUYẾT ĐỊNH\nVề việc nghỉ lễ Quốc khánh 2/9\nCăn cứ vào Luật Tổ chức chính phủ ngày 19 tháng 6 năm 2015;\nCăn cứ vào nghị định số 123/2016/NĐ-CP của Chính phủ;\nXét đề nghị của Giám đốc Sở Nội vụ và Trưởng phòng Hành chính.\nQUYẾT ĐỊNH/THÔNG BÁO:\nĐiều 1. Phê duyệt về việc nghi lễ\nkhánh 2/9 đối với các cơ quan, đơn vị trực thuộc\nKế toán chịu trách nhiệm thi hành\nĐiều 2. Giao cho phòng Tài chính\nĐiều 3. Quyết định/Thông báo này có hiệu lực kể từ ngày ký.\nHIỆU TRƯỞNG\nThị B",
+    "extraction_result": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "938/QĐ-VINAMILK",
+        "ngay_ban_hanh": "04/02/2026",
+        "co_quan_ban_hanh": "Công ty Vinamilk",
+        "trich_yeu": "Về việc nghỉ lễ Quốc khánh 2/9",
+        "nguoi_ky": "Thị B"
+    }
+}

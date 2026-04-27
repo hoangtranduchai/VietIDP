@@ -1,0 +1,12 @@
+{
+    "source_file": "bench_029",
+    "ocr_raw_text": "SỞ Y TẾ TP.HCM\nCỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nSố: 515/TB-TP.HCM\nTự do\nĐộc lập\nHạnh phúc\n08 năm 2021\nNgày 03\nTỜ TRÌNH\nviệc nghỉ lễ Quốc khánh 2/9\nCăn cứ vào Luật Tổ chức chính phủ ngày 19\nnăm 2015;\nCăn cứ vào nghị định số 123/2016/NĐ-CP của Chính phú;\nXét đề nghị của Giám đốc Sở Nội vụ và Trưởng phòng Hành chính,\nQUYẾT ĐỊNH/THÔNG BÁO:\nĐiều\nlễ\nkhánh 2/9 đối với các cơ quan, đơn vị trực thuộc.\n1. Phê duyệt về việc\nKế toán chịu trách nhiệm thi hành.\nĐiều 2. Giao cho phòng Tài chính\nĐiều 3\nđịnh/Thông báo này có hiệu lực kể từ ngày ký.\nHIỆU TRƯỞNG\nLọ",
+    "extraction_result": {
+        "loai_van_ban": "Tờ trình",
+        "so_hieu": "515/TB-TP.HCM",
+        "ngay_ban_hanh": "08/2021",
+        "co_quan_ban_hanh": "Sở Y tế TP.HCM",
+        "trich_yeu": "việc nghỉ lễ Quốc khánh 2/9",
+        "nguoi_ky": ""
+    }
+}

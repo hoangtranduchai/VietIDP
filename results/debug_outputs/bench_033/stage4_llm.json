@@ -1,0 +1,12 @@
+{
+    "source_file": "bench_033",
+    "ocr_raw_text": "BND TỈNH ĐỒNG NAI\nCỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nSố: 965/TB-NAI\nĐộc lập\nTự do\nHạnh phúc\n08 năm 2023\nNgày 17\nKẾ HOẠCH\nlề việc\nduyệt đề án bảo vệ môi trường\nCăn cứ vào Luật Tổ chức chính phủ ngày 19\nnăm 2015;\nCăn cứ vào nghị định số 123/2016/NĐ-CP của Chính phủ;\nXét đề nghị của Giám đốc Sở Nội vụ và Trưởng phòng Hành chính,\nQUYẾT ĐỊNH/THÔNG BÁO:\nĐiều\nPhê duyệt về việc phê duyệt đề án bảo vệ môi trường đối với các cơ quan, đơn vị trang\nĐiều 2. Giao cho phòng Tài chính\nKế toán chịu trách nhiệm thi hành.\nĐiều 3. Quyết định/Thông báo này có hiệu lực kể từ ngày ký.\nTỔNG GIÁM ĐỐC",
+    "extraction_result": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "965/TB-NAI",
+        "ngay_ban_hanh": "17/08/2023",
+        "co_quan_ban_hanh": "BND Tỉnh Đồng Nai",
+        "trich_yeu": "Phê duyệt về việc phê duyệt đề án bảo vệ môi trường đối với các cơ quan, đơn vị",
+        "nguoi_ky": ""
+    }
+}

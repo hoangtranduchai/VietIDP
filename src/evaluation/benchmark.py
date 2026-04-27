@@ -6,7 +6,7 @@ Chạy pipeline trên tập dữ liệu test, tính CER/WER/F1.
 
 Sử dụng:
     conda activate vietidp
-    cd /d E:\OCR-LLM_Research\OCR-LLM_Research
+    cd /d E:\\OCR-LLM_Research\\OCR-LLM_Research
     python src/evaluation/benchmark.py --input data/test --ground-truth data/test/labels
 """
 
@@ -300,7 +300,30 @@ if __name__ == "__main__":
     parser.add_argument("--ground-truth", default=None, help="Ground truth JSON directory")
     parser.add_argument("--output", default=None, help="Output directory")
     parser.add_argument("--limit", type=int, default=None, help="Limit number of files")
+    parser.add_argument("--use-raw", action="store_true", help="Fallback to data/raw if data/test is empty")
     args = parser.parse_args()
 
-    runner = BenchmarkRunner(args.input, args.ground_truth, args.output, args.limit)
+    input_dir = args.input
+    gt_dir = args.ground_truth
+
+    # Auto-fallback: if data/test has no images, try data/raw
+    if not any(f.lower().endswith(('.pdf', '.png', '.jpg', '.jpeg'))
+               for f in os.listdir(input_dir) if os.path.isfile(os.path.join(input_dir, f))):
+        fallback = "data/raw"
+        if os.path.isdir(fallback) and not args.use_raw:
+            print(f"[INFO] {input_dir} is empty, auto-fallback to {fallback}")
+            print(f"       (or use --use-raw explicitly)")
+            input_dir = fallback
+        elif args.use_raw and os.path.isdir(fallback):
+            input_dir = fallback
+
+    # Auto-detect ground-truth directory
+    if gt_dir is None:
+        candidate = os.path.join(input_dir, "labels")
+        if os.path.isdir(candidate):
+            gt_dir = candidate
+            print(f"[INFO] Auto-detected ground truth: {gt_dir}")
+
+    runner = BenchmarkRunner(input_dir, gt_dir, args.output, args.limit)
     runner.run()
+

@@ -1,0 +1,12 @@
+{
+    "source_file": "bench_068",
+    "ocr_raw_text": "SỞ Y TẾ TP.HCM\nCỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nSố: 243/TB-TP.HCM\nTự do\nĐộc lập\nHạnh phúc\nNgày 25 tháng 01 năm 2021\nKẾ HOẠCH\nVề việc bổ nhiệm cán bộ\nlý\nCăn cứ vào Luật Tổ chức chính phủ ngày 19\nnăm 2015;\nCăn cứ vào nghị định số 123/2016/NĐ-CP của Chính phủ;\nXét đề\ncủa Giám đốc Sở Nội vụ và Trướng phòng Hành chính,\nQUYẾT ĐỊNH/THÔNG BÁO:\nĐiều I. Phê duyệt về việc bổ nhiệm cán bộ quản lý đối với các cơ quan, đơn vị trực thuộc\nKế toán chịu trách nhiệm thi hành\nĐiều 2. Giao cho phòng Tài chính\nĐiều 3. Quyết định/Thông báo này có hiệu lực kể từ ngày ký.\nTỔNG GIÁM ĐỐC\nD\nioing",
+    "extraction_result": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "243/TB-TP.HCM",
+        "ngay_ban_hanh": "25/01/2021",
+        "co_quan_ban_hanh": "Sở Y tế TP.HCM",
+        "trich_yeu": "Về việc bổ nhiệm cán bộ quản lý đối với các cơ quan, đơn vị trực thuộc",
+        "nguoi_ky": ""
+    }
+}

@@ -1,0 +1,12 @@
+{
+    "source_file": "bench_006",
+    "ocr_raw_text": "TRƯỜNG ĐH BÁCH KHOA\nCỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nSố: 520/TB-KHOA\nTự do\nHạnh phúc\nĐộc lập\nNgày 03 tháng 09 năm 2021\nTỜ TRÌNH\nviệc nghi lễ Quốc khánh 2/9\nCăn cứ vào Luật Tổ chức chính phủ ngày 19 tháng\nnăm 2015;\nCăn cứ vào nghị định số 123/2016/NĐ-CP của Chính phủ;\nXét đề\ncủa Giám đốc Sở Nội vụ và Trưởng phòng Hành chính,\nQUYẾT ĐỊNH/THÔNG BÁO:\nĐiều 1\nlễ quốc khánh 2/9 đối với các cơ quan, đơn vị trực thuộc.\nPhê duyệt về việc\nKế toán chịu trách nhiệm thi hành\nĐiều 2. Giao cho phòng Tài chính\nĐiều 3. Quyết định/Thông báo này có hiệu lực kể từ ngày ký.\nCHỦ TỊCH\nNAC\n10",
+    "extraction_result": {
+        "loai_van_ban": "Tờ trình",
+        "so_hieu": "520/TB-KHOA",
+        "ngay_ban_hanh": "03/09/2021",
+        "co_quan_ban_hanh": "TRƯỜNG ĐH BÁCH KHOA",
+        "trich_yeu": "việc nghi lễ Quốc khánh 2/9",
+        "nguoi_ky": ""
+    }
+}

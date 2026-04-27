@@ -1,0 +1,12 @@
+{
+    "source_file": "bench_044",
+    "ocr_raw_text": "TRƯỜNG ĐH BÁCH KHOA\nCỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nSố: 351/TB-KHOA\nĐộc lập\nTự do\nHạnh phúc\n04 năm 2023\nNgày 26\nKẾ HOẠCH\nPhê duyệt kết\nlựa chọn nhà thầu\nCăn cứ vào Luật Tổ chức chính\nngày 19 tháng 6 năm 2015;\nCăn cứ vào nghị định số 123/2016/NĐ-CP của Chính phủ;\nXét đề nghị của Giám đốc Sở Nội vụi và Trưởng phòng Hành chính,\nQUYẾT ĐỊNH/THÔNG BÁO:\nĐiều 1\nthì lựa chọn nhà thầu đối với các cơ quan, đơn vị trực thuế\nduyệt kết\nPhê duyệt\nKế toán chịu trách nhiệm thi hành.\nĐiều 2. Giao cho phòng Tài chính\nĐiều 3. Quyết định/Thông báo này có hiệu lực kể từ ngày ký.\nBỘ TRƯỜNG",
+    "extraction_result": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "351/TB-KHOA",
+        "ngay_ban_hanh": "26/04/2023",
+        "co_quan_ban_hanh": "TRƯỜNG ĐH BÁCH KHOA",
+        "trich_yeu": "Phê duyệt kết lựa chọn nhà thầu",
+        "nguoi_ky": ""
+    }
+}

@@ -88,11 +88,35 @@ def test_ollama():
     print_header("TEST 4: Ollama LLM (Qwen2.5-7B)")
     try:
         import requests
+        import subprocess
         from src.config import Config
 
-        r = requests.get("http://localhost:11434/api/tags", timeout=5)
-        if r.status_code != 200:
-            print("  [FAIL] Ollama not responding")
+        # Try connecting; auto-start if not running
+        ollama_ok = False
+        for attempt in range(2):
+            try:
+                r = requests.get("http://localhost:11434/api/tags", timeout=5)
+                if r.status_code == 200:
+                    ollama_ok = True
+                    break
+            except Exception:
+                pass
+
+            if attempt == 0:
+                print("  Ollama not running, auto-starting...")
+                try:
+                    subprocess.Popen(
+                        ["ollama", "serve"],
+                        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                        creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0)
+                    )
+                    time.sleep(5)
+                except FileNotFoundError:
+                    print("  [FAIL] Ollama binary not found. Install from https://ollama.ai")
+                    return False
+
+        if not ollama_ok:
+            print("  [FAIL] Ollama not responding after auto-start")
             return False
 
         models = [m['name'] for m in r.json().get('models', [])]

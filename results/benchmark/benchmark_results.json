@@ -1,0 +1,3420 @@
+{
+  "timestamp": "2026-04-28T00:59:52.921482",
+  "summary": {
+    "total_files": 100,
+    "successful": 100,
+    "failed": 0,
+    "success_rate": 1.0,
+    "total_time": 1688.91,
+    "avg_time": 16.89,
+    "median_time": 15.38,
+    "min_time": 14.15,
+    "max_time": 25.18,
+    "avg_cer": 0.2354,
+    "avg_wer": 0.256,
+    "avg_f1": 0.7495,
+    "vram_peak_gb": 2.16
+  },
+  "results": [
+    {
+      "filename": "bench_000.jpg",
+      "status": "success",
+      "processing_time": 15.16,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 579,
+      "extraction": {
+        "loai_van_ban": "Thông báo",
+        "so_hieu": "800/TB-Tạo",
+        "ngay_ban_hanh": "",
+        "co_quan_ban_hanh": "Giáo dục và Đào tạo Cộng hòa xã hội chủ nghĩa Việt Nam",
+        "trich_yeu": "Phê duyệt về việc phê duyệt đề án bảo vệ môi trường đối với các cơ quan, đơn vị",
+        "nguoi_ky": ""
+      },
+      "cer": 0.24132492113564669,
+      "wer": 0.25,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "missed",
+          "co_quan_ban_hanh": "wrong",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.75,
+        "recall": 0.6,
+        "f1": 0.6667,
+        "tp": 3,
+        "fp": 1,
+        "fn": 2
+      }
+    },
+    {
+      "filename": "bench_001.jpg",
+      "status": "success",
+      "processing_time": 17.47,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 584,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "855/TB-THƯƠNG",
+        "ngay_ban_hanh": "03/05/2020",
+        "co_quan_ban_hanh": "Bộ Công thương",
+        "trich_yeu": "Phê duyệt kết quả lựa chọn nhà thầu",
+        "nguoi_ky": ""
+      },
+      "cer": 0.22276422764227644,
+      "wer": 0.23484848484848486,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "wrong",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.8,
+        "recall": 0.8,
+        "f1": 0.8,
+        "tp": 4,
+        "fp": 1,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_002.jpg",
+      "status": "success",
+      "processing_time": 14.98,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 589,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "462/TB-THƯƠNG",
+        "ngay_ban_hanh": "02/02/2024",
+        "co_quan_ban_hanh": "Bộ Công thương",
+        "trich_yeu": "Về việc ban hành quy định quản lý dự án đầu tư",
+        "nguoi_ky": ""
+      },
+      "cer": 0.14375,
+      "wer": 0.11347517730496454,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "wrong",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.8,
+        "recall": 0.8,
+        "f1": 0.8,
+        "tp": 4,
+        "fp": 1,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_003.jpg",
+      "status": "success",
+      "processing_time": 20.23,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 579,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "614/QĐ-THƯƠNG",
+        "ngay_ban_hanh": "10/02/2024",
+        "co_quan_ban_hanh": "Bộ Công thương",
+        "trich_yeu": "Phê duyệt kết quả lựa chọn nhà thầu",
+        "nguoi_ky": ""
+      },
+      "cer": 0.25040916530278234,
+      "wer": 0.2727272727272727,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 1.0,
+        "recall": 0.8333,
+        "f1": 0.9091,
+        "tp": 5,
+        "fp": 0,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_004.jpg",
+      "status": "success",
+      "processing_time": 21.96,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 564,
+      "extraction": {
+        "loai_van_ban": "Thông báo",
+        "so_hieu": "891/TB-KHOA",
+        "ngay_ban_hanh": "",
+        "co_quan_ban_hanh": "TRƯỜNG ĐH BÁCH KHOA",
+        "trich_yeu": "về việc nghỉ lễ Quốc khánh 2/9",
+        "nguoi_ky": ""
+      },
+      "cer": 0.22442244224422442,
+      "wer": 0.24427480916030533,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "missed",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 1.0,
+        "recall": 0.6667,
+        "f1": 0.8,
+        "tp": 4,
+        "fp": 0,
+        "fn": 2
+      }
+    },
+    {
+      "filename": "bench_005.jpg",
+      "status": "success",
+      "processing_time": 22.37,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 564,
+      "extraction": {
+        "loai_van_ban": "Thông báo",
+        "so_hieu": "56/TB-NAI",
+        "ngay_ban_hanh": "01/03/2022",
+        "co_quan_ban_hanh": "Ban Nội chính Tỉnh Đồng Nai",
+        "trich_yeu": "Triển khai công tác mới cho năm học mới đối với các cơ quan, đơn vị",
+        "nguoi_ky": ""
+      },
+      "cer": 0.27910685805422647,
+      "wer": 0.2962962962962963,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "wrong",
+          "trich_yeu": "wrong",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.6,
+        "recall": 0.75,
+        "f1": 0.6667,
+        "tp": 3,
+        "fp": 2,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_006.jpg",
+      "status": "success",
+      "processing_time": 22.39,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 575,
+      "extraction": {
+        "loai_van_ban": "Tờ trình",
+        "so_hieu": "520/TB-KHOA",
+        "ngay_ban_hanh": "03/09/2021",
+        "co_quan_ban_hanh": "TRƯỜNG ĐH BÁCH KHOA",
+        "trich_yeu": "việc nghi lễ Quốc khánh 2/9",
+        "nguoi_ky": ""
+      },
+      "cer": 0.2528925619834711,
+      "wer": 0.2824427480916031,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "wrong",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.8,
+        "recall": 0.8,
+        "f1": 0.8,
+        "tp": 4,
+        "fp": 1,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_007.jpg",
+      "status": "success",
+      "processing_time": 23.22,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 571,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "541/TB-THƯƠNG",
+        "ngay_ban_hanh": "03/02/2023",
+        "co_quan_ban_hanh": "Bộ Công thương",
+        "trich_yeu": "Phê duyệt về việc ban hành quy định quản lý dự án đầu tư đối với các cơ quan, đơn vị",
+        "nguoi_ky": ""
+      },
+      "cer": 0.29199372056514916,
+      "wer": 0.3142857142857143,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "wrong",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "wrong",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.6,
+        "recall": 0.75,
+        "f1": 0.6667,
+        "tp": 3,
+        "fp": 2,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_008.jpg",
+      "status": "success",
+      "processing_time": 22.16,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 584,
+      "extraction": {
+        "loai_van_ban": "Tờ trình",
+        "so_hieu": "27/TB-NAI",
+        "ngay_ban_hanh": "",
+        "co_quan_ban_hanh": "BND Tỉnh Đồng Nai",
+        "trich_yeu": "Về việc bổ nhiệm cán bộ",
+        "nguoi_ky": ""
+      },
+      "cer": 0.2049586776859504,
+      "wer": 0.24812030075187969,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "missed",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 1.0,
+        "recall": 0.6667,
+        "f1": 0.8,
+        "tp": 4,
+        "fp": 0,
+        "fn": 2
+      }
+    },
+    {
+      "filename": "bench_009.jpg",
+      "status": "success",
+      "processing_time": 23.21,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 593,
+      "extraction": {
+        "loai_van_ban": "Tờ trình",
+        "so_hieu": "818/TB-KHOA",
+        "ngay_ban_hanh": "08/2022",
+        "co_quan_ban_hanh": "TRƯỜNG ĐH BÁCH KHOA",
+        "trich_yeu": "lề việc ban hành quy định quản lý dự án đầu tư",
+        "nguoi_ky": ""
+      },
+      "cer": 0.15457413249211358,
+      "wer": 0.15602836879432624,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "wrong",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.8,
+        "recall": 0.8,
+        "f1": 0.8,
+        "tp": 4,
+        "fp": 1,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_010.jpg",
+      "status": "success",
+      "processing_time": 23.27,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 581,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "261/TB-THƯƠNG",
+        "ngay_ban_hanh": "01/01/2023",
+        "co_quan_ban_hanh": "Bộ Công thương",
+        "trich_yeu": "Phê duyệt về việc ban hành quy định quản lý dự án đầu tư đối với các cơ quan, đơn vị",
+        "nguoi_ky": ""
+      },
+      "cer": 0.16323296354992076,
+      "wer": 0.16428571428571428,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "wrong",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "wrong",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.6,
+        "recall": 0.75,
+        "f1": 0.6667,
+        "tp": 3,
+        "fp": 2,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_011.jpg",
+      "status": "success",
+      "processing_time": 22.96,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 591,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "402/TB-Tạo",
+        "ngay_ban_hanh": "",
+        "co_quan_ban_hanh": "Giáo dục và Đào tạo",
+        "trich_yeu": "Phê duyệt về việc ban hành quy định quản lý dự án đầu tư đối với các cơ quan, đơn vị chịu trách nhiệm thi hành.",
+        "nguoi_ky": ""
+      },
+      "cer": 0.24883359253499224,
+      "wer": 0.2777777777777778,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "wrong",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "missed",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.75,
+        "recall": 0.6,
+        "f1": 0.6667,
+        "tp": 3,
+        "fp": 1,
+        "fn": 2
+      }
+    },
+    {
+      "filename": "bench_012.jpg",
+      "status": "success",
+      "processing_time": 23.23,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 562,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "825/TB-Tạo",
+        "ngay_ban_hanh": "25/01/2024",
+        "co_quan_ban_hanh": "Giáo dục và Đào tạo",
+        "trich_yeu": "Triển khai công tác mới cho năm học mới đối với các cơ quan, đơn vị",
+        "nguoi_ky": ""
+      },
+      "cer": 0.3570300157977883,
+      "wer": 0.39416058394160586,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "wrong",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "wrong",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.6,
+        "recall": 0.75,
+        "f1": 0.6667,
+        "tp": 3,
+        "fp": 2,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_013.jpg",
+      "status": "success",
+      "processing_time": 23.28,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 575,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "751/TB-TP.HCM",
+        "ngay_ban_hanh": "03/2021",
+        "co_quan_ban_hanh": "Sở Y tế TP.HCM",
+        "trich_yeu": "Phê duyệt về việc ban hành quy định quản lý dự án đầu tư đối với các cơ quan, đơn vị",
+        "nguoi_ky": ""
+      },
+      "cer": 0.2120253164556962,
+      "wer": 0.2198581560283688,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "wrong",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.8,
+        "recall": 0.8,
+        "f1": 0.8,
+        "tp": 4,
+        "fp": 1,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_014.jpg",
+      "status": "success",
+      "processing_time": 23.12,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 557,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "28/TB-TP.HCM",
+        "ngay_ban_hanh": "02/01/2025",
+        "co_quan_ban_hanh": "Sở Y tế TP.HCM",
+        "trich_yeu": "Phê duyệt về việc bổ nhiệm cán bộ quản lý đối với các cơ quan, đơn vị trực thuộc",
+        "nguoi_ky": ""
+      },
+      "cer": 0.16166666666666665,
+      "wer": 0.19548872180451127,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "wrong",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "wrong",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.6,
+        "recall": 0.75,
+        "f1": 0.6667,
+        "tp": 3,
+        "fp": 2,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_015.jpg",
+      "status": "success",
+      "processing_time": 23.65,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 594,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "709/TB-TP.HCM",
+        "ngay_ban_hanh": "22/11/2021",
+        "co_quan_ban_hanh": "Sở Y tế TP.HCM",
+        "trich_yeu": "Phê duyệt về việc phê duyệt đề án bảo vệ môi trường đối với các cơ quan, đơn vị",
+        "nguoi_ky": "Trần Thị B"
+      },
+      "cer": 0.20192307692307693,
+      "wer": 0.21897810218978103,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "wrong",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "correct",
+          "nguoi_ky": "correct"
+        },
+        "precision": 0.8333,
+        "recall": 1.0,
+        "f1": 0.9091,
+        "tp": 5,
+        "fp": 1,
+        "fn": 0
+      }
+    },
+    {
+      "filename": "bench_016.jpg",
+      "status": "success",
+      "processing_time": 22.65,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 582,
+      "extraction": {
+        "loai_van_ban": "Thông báo",
+        "so_hieu": "989/TB-Tạo",
+        "ngay_ban_hanh": "14/09/2024",
+        "co_quan_ban_hanh": "Giáo dục và Đào tạo",
+        "trich_yeu": "duyệt đề án bảo vệ môi trường",
+        "nguoi_ky": ""
+      },
+      "cer": 0.2579113924050633,
+      "wer": 0.2949640287769784,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 1.0,
+        "recall": 0.8333,
+        "f1": 0.9091,
+        "tp": 5,
+        "fp": 0,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_017.jpg",
+      "status": "success",
+      "processing_time": 22.78,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 590,
+      "extraction": {
+        "loai_van_ban": "Tờ trình",
+        "so_hieu": "273/TB-KHOA",
+        "ngay_ban_hanh": "20/05/2023",
+        "co_quan_ban_hanh": "TRƯỜNG ĐH BÁCH KHOA",
+        "trich_yeu": "duyệt đề án bảo vệ môi trường",
+        "nguoi_ky": ""
+      },
+      "cer": 0.24722662440570523,
+      "wer": 0.2536231884057971,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 1.0,
+        "recall": 0.8333,
+        "f1": 0.9091,
+        "tp": 5,
+        "fp": 0,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_018.jpg",
+      "status": "success",
+      "processing_time": 22.08,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 568,
+      "extraction": {
+        "loai_van_ban": "Khác",
+        "so_hieu": "737/TB-NAI",
+        "ngay_ban_hanh": "09/2020",
+        "co_quan_ban_hanh": "BND Tỉnh Đồng Nai",
+        "trich_yeu": "Về việc bổ nhiệm cán bộ quản lý",
+        "nguoi_ky": ""
+      },
+      "cer": 0.21227197346600332,
+      "wer": 0.24812030075187969,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "wrong",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.8,
+        "recall": 0.8,
+        "f1": 0.8,
+        "tp": 4,
+        "fp": 1,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_019.jpg",
+      "status": "success",
+      "processing_time": 22.96,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 568,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "958/TB-Tạo",
+        "ngay_ban_hanh": "01/11/2025",
+        "co_quan_ban_hanh": "Giáo dục và Đào tạo",
+        "trich_yeu": "Phê duyệt về việc bố nhiệm cán bộ quản lý đối với các cơ quan, đơn vị trực thuộc",
+        "nguoi_ky": ""
+      },
+      "cer": 0.17569786535303777,
+      "wer": 0.2,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "wrong",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "wrong",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.6,
+        "recall": 0.75,
+        "f1": 0.6667,
+        "tp": 3,
+        "fp": 2,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_020.jpg",
+      "status": "success",
+      "processing_time": 22.39,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 566,
+      "extraction": {
+        "loai_van_ban": "Thông báo",
+        "so_hieu": "459/TB-TP.HCM",
+        "ngay_ban_hanh": "06/2021",
+        "co_quan_ban_hanh": "Sở Y tế TP.HCM",
+        "trich_yeu": "Về việc bổ nhiệm cán bộ",
+        "nguoi_ky": ""
+      },
+      "cer": 0.24587458745874588,
+      "wer": 0.2631578947368421,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 1.0,
+        "recall": 0.8333,
+        "f1": 0.9091,
+        "tp": 5,
+        "fp": 0,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_021.jpg",
+      "status": "success",
+      "processing_time": 19.38,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 587,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "672/QĐ-VINAMILK",
+        "ngay_ban_hanh": "05/04/2021",
+        "co_quan_ban_hanh": "",
+        "trich_yeu": "việc phê duyệt đề án bảo vệ môi trường",
+        "nguoi_ky": ""
+      },
+      "cer": 0.27330173775671407,
+      "wer": 0.29927007299270075,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "missed",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 1.0,
+        "recall": 0.6667,
+        "f1": 0.8,
+        "tp": 4,
+        "fp": 0,
+        "fn": 2
+      }
+    },
+    {
+      "filename": "bench_022.jpg",
+      "status": "success",
+      "processing_time": 25.18,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 573,
+      "extraction": {
+        "loai_van_ban": "Thông báo",
+        "so_hieu": "592/TB-VINAMILK",
+        "ngay_ban_hanh": "08/06/2021",
+        "co_quan_ban_hanh": "",
+        "trich_yeu": "Phê duyệt kết quả lựa chọn nhà thầu",
+        "nguoi_ky": ""
+      },
+      "cer": 0.18962722852512157,
+      "wer": 0.20300751879699247,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "wrong",
+          "co_quan_ban_hanh": "missed",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.75,
+        "recall": 0.6,
+        "f1": 0.6667,
+        "tp": 3,
+        "fp": 1,
+        "fn": 2
+      }
+    },
+    {
+      "filename": "bench_023.jpg",
+      "status": "success",
+      "processing_time": 23.51,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 583,
+      "extraction": {
+        "loai_van_ban": "Thông báo",
+        "so_hieu": "330/TB-KHOA",
+        "ngay_ban_hanh": "27/08/2022",
+        "co_quan_ban_hanh": "ĐƯỜNG ĐH BÁCH KHOA",
+        "trich_yeu": "dự án đầu tư đối với các cơ quan, đơn vị",
+        "nguoi_ky": ""
+      },
+      "cer": 0.2453125,
+      "wer": 0.2907801418439716,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "wrong",
+          "trich_yeu": "wrong",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.6,
+        "recall": 0.75,
+        "f1": 0.6667,
+        "tp": 3,
+        "fp": 2,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_024.jpg",
+      "status": "success",
+      "processing_time": 23.7,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 570,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "532/TB-THƯƠNG",
+        "ngay_ban_hanh": "19/06/2015",
+        "co_quan_ban_hanh": "Bộ Công thương",
+        "trich_yeu": "Phê duyệt kết quả lựa chọn nhà thầu đối với các cơ quan, đơn vị trực thuộc",
+        "nguoi_ky": ""
+      },
+      "cer": 0.29901960784313725,
+      "wer": 0.3484848484848485,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "wrong",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "wrong",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.6,
+        "recall": 0.75,
+        "f1": 0.6667,
+        "tp": 3,
+        "fp": 2,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_025.jpg",
+      "status": "success",
+      "processing_time": 15.82,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 586,
+      "extraction": {
+        "loai_van_ban": "Thông báo",
+        "so_hieu": "241/TB-Tạo",
+        "ngay_ban_hanh": "03/01/2024",
+        "co_quan_ban_hanh": "Giáo dục và Đào tạo",
+        "trich_yeu": "Ban hành quy định quản lý dự án đầu tư đối với các cơ quan, đơn vị",
+        "nguoi_ky": ""
+      },
+      "cer": 0.215625,
+      "wer": 0.25874125874125875,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "wrong",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "wrong",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.6,
+        "recall": 0.75,
+        "f1": 0.6667,
+        "tp": 3,
+        "fp": 2,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_026.jpg",
+      "status": "success",
+      "processing_time": 15.25,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 586,
+      "extraction": {
+        "loai_van_ban": "Tờ trình",
+        "so_hieu": "636/TB-VINAMILK",
+        "ngay_ban_hanh": "26/10/2023",
+        "co_quan_ban_hanh": "ONG TY CP VINAMILK",
+        "trich_yeu": "Về việc bổ nhiệm cán bộ quản lý",
+        "nguoi_ky": ""
+      },
+      "cer": 0.13071895424836602,
+      "wer": 0.13533834586466165,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "wrong",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.8,
+        "recall": 0.8,
+        "f1": 0.8,
+        "tp": 4,
+        "fp": 1,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_027.jpg",
+      "status": "success",
+      "processing_time": 14.67,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 566,
+      "extraction": {
+        "loai_van_ban": "Thông báo",
+        "so_hieu": "645/TB-THƯƠNG",
+        "ngay_ban_hanh": "",
+        "co_quan_ban_hanh": "Bộ Công thương",
+        "trich_yeu": "việc nghỉ lễ Quốc khánh 2/9",
+        "nguoi_ky": "Vũ Văn"
+      },
+      "cer": 0.15537190082644628,
+      "wer": 0.16793893129770993,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "missed",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "correct",
+          "nguoi_ky": "correct"
+        },
+        "precision": 1.0,
+        "recall": 0.8333,
+        "f1": 0.9091,
+        "tp": 5,
+        "fp": 0,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_028.jpg",
+      "status": "success",
+      "processing_time": 15.83,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 578,
+      "extraction": {
+        "loai_van_ban": "Tờ trình",
+        "so_hieu": "445/TB-TP.HCM",
+        "ngay_ban_hanh": "28/07/2023",
+        "co_quan_ban_hanh": "Sở Y tế TP.HCM",
+        "trich_yeu": "lựa chọn nhà thầu, phê duyệt kết quả lựa chọn nhà thầu đối với các cơ quan, đơn vị trực thuộc",
+        "nguoi_ky": ""
+      },
+      "cer": 0.2899022801302932,
+      "wer": 0.3208955223880597,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 1.0,
+        "recall": 0.8333,
+        "f1": 0.9091,
+        "tp": 5,
+        "fp": 0,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_029.jpg",
+      "status": "success",
+      "processing_time": 15.01,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 554,
+      "extraction": {
+        "loai_van_ban": "Tờ trình",
+        "so_hieu": "515/TB-TP.HCM",
+        "ngay_ban_hanh": "03/08/2021",
+        "co_quan_ban_hanh": "Sở Y tế TP.HCM",
+        "trich_yeu": "việc nghỉ lễ Quốc khánh 2/9",
+        "nguoi_ky": ""
+      },
+      "cer": 0.29900332225913623,
+      "wer": 0.32061068702290074,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 1.0,
+        "recall": 0.8333,
+        "f1": 0.9091,
+        "tp": 5,
+        "fp": 0,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_030.jpg",
+      "status": "success",
+      "processing_time": 14.68,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 570,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "708/TB-NAI",
+        "ngay_ban_hanh": "",
+        "co_quan_ban_hanh": "BND Tỉnh Đồng Nai",
+        "trich_yeu": "Phê duyệt kết quả lựa chọn nhà thầu",
+        "nguoi_ky": ""
+      },
+      "cer": 0.18923327895595432,
+      "wer": 0.21052631578947367,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "wrong",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "missed",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.75,
+        "recall": 0.6,
+        "f1": 0.6667,
+        "tp": 3,
+        "fp": 1,
+        "fn": 2
+      }
+    },
+    {
+      "filename": "bench_031.jpg",
+      "status": "success",
+      "processing_time": 14.53,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 565,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "595/QĐ-VINAMILK",
+        "ngay_ban_hanh": "04/2023",
+        "co_quan_ban_hanh": "",
+        "trich_yeu": "Phê duyệt đề án bảo vệ môi trường",
+        "nguoi_ky": ""
+      },
+      "cer": 0.3139717425431711,
+      "wer": 0.3722627737226277,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "missed",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 1.0,
+        "recall": 0.6667,
+        "f1": 0.8,
+        "tp": 4,
+        "fp": 0,
+        "fn": 2
+      }
+    },
+    {
+      "filename": "bench_032.jpg",
+      "status": "success",
+      "processing_time": 15.17,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 599,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "761/QĐ-TP.HCM",
+        "ngay_ban_hanh": "06/2021",
+        "co_quan_ban_hanh": "Sở Y tế TP.HCM",
+        "trich_yeu": "Phê duyệt đề án bảo vệ môi trường",
+        "nguoi_ky": ""
+      },
+      "cer": 0.1523809523809524,
+      "wer": 0.14492753623188406,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 1.0,
+        "recall": 0.8333,
+        "f1": 0.9091,
+        "tp": 5,
+        "fp": 0,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_033.jpg",
+      "status": "success",
+      "processing_time": 15.71,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 582,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "965/TB-NAI",
+        "ngay_ban_hanh": "17/08/2023",
+        "co_quan_ban_hanh": "BND Tỉnh Đồng Nai",
+        "trich_yeu": "Phê duyệt về việc phê duyệt đề án bảo vệ môi trường đối với các cơ quan, đơn vị",
+        "nguoi_ky": ""
+      },
+      "cer": 0.16108452950558214,
+      "wer": 0.16666666666666666,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "wrong",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.8,
+        "recall": 0.8,
+        "f1": 0.8,
+        "tp": 4,
+        "fp": 1,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_034.jpg",
+      "status": "success",
+      "processing_time": 15.1,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 579,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "776/TB-TP.HCM",
+        "ngay_ban_hanh": "09/04/2023",
+        "co_quan_ban_hanh": "Sở Y tế TP.HCM",
+        "trich_yeu": "Về việc bổ nhiệm cán bộ quản lý",
+        "nguoi_ky": ""
+      },
+      "cer": 0.19669421487603306,
+      "wer": 0.21052631578947367,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "wrong",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.8,
+        "recall": 0.8,
+        "f1": 0.8,
+        "tp": 4,
+        "fp": 1,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_035.jpg",
+      "status": "success",
+      "processing_time": 14.66,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 567,
+      "extraction": {
+        "loai_van_ban": "Thông báo",
+        "so_hieu": "663/TB-KHOA",
+        "ngay_ban_hanh": "",
+        "co_quan_ban_hanh": "",
+        "trich_yeu": "Triển khai công tác sinh năm học mới đối với các cơ quan, đơn vị",
+        "nguoi_ky": ""
+      },
+      "cer": 0.3184713375796178,
+      "wer": 0.362962962962963,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "missed",
+          "co_quan_ban_hanh": "missed",
+          "trich_yeu": "wrong",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.6667,
+        "recall": 0.4,
+        "f1": 0.5,
+        "tp": 2,
+        "fp": 1,
+        "fn": 3
+      }
+    },
+    {
+      "filename": "bench_036.jpg",
+      "status": "success",
+      "processing_time": 15.19,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 592,
+      "extraction": {
+        "loai_van_ban": "Thông báo",
+        "so_hieu": "966/TB-TP.HCM",
+        "ngay_ban_hanh": "03/01/2023",
+        "co_quan_ban_hanh": "Sở Y tế TP.HCM",
+        "trich_yeu": "Phê duyệt kết quả lựa chọn nhà thầu",
+        "nguoi_ky": ""
+      },
+      "cer": 0.21197411003236247,
+      "wer": 0.2462686567164179,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "wrong",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.8,
+        "recall": 0.8,
+        "f1": 0.8,
+        "tp": 4,
+        "fp": 1,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_037.jpg",
+      "status": "success",
+      "processing_time": 14.77,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 572,
+      "extraction": {
+        "loai_van_ban": "Tờ trình",
+        "so_hieu": "143/TB-KHOA",
+        "ngay_ban_hanh": "",
+        "co_quan_ban_hanh": "TRƯỜNG ĐH BÁCH KHOA",
+        "trich_yeu": "lựa chọn nhà thầu",
+        "nguoi_ky": ""
+      },
+      "cer": 0.313915857605178,
+      "wer": 0.3458646616541353,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "missed",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 1.0,
+        "recall": 0.6667,
+        "f1": 0.8,
+        "tp": 4,
+        "fp": 0,
+        "fn": 2
+      }
+    },
+    {
+      "filename": "bench_038.jpg",
+      "status": "success",
+      "processing_time": 15.7,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 587,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "852/TB-TP.HCM",
+        "ngay_ban_hanh": "28/03/2021",
+        "co_quan_ban_hanh": "Sở Y tế TP.HCM",
+        "trich_yeu": "Phê duyệt về việc phê duyệt đề án bảo vệ môi trường đối với các cơ quan, đơn vị",
+        "nguoi_ky": ""
+      },
+      "cer": 0.2282958199356913,
+      "wer": 0.23357664233576642,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "wrong",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.8,
+        "recall": 0.8,
+        "f1": 0.8,
+        "tp": 4,
+        "fp": 1,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_039.jpg",
+      "status": "success",
+      "processing_time": 15.59,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 587,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "232/QĐ-TP.HCM",
+        "ngay_ban_hanh": "15/05/2022",
+        "co_quan_ban_hanh": "Sở Y tế TP.HCM",
+        "trich_yeu": "Phê duyệt triển khai công tác tuyển sinh năm học mới đối với các cơ quan, đơn vị",
+        "nguoi_ky": ""
+      },
+      "cer": 0.14444444444444443,
+      "wer": 0.11851851851851852,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 1.0,
+        "recall": 0.8333,
+        "f1": 0.9091,
+        "tp": 5,
+        "fp": 0,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_040.jpg",
+      "status": "success",
+      "processing_time": 15.38,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 581,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "649/TB-KHOA",
+        "ngay_ban_hanh": "03/2020",
+        "co_quan_ban_hanh": "",
+        "trich_yeu": "Phê duyệt triển khai công tác tuyển sinh năm học mới đối với các cơ quan, đơn vị",
+        "nguoi_ky": "Lê Á"
+      },
+      "cer": 0.23444976076555024,
+      "wer": 0.24444444444444444,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "wrong",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "missed",
+          "trich_yeu": "correct",
+          "nguoi_ky": "wrong"
+        },
+        "precision": 0.6,
+        "recall": 0.75,
+        "f1": 0.6667,
+        "tp": 3,
+        "fp": 2,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_041.jpg",
+      "status": "success",
+      "processing_time": 15.62,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 588,
+      "extraction": {
+        "loai_van_ban": "Tờ trình",
+        "so_hieu": "673/TB-TP.HCM",
+        "ngay_ban_hanh": "13/10/2021",
+        "co_quan_ban_hanh": "Sở Y tế TP.HCM",
+        "trich_yeu": "lý dự án đầu tư về việc ban hành quy định",
+        "nguoi_ky": ""
+      },
+      "cer": 0.2843601895734597,
+      "wer": 0.3120567375886525,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "wrong",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.8,
+        "recall": 0.8,
+        "f1": 0.8,
+        "tp": 4,
+        "fp": 1,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_042.jpg",
+      "status": "success",
+      "processing_time": 14.53,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 576,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "377/QĐ-NAI",
+        "ngay_ban_hanh": "",
+        "co_quan_ban_hanh": "BND Tỉnh Đồng Nai",
+        "trich_yeu": "Triển khai tác sinh năm học mới",
+        "nguoi_ky": ""
+      },
+      "cer": 0.1990521327014218,
+      "wer": 0.22058823529411764,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "missed",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "wrong",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.75,
+        "recall": 0.6,
+        "f1": 0.6667,
+        "tp": 3,
+        "fp": 1,
+        "fn": 2
+      }
+    },
+    {
+      "filename": "bench_043.jpg",
+      "status": "success",
+      "processing_time": 15.98,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 579,
+      "extraction": {
+        "loai_van_ban": "Thông báo",
+        "so_hieu": "281/TB-Tạo",
+        "ngay_ban_hanh": "27/12/2024",
+        "co_quan_ban_hanh": "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nGIÁO DỤC VÀ ĐÀO TẠO",
+        "trich_yeu": "Phê duyệt kết lựa chọn nhà thầu",
+        "nguoi_ky": ""
+      },
+      "cer": 0.2912621359223301,
+      "wer": 0.3333333333333333,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "wrong",
+          "trich_yeu": "wrong",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.6,
+        "recall": 0.75,
+        "f1": 0.6667,
+        "tp": 3,
+        "fp": 2,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_044.jpg",
+      "status": "success",
+      "processing_time": 15.52,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 576,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "351/TB-KHOA",
+        "ngay_ban_hanh": "26/04/2023",
+        "co_quan_ban_hanh": "TRƯỜNG ĐH BÁCH KHOA",
+        "trich_yeu": "Phê duyệt kết lựa chọn nhà thầu",
+        "nguoi_ky": ""
+      },
+      "cer": 0.2910569105691057,
+      "wer": 0.3082706766917293,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "wrong",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "wrong",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.6,
+        "recall": 0.75,
+        "f1": 0.6667,
+        "tp": 3,
+        "fp": 2,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_045.jpg",
+      "status": "success",
+      "processing_time": 15.27,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 597,
+      "extraction": {
+        "loai_van_ban": "Tờ trình",
+        "so_hieu": "928/TB-VINAMILK",
+        "ngay_ban_hanh": "",
+        "co_quan_ban_hanh": "",
+        "trich_yeu": "Về việc ban hành quy định quản lý dự án đầu tư đối với các cơ quan, đơn vị",
+        "nguoi_ky": "B"
+      },
+      "cer": 0.2125,
+      "wer": 0.24822695035460993,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "missed",
+          "co_quan_ban_hanh": "missed",
+          "trich_yeu": "correct",
+          "nguoi_ky": "correct"
+        },
+        "precision": 1.0,
+        "recall": 0.6667,
+        "f1": 0.8,
+        "tp": 4,
+        "fp": 0,
+        "fn": 2
+      }
+    },
+    {
+      "filename": "bench_046.jpg",
+      "status": "success",
+      "processing_time": 15.26,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 580,
+      "extraction": {
+        "loai_van_ban": "Thông báo",
+        "so_hieu": "743/TB-KHOA",
+        "ngay_ban_hanh": "25/11/2025",
+        "co_quan_ban_hanh": "TRƯỜNG ĐH BÁCH KHOA",
+        "trich_yeu": "duyệt đề án bảo vệ môi trường",
+        "nguoi_ky": ""
+      },
+      "cer": 0.18412698412698414,
+      "wer": 0.19708029197080293,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 1.0,
+        "recall": 0.8333,
+        "f1": 0.9091,
+        "tp": 5,
+        "fp": 0,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_047.jpg",
+      "status": "success",
+      "processing_time": 15.37,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 590,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "324/QĐ-THƯƠNG",
+        "ngay_ban_hanh": "16/02/2023",
+        "co_quan_ban_hanh": "Bộ Công thương",
+        "trich_yeu": "Phê duyệt đề án bảo vệ môi trường đối với các cơ quan, đơn vị",
+        "nguoi_ky": ""
+      },
+      "cer": 0.1424,
+      "wer": 0.14705882352941177,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "wrong",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.8,
+        "recall": 0.8,
+        "f1": 0.8,
+        "tp": 4,
+        "fp": 1,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_048.jpg",
+      "status": "success",
+      "processing_time": 15.67,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 591,
+      "extraction": {
+        "loai_van_ban": "Thông báo",
+        "so_hieu": "363/TB-Tạo",
+        "ngay_ban_hanh": "04/2024",
+        "co_quan_ban_hanh": "Giáo dục và Đào tạo Cộng hòa xã hội chủ nghĩa Việt Nam",
+        "trich_yeu": "Phê duyệt đề án bảo vệ môi trường đối với các cơ quan, đơn vị",
+        "nguoi_ky": ""
+      },
+      "cer": 0.24132492113564669,
+      "wer": 0.2642857142857143,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "wrong",
+          "trich_yeu": "wrong",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.6,
+        "recall": 0.75,
+        "f1": 0.6667,
+        "tp": 3,
+        "fp": 2,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_049.jpg",
+      "status": "success",
+      "processing_time": 14.81,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 588,
+      "extraction": {
+        "loai_van_ban": "Tờ trình",
+        "so_hieu": "229/TB-Tạo",
+        "ngay_ban_hanh": "14/04/2024",
+        "co_quan_ban_hanh": "",
+        "trich_yeu": "duyệt đề án bảo vệ môi trường",
+        "nguoi_ky": ""
+      },
+      "cer": 0.3180379746835443,
+      "wer": 0.37410071942446044,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "missed",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 1.0,
+        "recall": 0.6667,
+        "f1": 0.8,
+        "tp": 4,
+        "fp": 0,
+        "fn": 2
+      }
+    },
+    {
+      "filename": "bench_050.jpg",
+      "status": "success",
+      "processing_time": 15.39,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 587,
+      "extraction": {
+        "loai_van_ban": "Thông báo",
+        "so_hieu": "395/TB-VINAMILK",
+        "ngay_ban_hanh": "17/11/2024",
+        "co_quan_ban_hanh": "",
+        "trich_yeu": "Triển khai công tác tuyển sinh năm học mới đối với các cơ quan, đơn vị",
+        "nguoi_ky": "Tổng giám đốc"
+      },
+      "cer": 0.30094043887147337,
+      "wer": 0.3088235294117647,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "missed",
+          "trich_yeu": "correct",
+          "nguoi_ky": "wrong"
+        },
+        "precision": 0.8,
+        "recall": 0.8,
+        "f1": 0.8,
+        "tp": 4,
+        "fp": 1,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_051.jpg",
+      "status": "success",
+      "processing_time": 14.85,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 556,
+      "extraction": {
+        "loai_van_ban": "Thông báo",
+        "so_hieu": "52/TB-VINAMILK",
+        "ngay_ban_hanh": "05/02/2023",
+        "co_quan_ban_hanh": "",
+        "trich_yeu": "Triển khai tác sinh năm học mới đối với các cơ quan, đơn vị",
+        "nguoi_ky": ""
+      },
+      "cer": 0.23137876386687797,
+      "wer": 0.2518518518518518,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "wrong",
+          "co_quan_ban_hanh": "missed",
+          "trich_yeu": "wrong",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.5,
+        "recall": 0.5,
+        "f1": 0.5,
+        "tp": 2,
+        "fp": 2,
+        "fn": 2
+      }
+    },
+    {
+      "filename": "bench_052.jpg",
+      "status": "success",
+      "processing_time": 14.93,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 573,
+      "extraction": {
+        "loai_van_ban": "Khác",
+        "so_hieu": "421/QĐ-NAI",
+        "ngay_ban_hanh": "08/10/2026",
+        "co_quan_ban_hanh": "",
+        "trich_yeu": "Triển khai công tác mới sinh năm học mới đối với các cơ quan, đơn vị",
+        "nguoi_ky": ""
+      },
+      "cer": 0.2591414944356121,
+      "wer": 0.26666666666666666,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "wrong",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "missed",
+          "trich_yeu": "wrong",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.5,
+        "recall": 0.5,
+        "f1": 0.5,
+        "tp": 2,
+        "fp": 2,
+        "fn": 2
+      }
+    },
+    {
+      "filename": "bench_053.jpg",
+      "status": "success",
+      "processing_time": 15.0,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 582,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "692/QĐ-TP.HCM",
+        "ngay_ban_hanh": "07/2022",
+        "co_quan_ban_hanh": "Sở Y tế TP.HCM",
+        "trich_yeu": "Về việc bổ nhiệm cán bộ quản lý",
+        "nguoi_ky": ""
+      },
+      "cer": 0.2145214521452145,
+      "wer": 0.24060150375939848,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 1.0,
+        "recall": 0.8333,
+        "f1": 0.9091,
+        "tp": 5,
+        "fp": 0,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_054.jpg",
+      "status": "success",
+      "processing_time": 15.76,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 564,
+      "extraction": {
+        "loai_van_ban": "Khác",
+        "so_hieu": "777/TB-THƯƠNG",
+        "ngay_ban_hanh": "05/02/2022",
+        "co_quan_ban_hanh": "Bộ Công thương",
+        "trich_yeu": "Phê duyệt về việc nghi lễ Quốc khánh 2/9 đối với các cơ quan, đơn vị trực thuộc",
+        "nguoi_ky": ""
+      },
+      "cer": 0.30449251247920134,
+      "wer": 0.3230769230769231,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "wrong",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "wrong",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "wrong",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.4,
+        "recall": 0.6667,
+        "f1": 0.5,
+        "tp": 2,
+        "fp": 3,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_055.jpg",
+      "status": "success",
+      "processing_time": 15.64,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 577,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "813/TB-TP.HCM",
+        "ngay_ban_hanh": "05/01/2025",
+        "co_quan_ban_hanh": "Sở Y tế TP.HCM",
+        "trich_yeu": "Phê duyệt về việc duyệt đề án bảo vệ môi trường đối với các cơ quan, đơn vị",
+        "nguoi_ky": ""
+      },
+      "cer": 0.25562700964630225,
+      "wer": 0.2773722627737226,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "wrong",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "wrong",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "wrong",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.4,
+        "recall": 0.6667,
+        "f1": 0.5,
+        "tp": 2,
+        "fp": 3,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_056.jpg",
+      "status": "success",
+      "processing_time": 15.37,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 588,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "649/TB-NAI",
+        "ngay_ban_hanh": "",
+        "co_quan_ban_hanh": "BND Tỉnh Đồng Nai",
+        "trich_yeu": "Phê duyệt về việc ban hành quy định quản lý dự án đầu tư đối với các cơ quan, đơn vị",
+        "nguoi_ky": ""
+      },
+      "cer": 0.22677165354330708,
+      "wer": 0.24822695035460993,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "wrong",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "missed",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.75,
+        "recall": 0.6,
+        "f1": 0.6667,
+        "tp": 3,
+        "fp": 1,
+        "fn": 2
+      }
+    },
+    {
+      "filename": "bench_057.jpg",
+      "status": "success",
+      "processing_time": 14.84,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 563,
+      "extraction": {
+        "loai_van_ban": "Khác",
+        "so_hieu": "229/TB-THƯƠNG",
+        "ngay_ban_hanh": "05/01/2021",
+        "co_quan_ban_hanh": "Bộ Công thương",
+        "trich_yeu": "Triển khai tác sinh năm học mới",
+        "nguoi_ky": ""
+      },
+      "cer": 0.25,
+      "wer": 0.23880597014925373,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "wrong",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "wrong",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "wrong",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.4,
+        "recall": 0.6667,
+        "f1": 0.5,
+        "tp": 2,
+        "fp": 3,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_058.jpg",
+      "status": "success",
+      "processing_time": 15.49,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 568,
+      "extraction": {
+        "loai_van_ban": "Khác",
+        "so_hieu": "69/TB-THƯƠNG",
+        "ngay_ban_hanh": "03/01/2023",
+        "co_quan_ban_hanh": "Bộ Công thương",
+        "trich_yeu": "Về việc bổ nhiệm cán bộ quản lý đối với các cơ quan, đơn vị trực thuộc",
+        "nguoi_ky": ""
+      },
+      "cer": 0.22885572139303484,
+      "wer": 0.26515151515151514,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "wrong",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "wrong",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.6,
+        "recall": 0.75,
+        "f1": 0.6667,
+        "tp": 3,
+        "fp": 2,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_059.jpg",
+      "status": "success",
+      "processing_time": 15.75,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 593,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "925/QĐ-KHOA",
+        "ngay_ban_hanh": "24/04/2020",
+        "co_quan_ban_hanh": "TRƯỜNG ĐII BÁCH KHOA",
+        "trich_yeu": "Phê duyệt về việc phê duyệt đề án bảo vệ môi trường đối với các cơ quan, đơn vị",
+        "nguoi_ky": ""
+      },
+      "cer": 0.2126984126984127,
+      "wer": 0.24087591240875914,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "wrong",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.8,
+        "recall": 0.8,
+        "f1": 0.8,
+        "tp": 4,
+        "fp": 1,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_060.jpg",
+      "status": "success",
+      "processing_time": 15.21,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 567,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "104/QĐ-KHOA",
+        "ngay_ban_hanh": "07/12/2026",
+        "co_quan_ban_hanh": "TRƯỜNG ĐH BÁCH KHOA",
+        "trich_yeu": "Về việc bổ nhiệm cán bộ quản lý",
+        "nguoi_ky": ""
+      },
+      "cer": 0.18433931484502447,
+      "wer": 0.21641791044776118,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 1.0,
+        "recall": 0.8333,
+        "f1": 0.9091,
+        "tp": 5,
+        "fp": 0,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_061.jpg",
+      "status": "success",
+      "processing_time": 15.01,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 574,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "49/QĐ-KHOA",
+        "ngay_ban_hanh": "",
+        "co_quan_ban_hanh": "TRƯỜNG ĐH BÁCH KHOA",
+        "trich_yeu": "Phê duyệt triển khai công tác tuyển sinh năm học mới đối với các cơ quan, đơn vị",
+        "nguoi_ky": ""
+      },
+      "cer": 0.18253968253968253,
+      "wer": 0.18518518518518517,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "missed",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 1.0,
+        "recall": 0.6667,
+        "f1": 0.8,
+        "tp": 4,
+        "fp": 0,
+        "fn": 2
+      }
+    },
+    {
+      "filename": "bench_062.jpg",
+      "status": "success",
+      "processing_time": 14.57,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 568,
+      "extraction": {
+        "loai_van_ban": "Thông báo",
+        "so_hieu": "405/TB-TP.HCM",
+        "ngay_ban_hanh": "",
+        "co_quan_ban_hanh": "Sở Y tế TP.HCM",
+        "trich_yeu": "Phê duyệt kết quả lựa chọn nhà thầu đối với các cơ quan, đơn vị trực thuộc",
+        "nguoi_ky": ""
+      },
+      "cer": 0.24878048780487805,
+      "wer": 0.2706766917293233,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "missed",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 1.0,
+        "recall": 0.6667,
+        "f1": 0.8,
+        "tp": 4,
+        "fp": 0,
+        "fn": 2
+      }
+    },
+    {
+      "filename": "bench_063.jpg",
+      "status": "success",
+      "processing_time": 15.98,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 568,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "403/TB-Tạo",
+        "ngay_ban_hanh": "",
+        "co_quan_ban_hanh": "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nGIÁO DỤC VÀ ĐÀO TẠO",
+        "trich_yeu": "Phê duyệt triển khai công tác mói tá sinh năm học mới đối với các cơ quan, đơn vị",
+        "nguoi_ky": ""
+      },
+      "cer": 0.3866877971473851,
+      "wer": 0.4306569343065693,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "wrong",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "missed",
+          "co_quan_ban_hanh": "wrong",
+          "trich_yeu": "wrong",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.25,
+        "recall": 0.3333,
+        "f1": 0.2857,
+        "tp": 1,
+        "fp": 3,
+        "fn": 2
+      }
+    },
+    {
+      "filename": "bench_064.jpg",
+      "status": "success",
+      "processing_time": 15.35,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 571,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "630/QĐ-VINAMILK",
+        "ngay_ban_hanh": "18/03/2023",
+        "co_quan_ban_hanh": "",
+        "trich_yeu": "Phê duyệt về việc bổ nhiệm cán bộ quản lý đối với các cơ quan, đơn vị trực thuộc",
+        "nguoi_ky": "Giám đốc"
+      },
+      "cer": 0.24796084828711257,
+      "wer": 0.2857142857142857,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "missed",
+          "trich_yeu": "correct",
+          "nguoi_ky": "wrong"
+        },
+        "precision": 0.8,
+        "recall": 0.8,
+        "f1": 0.8,
+        "tp": 4,
+        "fp": 1,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_065.jpg",
+      "status": "success",
+      "processing_time": 14.88,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 591,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "773/TB-VINAMILK",
+        "ngay_ban_hanh": "20/08/2024",
+        "co_quan_ban_hanh": "ONG TYCP VINAMILK",
+        "trich_yeu": "Phê duyệt kết quả lựa chọn nhà thầu",
+        "nguoi_ky": "Nguyễn Văn A"
+      },
+      "cer": 0.1794871794871795,
+      "wer": 0.21641791044776118,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "wrong",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "wrong",
+          "trich_yeu": "correct",
+          "nguoi_ky": "correct"
+        },
+        "precision": 0.6667,
+        "recall": 1.0,
+        "f1": 0.8,
+        "tp": 4,
+        "fp": 2,
+        "fn": 0
+      }
+    },
+    {
+      "filename": "bench_066.jpg",
+      "status": "success",
+      "processing_time": 14.7,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 560,
+      "extraction": {
+        "loai_van_ban": "Thông báo",
+        "so_hieu": "937/TB-KHOA",
+        "ngay_ban_hanh": "05/01/2023",
+        "co_quan_ban_hanh": "TRƯỜNG ĐH BÁCH KHOA",
+        "trich_yeu": "việc nghỉ lễ Quốc khánh 2/9",
+        "nguoi_ky": ""
+      },
+      "cer": 0.265139116202946,
+      "wer": 0.3106060606060606,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 1.0,
+        "recall": 0.8333,
+        "f1": 0.9091,
+        "tp": 5,
+        "fp": 0,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_067.jpg",
+      "status": "success",
+      "processing_time": 15.49,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 577,
+      "extraction": {
+        "loai_van_ban": "Thông báo",
+        "so_hieu": "359/TB-Tạo",
+        "ngay_ban_hanh": "05/12/2025",
+        "co_quan_ban_hanh": "Giáo dục và Đào tạo Cộng hòa xã hội chủ nghĩa Việt Nam",
+        "trich_yeu": "Phê duyệt về việc phê duyệt đề án bảo vệ môi trường đối với các cơ quan, đơn vị",
+        "nguoi_ky": ""
+      },
+      "cer": 0.2340764331210191,
+      "wer": 0.2517985611510791,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "wrong",
+          "co_quan_ban_hanh": "wrong",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.6,
+        "recall": 0.75,
+        "f1": 0.6667,
+        "tp": 3,
+        "fp": 2,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_068.jpg",
+      "status": "success",
+      "processing_time": 15.21,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 577,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "243/TB-TP.HCM",
+        "ngay_ban_hanh": "25/01/2021",
+        "co_quan_ban_hanh": "Sở Y tế TP.HCM",
+        "trich_yeu": "Về việc bổ nhiệm cán bộ quản lý đối với các cơ quan, đơn vị trực thuộc",
+        "nguoi_ky": ""
+      },
+      "cer": 0.20853858784893267,
+      "wer": 0.23880597014925373,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "wrong",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.8,
+        "recall": 0.8,
+        "f1": 0.8,
+        "tp": 4,
+        "fp": 1,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_069.jpg",
+      "status": "success",
+      "processing_time": 14.96,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 576,
+      "extraction": {
+        "loai_van_ban": "Thông báo",
+        "so_hieu": "839/TB-THƯƠNG",
+        "ngay_ban_hanh": "18/04/2021",
+        "co_quan_ban_hanh": "Bộ Công thương",
+        "trich_yeu": "Phê duyệt về việc duyệt đề án bảo vệ môi trường đối với các cơ quan, đơn vị",
+        "nguoi_ky": ""
+      },
+      "cer": 0.22966507177033493,
+      "wer": 0.23357664233576642,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "wrong",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.8,
+        "recall": 0.8,
+        "f1": 0.8,
+        "tp": 4,
+        "fp": 1,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_070.jpg",
+      "status": "success",
+      "processing_time": 15.22,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 573,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "782/TB-KHOA",
+        "ngay_ban_hanh": "03/02/2024",
+        "co_quan_ban_hanh": "TRƯỜNG ĐH BÁCH KHOA",
+        "trich_yeu": "Về việc bổ nhiệm cán bộ quản lý đối với các cơ quan, đơn vị trực thuộc",
+        "nguoi_ky": ""
+      },
+      "cer": 0.15384615384615385,
+      "wer": 0.15671641791044777,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "wrong",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.8,
+        "recall": 0.8,
+        "f1": 0.8,
+        "tp": 4,
+        "fp": 1,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_071.jpg",
+      "status": "success",
+      "processing_time": 14.47,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 565,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "266/TB-TP.HCM",
+        "ngay_ban_hanh": "",
+        "co_quan_ban_hanh": "Sở Y tế TP.HCM",
+        "trich_yeu": "Về việc nghỉ lễ Quốc khánh 2/9",
+        "nguoi_ky": ""
+      },
+      "cer": 0.3105175292153589,
+      "wer": 0.3282442748091603,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "wrong",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "missed",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.75,
+        "recall": 0.6,
+        "f1": 0.6667,
+        "tp": 3,
+        "fp": 1,
+        "fn": 2
+      }
+    },
+    {
+      "filename": "bench_072.jpg",
+      "status": "success",
+      "processing_time": 14.67,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 583,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "25/QĐ-THƯƠNG",
+        "ngay_ban_hanh": "08/03/2021",
+        "co_quan_ban_hanh": "Bộ Công thương",
+        "trich_yeu": "Phê duyệt kết quả lựa chọn nhà thầu",
+        "nguoi_ky": ""
+      },
+      "cer": 0.2684124386252046,
+      "wer": 0.2878787878787879,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 1.0,
+        "recall": 0.8333,
+        "f1": 0.9091,
+        "tp": 5,
+        "fp": 0,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_073.jpg",
+      "status": "success",
+      "processing_time": 14.15,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 566,
+      "extraction": {
+        "loai_van_ban": "Tờ trình",
+        "so_hieu": "610/TB-TP.HCM",
+        "ngay_ban_hanh": "",
+        "co_quan_ban_hanh": "Sở Y tế TP.HCM",
+        "trich_yeu": "Về việc bổ nhiệm cán bộ",
+        "nguoi_ky": ""
+      },
+      "cer": 0.23383084577114427,
+      "wer": 0.2631578947368421,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "missed",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 1.0,
+        "recall": 0.6667,
+        "f1": 0.8,
+        "tp": 4,
+        "fp": 0,
+        "fn": 2
+      }
+    },
+    {
+      "filename": "bench_074.jpg",
+      "status": "success",
+      "processing_time": 14.74,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 574,
+      "extraction": {
+        "loai_van_ban": "Khác",
+        "so_hieu": "182/TB-Tạo",
+        "ngay_ban_hanh": "04/11/2022",
+        "co_quan_ban_hanh": "Giáo dục và Đào tạo",
+        "trich_yeu": "phê duyệt đề án bảo vệ môi trường đối với các cơ quan, đơn vị",
+        "nguoi_ky": ""
+      },
+      "cer": 0.2702702702702703,
+      "wer": 0.30935251798561153,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "wrong",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "wrong",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.6,
+        "recall": 0.75,
+        "f1": 0.6667,
+        "tp": 3,
+        "fp": 2,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_075.jpg",
+      "status": "success",
+      "processing_time": 14.9,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 562,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "244/QĐ-TP.HCM",
+        "ngay_ban_hanh": "01/01/2024",
+        "co_quan_ban_hanh": "Sở Y tế TP.HCM",
+        "trich_yeu": "Phê duyệt kết quả lựa chọn nhà thầu",
+        "nguoi_ky": ""
+      },
+      "cer": 0.33387888707037644,
+      "wer": 0.3383458646616541,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "wrong",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.8,
+        "recall": 0.8,
+        "f1": 0.8,
+        "tp": 4,
+        "fp": 1,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_076.jpg",
+      "status": "success",
+      "processing_time": 15.05,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 580,
+      "extraction": {
+        "loai_van_ban": "Thông báo",
+        "so_hieu": "546/TB-VINAMILK",
+        "ngay_ban_hanh": "18/07/2025",
+        "co_quan_ban_hanh": "TRONG TYCP VINAMILK",
+        "trich_yeu": "Triển khai công tác kế toán năm học mới đối với các cơ quan, đơn vị",
+        "nguoi_ky": ""
+      },
+      "cer": 0.3549920760697306,
+      "wer": 0.34814814814814815,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "wrong",
+          "trich_yeu": "wrong",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.6,
+        "recall": 0.75,
+        "f1": 0.6667,
+        "tp": 3,
+        "fp": 2,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_077.jpg",
+      "status": "success",
+      "processing_time": 15.1,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 592,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "334/TB-NAI",
+        "ngay_ban_hanh": "07/02/2021",
+        "co_quan_ban_hanh": "BND Tỉnh Đồng Nai",
+        "trich_yeu": "Phê duyệt về việc phê duyệt đề án bảo vệ môi trường đối với các cơ quan, đơn vị",
+        "nguoi_ky": ""
+      },
+      "cer": 0.13099041533546327,
+      "wer": 0.1386861313868613,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "wrong",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.8,
+        "recall": 0.8,
+        "f1": 0.8,
+        "tp": 4,
+        "fp": 1,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_078.jpg",
+      "status": "success",
+      "processing_time": 14.7,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 575,
+      "extraction": {
+        "loai_van_ban": "Tờ trình",
+        "so_hieu": "14/TB-VINAMILK",
+        "ngay_ban_hanh": "",
+        "co_quan_ban_hanh": "Tổng công ty cổ phần Vinamilk",
+        "trich_yeu": "Phê duyệt kết quả lựa chọn nhà thầu đối với các cơ quan, đơn vị trực thuộc",
+        "nguoi_ky": ""
+      },
+      "cer": 0.21809369951534732,
+      "wer": 0.24812030075187969,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "missed",
+          "co_quan_ban_hanh": "wrong",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.75,
+        "recall": 0.6,
+        "f1": 0.6667,
+        "tp": 3,
+        "fp": 1,
+        "fn": 2
+      }
+    },
+    {
+      "filename": "bench_079.jpg",
+      "status": "success",
+      "processing_time": 14.74,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 583,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "375/QĐ-THƯƠNG",
+        "ngay_ban_hanh": "23/06/2023",
+        "co_quan_ban_hanh": "Bộ Công thương",
+        "trich_yeu": "Triển khai công tác sinh năm học mới",
+        "nguoi_ky": ""
+      },
+      "cer": 0.3222748815165877,
+      "wer": 0.32592592592592595,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "wrong",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.8,
+        "recall": 0.8,
+        "f1": 0.8,
+        "tp": 4,
+        "fp": 1,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_080.jpg",
+      "status": "success",
+      "processing_time": 14.87,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 578,
+      "extraction": {
+        "loai_van_ban": "Thông báo",
+        "so_hieu": "280/TB-TP.HCM",
+        "ngay_ban_hanh": "17/06/2020",
+        "co_quan_ban_hanh": "Sở Y tế TP.HCM",
+        "trich_yeu": "Về việc bố nhiệm cán bộ quản lý",
+        "nguoi_ky": ""
+      },
+      "cer": 0.21890547263681592,
+      "wer": 0.24060150375939848,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "wrong",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "wrong",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.6,
+        "recall": 0.75,
+        "f1": 0.6667,
+        "tp": 3,
+        "fp": 2,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_081.jpg",
+      "status": "success",
+      "processing_time": 14.95,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 580,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "571/TB-Tạo",
+        "ngay_ban_hanh": "05/08/2020",
+        "co_quan_ban_hanh": "Giáo dục và Đào tạo",
+        "trich_yeu": "việc nghỉ lễ Quốc khánh 2/9 đối với các cơ quan, đơn vị trực thuộc",
+        "nguoi_ky": ""
+      },
+      "cer": 0.24630541871921183,
+      "wer": 0.2631578947368421,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "wrong",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "wrong",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.6,
+        "recall": 0.75,
+        "f1": 0.6667,
+        "tp": 3,
+        "fp": 2,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_082.jpg",
+      "status": "success",
+      "processing_time": 15.7,
+      "num_pages": 1,
+      "total_stamps": 2,
+      "text_length": 580,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "779/QĐ-TP.HCM",
+        "ngay_ban_hanh": "27/09/2021",
+        "co_quan_ban_hanh": "Sở Y tế TP.HCM",
+        "trich_yeu": "Phê duyệt kết quả lựa chọn nhà thầu",
+        "nguoi_ky": ""
+      },
+      "cer": 0.26916802610114193,
+      "wer": 0.2781954887218045,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 1.0,
+        "recall": 0.8333,
+        "f1": 0.9091,
+        "tp": 5,
+        "fp": 0,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_083.jpg",
+      "status": "success",
+      "processing_time": 16.34,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 587,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "709/QĐ-TẠO",
+        "ngay_ban_hanh": "13/10/2024",
+        "co_quan_ban_hanh": "Giáo dục và Đào tạo Cộng hòa xã hội chủ nghĩa Việt Nam",
+        "trich_yeu": "Triển khai công tác tuyển sinh năm học mới đối với các cơ quan, đơn vị; Giao phòng Tài chính Kế toán chịu trách nhiệm thi hành",
+        "nguoi_ky": ""
+      },
+      "cer": 0.16587677725118483,
+      "wer": 0.1678832116788321,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "wrong",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.8,
+        "recall": 0.8,
+        "f1": 0.8,
+        "tp": 4,
+        "fp": 1,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_084.jpg",
+      "status": "success",
+      "processing_time": 15.11,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 573,
+      "extraction": {
+        "loai_van_ban": "Thông báo",
+        "so_hieu": "667/TB-Tạo",
+        "ngay_ban_hanh": "05/10/2026",
+        "co_quan_ban_hanh": "Giáo dục và Đào tạo",
+        "trich_yeu": "Về việc nghỉ lễ Quốc khánh 2/9",
+        "nguoi_ky": ""
+      },
+      "cer": 0.32066115702479336,
+      "wer": 0.3458646616541353,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 1.0,
+        "recall": 0.8333,
+        "f1": 0.9091,
+        "tp": 5,
+        "fp": 0,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_085.jpg",
+      "status": "success",
+      "processing_time": 15.0,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 571,
+      "extraction": {
+        "loai_van_ban": "Thông báo",
+        "so_hieu": "174/TB-TP.HCM",
+        "ngay_ban_hanh": "04/02/2024",
+        "co_quan_ban_hanh": "Sở Y tế TP.HCM",
+        "trich_yeu": "Phê duyệt kết quả lựa chọn nhà thầu",
+        "nguoi_ky": ""
+      },
+      "cer": 0.26221498371335505,
+      "wer": 0.3007518796992481,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "wrong",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.8,
+        "recall": 0.8,
+        "f1": 0.8,
+        "tp": 4,
+        "fp": 1,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_086.jpg",
+      "status": "success",
+      "processing_time": 14.67,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 585,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "850/TB-THƯƠNG",
+        "ngay_ban_hanh": "",
+        "co_quan_ban_hanh": "Bộ Công thương",
+        "trich_yeu": "việc phê duyệt đề án bảo vệ môi trường",
+        "nguoi_ky": ""
+      },
+      "cer": 0.16216216216216217,
+      "wer": 0.1678832116788321,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "wrong",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "missed",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.75,
+        "recall": 0.6,
+        "f1": 0.6667,
+        "tp": 3,
+        "fp": 1,
+        "fn": 2
+      }
+    },
+    {
+      "filename": "bench_087.jpg",
+      "status": "success",
+      "processing_time": 15.38,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 573,
+      "extraction": {
+        "loai_van_ban": "Thông báo",
+        "so_hieu": "362/TB-NAI",
+        "ngay_ban_hanh": "01/08/2021",
+        "co_quan_ban_hanh": "Bộ Nội vụ Tỉnh Đồng Nai",
+        "trich_yeu": "Về việc nghi lễ Quốc khánh 2/9",
+        "nguoi_ky": ""
+      },
+      "cer": 0.2781456953642384,
+      "wer": 0.3053435114503817,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "wrong",
+          "trich_yeu": "wrong",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.6,
+        "recall": 0.75,
+        "f1": 0.6667,
+        "tp": 3,
+        "fp": 2,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_088.jpg",
+      "status": "success",
+      "processing_time": 15.2,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 570,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "121/QĐ-NAI",
+        "ngay_ban_hanh": "06/2022",
+        "co_quan_ban_hanh": "BND Tỉnh Đồng Nai",
+        "trich_yeu": "Về việc nghi lễ Quốc khánh 2/9",
+        "nguoi_ky": ""
+      },
+      "cer": 0.23102310231023102,
+      "wer": 0.26717557251908397,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "wrong",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.8,
+        "recall": 0.8,
+        "f1": 0.8,
+        "tp": 4,
+        "fp": 1,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_089.jpg",
+      "status": "success",
+      "processing_time": 15.1,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 564,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "489/TB-Tạo",
+        "ngay_ban_hanh": "07/2021",
+        "co_quan_ban_hanh": "",
+        "trich_yeu": "Phê duyệt về việc nghi lễ Quốc khánh 2/9 đối với các cơ quan, đơn vị trực thuộc",
+        "nguoi_ky": ""
+      },
+      "cer": 0.33878887070376434,
+      "wer": 0.373134328358209,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "wrong",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "missed",
+          "trich_yeu": "wrong",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.5,
+        "recall": 0.5,
+        "f1": 0.5,
+        "tp": 2,
+        "fp": 2,
+        "fn": 2
+      }
+    },
+    {
+      "filename": "bench_090.jpg",
+      "status": "success",
+      "processing_time": 14.71,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 562,
+      "extraction": {
+        "loai_van_ban": "Tờ trình",
+        "so_hieu": "616/TB-KHOA",
+        "ngay_ban_hanh": "08/11/2022",
+        "co_quan_ban_hanh": "",
+        "trich_yeu": "việc nghỉ lễ Quốc khánh 2/9",
+        "nguoi_ky": ""
+      },
+      "cer": 0.2915980230642504,
+      "wer": 0.3511450381679389,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "missed",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 1.0,
+        "recall": 0.6667,
+        "f1": 0.8,
+        "tp": 4,
+        "fp": 0,
+        "fn": 2
+      }
+    },
+    {
+      "filename": "bench_091.jpg",
+      "status": "success",
+      "processing_time": 14.83,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 570,
+      "extraction": {
+        "loai_van_ban": "Khác",
+        "so_hieu": "834/TB-KHOA",
+        "ngay_ban_hanh": "09/2024",
+        "co_quan_ban_hanh": "TRƯỜNG ĐH BÁCH KHOA",
+        "trich_yeu": "Về việc bổ nhiệm cán bộ",
+        "nguoi_ky": ""
+      },
+      "cer": 0.13884297520661157,
+      "wer": 0.14285714285714285,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "wrong",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.8,
+        "recall": 0.8,
+        "f1": 0.8,
+        "tp": 4,
+        "fp": 1,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_092.jpg",
+      "status": "success",
+      "processing_time": 16.19,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 572,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "83/QĐ-VINAMILK",
+        "ngay_ban_hanh": "05/07/2022",
+        "co_quan_ban_hanh": "Tổng công ty cổ phần Vinamilk",
+        "trich_yeu": "Về việc nghi lễ Quốc khánh 2/9 đối với các cơ quan, đơn vị trực thuộc",
+        "nguoi_ky": ""
+      },
+      "cer": 0.23064250411861614,
+      "wer": 0.25190839694656486,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "wrong",
+          "trich_yeu": "wrong",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.6,
+        "recall": 0.75,
+        "f1": 0.6667,
+        "tp": 3,
+        "fp": 2,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_093.jpg",
+      "status": "success",
+      "processing_time": 15.61,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 583,
+      "extraction": {
+        "loai_van_ban": "Thông báo",
+        "so_hieu": "676/TB-THƯƠNG",
+        "ngay_ban_hanh": "03/09/2026",
+        "co_quan_ban_hanh": "Bộ Công thương",
+        "trich_yeu": "Phê duyệt về việc nghi lễ quốc khánh 2/9 đối với các cơ quan, đơn vị trực thuộc",
+        "nguoi_ky": ""
+      },
+      "cer": 0.11258278145695365,
+      "wer": 0.12307692307692308,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "wrong",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.8,
+        "recall": 0.8,
+        "f1": 0.8,
+        "tp": 4,
+        "fp": 1,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_094.jpg",
+      "status": "success",
+      "processing_time": 16.82,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 581,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "756/TB-KHOA",
+        "ngay_ban_hanh": "25/12/2024",
+        "co_quan_ban_hanh": "",
+        "trich_yeu": "Về việc nghỉ lễ Quốc khánh 2/9 năm 2015; Căn cứ vào Luật Tổ chức chính phủ ngày 19 tháng ... Căn cứ vào nghị định số 123/2016/NĐ-CP của Chính phủ",
+        "nguoi_ky": "Hoàng Thị E"
+      },
+      "cer": 0.2590759075907591,
+      "wer": 0.2595419847328244,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "wrong",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "missed",
+          "trich_yeu": "correct",
+          "nguoi_ky": "correct"
+        },
+        "precision": 0.8,
+        "recall": 0.8,
+        "f1": 0.8,
+        "tp": 4,
+        "fp": 1,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_095.jpg",
+      "status": "success",
+      "processing_time": 16.15,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 570,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "773/QĐ-NAI",
+        "ngay_ban_hanh": "06/03/2025",
+        "co_quan_ban_hanh": "Bộ Nội vụ Tỉnh Đồng Nai",
+        "trich_yeu": "Triển khai tác tuyển sinh năm mới; Phê duyệt triên khai công tác tuyển sinh năm học mới đối với các cơ quan, đơn vị",
+        "nguoi_ky": ""
+      },
+      "cer": 0.27070063694267515,
+      "wer": 0.2740740740740741,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "wrong",
+          "trich_yeu": "wrong",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.6,
+        "recall": 0.75,
+        "f1": 0.6667,
+        "tp": 3,
+        "fp": 2,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_096.jpg",
+      "status": "success",
+      "processing_time": 15.14,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 581,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "938/QĐ-VINAMILK",
+        "ngay_ban_hanh": "04/2026",
+        "co_quan_ban_hanh": "",
+        "trich_yeu": "Về việc nghỉ lễ Quốc khánh 2/9",
+        "nguoi_ky": "Thị B"
+      },
+      "cer": 0.24306688417618272,
+      "wer": 0.26717557251908397,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "missed",
+          "trich_yeu": "correct",
+          "nguoi_ky": "correct"
+        },
+        "precision": 1.0,
+        "recall": 0.8333,
+        "f1": 0.9091,
+        "tp": 5,
+        "fp": 0,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_097.jpg",
+      "status": "success",
+      "processing_time": 15.53,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 574,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "125/TB-THƯƠNG",
+        "ngay_ban_hanh": "04/12/2020",
+        "co_quan_ban_hanh": "Bộ Công thương",
+        "trich_yeu": "Phê duyệt triển khai công tác giáo dục năm học mới đối với các cơ quan, đơn vị",
+        "nguoi_ky": ""
+      },
+      "cer": 0.15409309791332262,
+      "wer": 0.1417910447761194,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "wrong",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "wrong",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.6,
+        "recall": 0.75,
+        "f1": 0.6667,
+        "tp": 3,
+        "fp": 2,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_098.jpg",
+      "status": "success",
+      "processing_time": 15.69,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 585,
+      "extraction": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "594/TB-VINAMILK",
+        "ngay_ban_hanh": "22/04/2021",
+        "co_quan_ban_hanh": "ONG TY CP VINAMILK",
+        "trich_yeu": "Phê duyệt về việc phê duyệt đề án bảo vệ môi trường đối với các cơ quan, đơn vị",
+        "nguoi_ky": ""
+      },
+      "cer": 0.2356687898089172,
+      "wer": 0.291970802919708,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "wrong",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "wrong",
+          "trich_yeu": "correct",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.6,
+        "recall": 0.75,
+        "f1": 0.6667,
+        "tp": 3,
+        "fp": 2,
+        "fn": 1
+      }
+    },
+    {
+      "filename": "bench_099.jpg",
+      "status": "success",
+      "processing_time": 15.38,
+      "num_pages": 1,
+      "total_stamps": 1,
+      "text_length": 562,
+      "extraction": {
+        "loai_van_ban": "Thông báo",
+        "so_hieu": "127/TB-TP.HCM",
+        "ngay_ban_hanh": "03/12/2023",
+        "co_quan_ban_hanh": "Sở Y tế TP.HCM",
+        "trich_yeu": "Về việc bố nhiệm cán bộ quản lý đối với các cơ quan, đơn vị trực thuộc",
+        "nguoi_ky": ""
+      },
+      "cer": 0.1824212271973466,
+      "wer": 0.18796992481203006,
+      "f1_score": {
+        "field_results": {
+          "loai_van_ban": "correct",
+          "so_hieu": "correct",
+          "ngay_ban_hanh": "correct",
+          "co_quan_ban_hanh": "correct",
+          "trich_yeu": "wrong",
+          "nguoi_ky": "missed"
+        },
+        "precision": 0.8,
+        "recall": 0.8,
+        "f1": 0.8,
+        "tp": 4,
+        "fp": 1,
+        "fn": 1
+      }
+    }
+  ]
+}

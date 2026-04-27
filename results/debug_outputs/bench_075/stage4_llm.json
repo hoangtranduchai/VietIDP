@@ -1,0 +1,12 @@
+{
+    "source_file": "bench_075",
+    "ocr_raw_text": "SỞ Y TẾ TP.HCM\nCỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nSố: 244/QĐ-TP.HCM\nĐộc lập\nHạnh\nTự do\n01 năm 2024\nNgày 19\nQUYẾT ĐỊNH\nnhà thầu\nPhê duyệt kết\nlựa\nCăn cứ vào Luật Tổ chức chính phủ ngày 19\n6 năm 2015;\nCăn cứ vào nghị định số 123/2016/NĐ-CP của Chính phủ;\nXét đề nghị của Giám đốc Sở Nội vụ và Trưởng phòng Hành chính,\nQUYẾT ĐỊNH/THÔNG BÁO:\nĐiều\nthì lựa chọn nhà thầu đối với các cơ quan, đơn vị trực thuc\nduyệt kết\n1. Phê duyệt\nKế toán chịu trách nhiệm thi hành.\nĐiều 2. Giao cho phòng Tài chính\nĐiều 3. Quyết định/Thông báo này có hiệu lực kể từ ngày ký.\nGIÁM ĐỐC",
+    "extraction_result": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "244/QĐ-TP.HCM",
+        "ngay_ban_hanh": "01/01/2024",
+        "co_quan_ban_hanh": "Sở Y tế TP.HCM",
+        "trich_yeu": "Phê duyệt kết quả lựa chọn nhà thầu",
+        "nguoi_ky": ""
+    }
+}

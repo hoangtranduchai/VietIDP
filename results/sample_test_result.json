@@ -18,7 +18,7 @@
     "so_hieu": "1830/TB-ĐHBK",
     "ngay_ban_hanh": "14/04/2026",
     "co_quan_ban_hanh": "Trường Đại học Bách Khoa",
-    "trich_yeu": "Thông báo về thời gian nghỉ lễ Giỗ Tổ Hùng Vương và Quốc tế Lao động năm 2026",
+    "trich_yeu": "Thời gian nghỉ lễ Giỗ Tổ ngày Chiến 30/4 và Ngày Quốc tế Lao động 01/5 năm 2026",
     "nguoi_ky": ""
   },
   "ocr_lines": [
@@ -655,7 +655,7 @@
       "page": 1
     }
   ],
-  "processing_time_seconds": 31.86,
+  "processing_time_seconds": 23.14,
   "source_file": "sample_test.jpg",
-  "processed_at": "2026-04-27T17:00:21.636154"
+  "processed_at": "2026-04-27T21:28:03.219930"
 }

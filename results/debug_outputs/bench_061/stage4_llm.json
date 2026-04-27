@@ -1,0 +1,12 @@
+{
+    "source_file": "bench_061",
+    "ocr_raw_text": "TRƯỜNG ĐH BÁCH KHOA\nCỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nSố: 49/QĐ-KHOA\nĐộc lập\nTự do\nHạnh phúc\n10 năm 2025\nNgày 11\nQUYẾT ĐỊNH\nTriển khai\ntác\nsinh năm học mới\nCăn cứ vào Luật Tổ chức chính phủ ngày 19\nnăm 2015;\nCăn cứx vào nghị định số 123/2016/NĐ-CP của Chính phủ;\nXét đề nghị của Giám đốc Sở Nội vụ và Trường phòng Hành chính,\nQUYẾT ĐỊNH/THÔNG BÁO:\nĐiều\n3\nPhê duyệt triển khai công tác tuyền sinh năm học mới đối với các cơ quan, đơn vị\nĐiều 2. Giao cho phòng Tài chính\nKế toán chịu trách nhiệm thi hành.\nĐiều 3. Quyết định/Thông báo này có hiệu lực kể từ ngày ký.\nBỘ TRƯỞNG",
+    "extraction_result": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "49/QĐ-KHOA",
+        "ngay_ban_hanh": "",
+        "co_quan_ban_hanh": "TRƯỜNG ĐH BÁCH KHOA",
+        "trich_yeu": "Phê duyệt triển khai công tác tuyển sinh năm học mới đối với các cơ quan, đơn vị",
+        "nguoi_ky": ""
+    }
+}

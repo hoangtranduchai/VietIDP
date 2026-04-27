@@ -1,0 +1,12 @@
+{
+    "source_file": "bench_058",
+    "ocr_raw_text": "BỘ CÔNG THƯƠNG\nCỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nSố: 69/TB-THƯƠNG\nĐộc lập\nTự do\nHạnh\n03 năm 2023\nNgày 24\nCHỈ THỊ\nVề việc bổ nhiệm cán bộ\nLý\nCăn cứ vào Luật Tổ chức chính phủ ngày 19 tháng\nnăm 2015;\nCăn cứ vào nghị định số 123/2016/NĐ-CP của Chính phủ;\nXét đề nghị của Giám đốc Sở Nội vụ và Trưởng phòng Hành chính,\nQUYẾT ĐỊNH/THÔNG BẢO:\nĐiều\nPhê duyệt về việc bổ nhiệm cán bộ quản lý đối với các cơ quan, đơn vị trực thuộc.\n5\nKế toán chịu trách nhiệm thi hành\nĐiều 2. Giao cho phòng Tài chính\nĐiều 3. Quyết định/Thông báo này có hiệu lực kể từ ngày ký.\nGIÁM ĐỐC\nến và",
+    "extraction_result": {
+        "loai_van_ban": "Khác",
+        "so_hieu": "69/TB-THƯƠNG",
+        "ngay_ban_hanh": "03/01/2023",
+        "co_quan_ban_hanh": "Bộ Công thương",
+        "trich_yeu": "Phê duyệt về việc bổ nhiệm cán bộ quản lý đối với các cơ quan, đơn vị trực thuộc",
+        "nguoi_ky": ""
+    }
+}

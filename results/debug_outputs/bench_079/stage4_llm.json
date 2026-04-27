@@ -1,0 +1,12 @@
+{
+    "source_file": "bench_079",
+    "ocr_raw_text": "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nBỘ CÔNG THƯƠNG\nSố: 375/QĐ-THƯƠNG\nĐộc lập\nTự do\nHạnh\nNgày 23 tháng 06 năm 2023\nQUYẾT ĐỊNH\nTriển khai\ntác\nsinh năm học mới\nCăn cứ vào Luật Tổ chức chính phủ ngày 19\n6 năm 2015;\nCăn cứ vào nghị định số 123/2016/NĐ-CP của Chính phủ,\nXét đề nghị của Giám đốc Sở Nội vụ và Trưởng phòng Hành chính,\nQUYẾT ĐỊNH/THÔNG BÁO:\nĐiều\nsinh năm học mới đối với các cơ quan, đơn vị\n1. Phê duyệt triển khai công tác\nĐiều 2\nKế toán chịu trách nhiệm thi hành\nGiao cho phòng Tài chính\nĐiều 3. Quyết định/Thông báo này có hiệu lực kể từ ngày ký.\nTỔNG GIÁM ĐỐC\nHoàr\n1, Thg",
+    "extraction_result": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "375/QĐ-THƯƠNG",
+        "ngay_ban_hanh": "23/06/2023",
+        "co_quan_ban_hanh": "Bộ Công thương",
+        "trich_yeu": "Triển khai công tác sinh năm học mới đối với các cơ quan, đơn vị",
+        "nguoi_ky": ""
+    }
+}

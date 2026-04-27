@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VietIDP Benchmark Report</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', -apple-system, sans-serif; background: #f8fafc; color: #1e293b; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
+        h1 { font-size: 28px; font-weight: 700; color: #001e40; margin-bottom: 4px; }
+        .subtitle { color: #64748b; font-size: 14px; margin-bottom: 32px; }
+        .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 32px; }
+        .card { background: white; border-radius: 12px; padding: 20px; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .card-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; margin-bottom: 8px; }
+        .card-value { font-size: 28px; font-weight: 700; color: #001e40; }
+        .card-sub { font-size: 12px; color: #64748b; margin-top: 4px; }
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        th { text-align: left; padding: 12px 14px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; background: #f8fafc; border-bottom: 1px solid #e2e8f0; }
+        td { padding: 10px 14px; font-size: 13px; border-bottom: 1px solid #f1f5f9; }
+        tr:hover td { background: #f8fafc; }
+        .badge { padding: 2px 10px; border-radius: 999px; font-size: 11px; font-weight: 600; }
+        .badge.success { background: #f0fdf4; color: #16a34a; }
+        .badge.fail { background: #fef2f2; color: #dc2626; }
+        .footer { margin-top: 32px; padding-top: 16px; border-top: 1px solid #e2e8f0; color: #94a3b8; font-size: 12px; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>VietIDP Benchmark Report</h1>
+        <p class="subtitle">Generated: 2026-04-28T00:59:52.921482 | Model: Qwen2.5-7B + VietOCR + YOLOv8x</p>
+
+        <div class="cards">
+            <div class="card">
+                <div class="card-label">Total Files</div>
+                <div class="card-value">100</div>
+                <div class="card-sub">100.0% success rate</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Avg Processing</div>
+                <div class="card-value">16.89s</div>
+                <div class="card-sub">Median: 15.38s</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Peak VRAM</div>
+                <div class="card-value">2.16 GB</div>
+                <div class="card-sub">RTX 5070 (8GB)</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Avg CER</div>
+                <div class="card-value">0.2354</div>
+                <div class="card-sub">Character Error Rate</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Avg WER</div>
+                <div class="card-value">0.2560</div>
+                <div class="card-sub">Word Error Rate</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Avg F1</div>
+                <div class="card-value">0.7495</div>
+                <div class="card-sub">Extraction Accuracy</div>
+            </div>
+        </div>
+
+        <h2 style="font-size:18px;font-weight:600;color:#001e40;margin-bottom:16px">Detailed Results</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Filename</th>
+                    <th>Status</th>
+                    <th>Time</th>
+                    <th>Pages</th>
+                    <th>Stamps</th>
+                    <th>Chars</th>
+                    <th>CER</th>
+                    <th>WER</th>
+                    <th>F1</th>
+                    <th>Doc Type</th>
+                    <th>Doc ID</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+        <tr>
+            <td>bench_000.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>15.16s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>579</td>
+            <td>0.2413</td>
+            <td>0.2500</td>
+            <td>0.6667</td>
+            <td>Thông báo</td>
+            <td style="font-family:monospace;font-size:12px">800/TB-Tạo</td>
+        </tr>
+        <tr>
+            <td>bench_001.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>17.47s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>584</td>
+            <td>0.2228</td>
+            <td>0.2348</td>
+            <td>0.8000</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">855/TB-THƯƠNG</td>
+        </tr>
+        <tr>
+            <td>bench_002.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>14.98s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>589</td>
+            <td>0.1437</td>
+            <td>0.1135</td>
+            <td>0.8000</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">462/TB-THƯƠNG</td>
+        </tr>
+        <tr>
+            <td>bench_003.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>20.23s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>579</td>
+            <td>0.2504</td>
+            <td>0.2727</td>
+            <td>0.9091</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">614/QĐ-THƯƠNG</td>
+        </tr>
+        <tr>
+            <td>bench_004.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>21.96s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>564</td>
+            <td>0.2244</td>
+            <td>0.2443</td>
+            <td>0.8000</td>
+            <td>Thông báo</td>
+            <td style="font-family:monospace;font-size:12px">891/TB-KHOA</td>
+        </tr>
+        <tr>
+            <td>bench_005.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>22.37s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>564</td>
+            <td>0.2791</td>
+            <td>0.2963</td>
+            <td>0.6667</td>
+            <td>Thông báo</td>
+            <td style="font-family:monospace;font-size:12px">56/TB-NAI</td>
+        </tr>
+        <tr>
+            <td>bench_006.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>22.39s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>575</td>
+            <td>0.2529</td>
+            <td>0.2824</td>
+            <td>0.8000</td>
+            <td>Tờ trình</td>
+            <td style="font-family:monospace;font-size:12px">520/TB-KHOA</td>
+        </tr>
+        <tr>
+            <td>bench_007.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>23.22s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>571</td>
+            <td>0.2920</td>
+            <td>0.3143</td>
+            <td>0.6667</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">541/TB-THƯƠNG</td>
+        </tr>
+        <tr>
+            <td>bench_008.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>22.16s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>584</td>
+            <td>0.2050</td>
+            <td>0.2481</td>
+            <td>0.8000</td>
+            <td>Tờ trình</td>
+            <td style="font-family:monospace;font-size:12px">27/TB-NAI</td>
+        </tr>
+        <tr>
+            <td>bench_009.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>23.21s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>593</td>
+            <td>0.1546</td>
+            <td>0.1560</td>
+            <td>0.8000</td>
+            <td>Tờ trình</td>
+            <td style="font-family:monospace;font-size:12px">818/TB-KHOA</td>
+        </tr>
+        <tr>
+            <td>bench_010.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>23.27s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>581</td>
+            <td>0.1632</td>
+            <td>0.1643</td>
+            <td>0.6667</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">261/TB-THƯƠNG</td>
+        </tr>
+        <tr>
+            <td>bench_011.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>22.96s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>591</td>
+            <td>0.2488</td>
+            <td>0.2778</td>
+            <td>0.6667</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">402/TB-Tạo</td>
+        </tr>
+        <tr>
+            <td>bench_012.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>23.23s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>562</td>
+            <td>0.3570</td>
+            <td>0.3942</td>
+            <td>0.6667</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">825/TB-Tạo</td>
+        </tr>
+        <tr>
+            <td>bench_013.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>23.28s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>575</td>
+            <td>0.2120</td>
+            <td>0.2199</td>
+            <td>0.8000</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">751/TB-TP.HCM</td>
+        </tr>
+        <tr>
+            <td>bench_014.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>23.12s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>557</td>
+            <td>0.1617</td>
+            <td>0.1955</td>
+            <td>0.6667</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">28/TB-TP.HCM</td>
+        </tr>
+        <tr>
+            <td>bench_015.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>23.65s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>594</td>
+            <td>0.2019</td>
+            <td>0.2190</td>
+            <td>0.9091</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">709/TB-TP.HCM</td>
+        </tr>
+        <tr>
+            <td>bench_016.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>22.65s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>582</td>
+            <td>0.2579</td>
+            <td>0.2950</td>
+            <td>0.9091</td>
+            <td>Thông báo</td>
+            <td style="font-family:monospace;font-size:12px">989/TB-Tạo</td>
+        </tr>
+        <tr>
+            <td>bench_017.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>22.78s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>590</td>
+            <td>0.2472</td>
+            <td>0.2536</td>
+            <td>0.9091</td>
+            <td>Tờ trình</td>
+            <td style="font-family:monospace;font-size:12px">273/TB-KHOA</td>
+        </tr>
+        <tr>
+            <td>bench_018.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>22.08s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>568</td>
+            <td>0.2123</td>
+            <td>0.2481</td>
+            <td>0.8000</td>
+            <td>Khác</td>
+            <td style="font-family:monospace;font-size:12px">737/TB-NAI</td>
+        </tr>
+        <tr>
+            <td>bench_019.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>22.96s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>568</td>
+            <td>0.1757</td>
+            <td>0.2000</td>
+            <td>0.6667</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">958/TB-Tạo</td>
+        </tr>
+        <tr>
+            <td>bench_020.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>22.39s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>566</td>
+            <td>0.2459</td>
+            <td>0.2632</td>
+            <td>0.9091</td>
+            <td>Thông báo</td>
+            <td style="font-family:monospace;font-size:12px">459/TB-TP.HCM</td>
+        </tr>
+        <tr>
+            <td>bench_021.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>19.38s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>587</td>
+            <td>0.2733</td>
+            <td>0.2993</td>
+            <td>0.8000</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">672/QĐ-VINAMILK</td>
+        </tr>
+        <tr>
+            <td>bench_022.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>25.18s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>573</td>
+            <td>0.1896</td>
+            <td>0.2030</td>
+            <td>0.6667</td>
+            <td>Thông báo</td>
+            <td style="font-family:monospace;font-size:12px">592/TB-VINAMILK</td>
+        </tr>
+        <tr>
+            <td>bench_023.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>23.51s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>583</td>
+            <td>0.2453</td>
+            <td>0.2908</td>
+            <td>0.6667</td>
+            <td>Thông báo</td>
+            <td style="font-family:monospace;font-size:12px">330/TB-KHOA</td>
+        </tr>
+        <tr>
+            <td>bench_024.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>23.7s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>570</td>
+            <td>0.2990</td>
+            <td>0.3485</td>
+            <td>0.6667</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">532/TB-THƯƠNG</td>
+        </tr>
+        <tr>
+            <td>bench_025.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>15.82s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>586</td>
+            <td>0.2156</td>
+            <td>0.2587</td>
+            <td>0.6667</td>
+            <td>Thông báo</td>
+            <td style="font-family:monospace;font-size:12px">241/TB-Tạo</td>
+        </tr>
+        <tr>
+            <td>bench_026.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>15.25s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>586</td>
+            <td>0.1307</td>
+            <td>0.1353</td>
+            <td>0.8000</td>
+            <td>Tờ trình</td>
+            <td style="font-family:monospace;font-size:12px">636/TB-VINAMILK</td>
+        </tr>
+        <tr>
+            <td>bench_027.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>14.67s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>566</td>
+            <td>0.1554</td>
+            <td>0.1679</td>
+            <td>0.9091</td>
+            <td>Thông báo</td>
+            <td style="font-family:monospace;font-size:12px">645/TB-THƯƠNG</td>
+        </tr>
+        <tr>
+            <td>bench_028.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>15.83s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>578</td>
+            <td>0.2899</td>
+            <td>0.3209</td>
+            <td>0.9091</td>
+            <td>Tờ trình</td>
+            <td style="font-family:monospace;font-size:12px">445/TB-TP.HCM</td>
+        </tr>
+        <tr>
+            <td>bench_029.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>15.01s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>554</td>
+            <td>0.2990</td>
+            <td>0.3206</td>
+            <td>0.9091</td>
+            <td>Tờ trình</td>
+            <td style="font-family:monospace;font-size:12px">515/TB-TP.HCM</td>
+        </tr>
+        <tr>
+            <td>bench_030.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>14.68s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>570</td>
+            <td>0.1892</td>
+            <td>0.2105</td>
+            <td>0.6667</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">708/TB-NAI</td>
+        </tr>
+        <tr>
+            <td>bench_031.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>14.53s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>565</td>
+            <td>0.3140</td>
+            <td>0.3723</td>
+            <td>0.8000</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">595/QĐ-VINAMILK</td>
+        </tr>
+        <tr>
+            <td>bench_032.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>15.17s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>599</td>
+            <td>0.1524</td>
+            <td>0.1449</td>
+            <td>0.9091</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">761/QĐ-TP.HCM</td>
+        </tr>
+        <tr>
+            <td>bench_033.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>15.71s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>582</td>
+            <td>0.1611</td>
+            <td>0.1667</td>
+            <td>0.8000</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">965/TB-NAI</td>
+        </tr>
+        <tr>
+            <td>bench_034.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>15.1s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>579</td>
+            <td>0.1967</td>
+            <td>0.2105</td>
+            <td>0.8000</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">776/TB-TP.HCM</td>
+        </tr>
+        <tr>
+            <td>bench_035.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>14.66s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>567</td>
+            <td>0.3185</td>
+            <td>0.3630</td>
+            <td>0.5000</td>
+            <td>Thông báo</td>
+            <td style="font-family:monospace;font-size:12px">663/TB-KHOA</td>
+        </tr>
+        <tr>
+            <td>bench_036.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>15.19s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>592</td>
+            <td>0.2120</td>
+            <td>0.2463</td>
+            <td>0.8000</td>
+            <td>Thông báo</td>
+            <td style="font-family:monospace;font-size:12px">966/TB-TP.HCM</td>
+        </tr>
+        <tr>
+            <td>bench_037.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>14.77s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>572</td>
+            <td>0.3139</td>
+            <td>0.3459</td>
+            <td>0.8000</td>
+            <td>Tờ trình</td>
+            <td style="font-family:monospace;font-size:12px">143/TB-KHOA</td>
+        </tr>
+        <tr>
+            <td>bench_038.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>15.7s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>587</td>
+            <td>0.2283</td>
+            <td>0.2336</td>
+            <td>0.8000</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">852/TB-TP.HCM</td>
+        </tr>
+        <tr>
+            <td>bench_039.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>15.59s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>587</td>
+            <td>0.1444</td>
+            <td>0.1185</td>
+            <td>0.9091</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">232/QĐ-TP.HCM</td>
+        </tr>
+        <tr>
+            <td>bench_040.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>15.38s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>581</td>
+            <td>0.2344</td>
+            <td>0.2444</td>
+            <td>0.6667</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">649/TB-KHOA</td>
+        </tr>
+        <tr>
+            <td>bench_041.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>15.62s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>588</td>
+            <td>0.2844</td>
+            <td>0.3121</td>
+            <td>0.8000</td>
+            <td>Tờ trình</td>
+            <td style="font-family:monospace;font-size:12px">673/TB-TP.HCM</td>
+        </tr>
+        <tr>
+            <td>bench_042.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>14.53s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>576</td>
+            <td>0.1991</td>
+            <td>0.2206</td>
+            <td>0.6667</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">377/QĐ-NAI</td>
+        </tr>
+        <tr>
+            <td>bench_043.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>15.98s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>579</td>
+            <td>0.2913</td>
+            <td>0.3333</td>
+            <td>0.6667</td>
+            <td>Thông báo</td>
+            <td style="font-family:monospace;font-size:12px">281/TB-Tạo</td>
+        </tr>
+        <tr>
+            <td>bench_044.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>15.52s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>576</td>
+            <td>0.2911</td>
+            <td>0.3083</td>
+            <td>0.6667</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">351/TB-KHOA</td>
+        </tr>
+        <tr>
+            <td>bench_045.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>15.27s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>597</td>
+            <td>0.2125</td>
+            <td>0.2482</td>
+            <td>0.8000</td>
+            <td>Tờ trình</td>
+            <td style="font-family:monospace;font-size:12px">928/TB-VINAMILK</td>
+        </tr>
+        <tr>
+            <td>bench_046.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>15.26s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>580</td>
+            <td>0.1841</td>
+            <td>0.1971</td>
+            <td>0.9091</td>
+            <td>Thông báo</td>
+            <td style="font-family:monospace;font-size:12px">743/TB-KHOA</td>
+        </tr>
+        <tr>
+            <td>bench_047.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>15.37s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>590</td>
+            <td>0.1424</td>
+            <td>0.1471</td>
+            <td>0.8000</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">324/QĐ-THƯƠNG</td>
+        </tr>
+        <tr>
+            <td>bench_048.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>15.67s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>591</td>
+            <td>0.2413</td>
+            <td>0.2643</td>
+            <td>0.6667</td>
+            <td>Thông báo</td>
+            <td style="font-family:monospace;font-size:12px">363/TB-Tạo</td>
+        </tr>
+        <tr>
+            <td>bench_049.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>14.81s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>588</td>
+            <td>0.3180</td>
+            <td>0.3741</td>
+            <td>0.8000</td>
+            <td>Tờ trình</td>
+            <td style="font-family:monospace;font-size:12px">229/TB-Tạo</td>
+        </tr>
+        <tr>
+            <td>bench_050.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>15.39s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>587</td>
+            <td>0.3009</td>
+            <td>0.3088</td>
+            <td>0.8000</td>
+            <td>Thông báo</td>
+            <td style="font-family:monospace;font-size:12px">395/TB-VINAMILK</td>
+        </tr>
+        <tr>
+            <td>bench_051.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>14.85s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>556</td>
+            <td>0.2314</td>
+            <td>0.2519</td>
+            <td>0.5000</td>
+            <td>Thông báo</td>
+            <td style="font-family:monospace;font-size:12px">52/TB-VINAMILK</td>
+        </tr>
+        <tr>
+            <td>bench_052.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>14.93s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>573</td>
+            <td>0.2591</td>
+            <td>0.2667</td>
+            <td>0.5000</td>
+            <td>Khác</td>
+            <td style="font-family:monospace;font-size:12px">421/QĐ-NAI</td>
+        </tr>
+        <tr>
+            <td>bench_053.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>15.0s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>582</td>
+            <td>0.2145</td>
+            <td>0.2406</td>
+            <td>0.9091</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">692/QĐ-TP.HCM</td>
+        </tr>
+        <tr>
+            <td>bench_054.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>15.76s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>564</td>
+            <td>0.3045</td>
+            <td>0.3231</td>
+            <td>0.5000</td>
+            <td>Khác</td>
+            <td style="font-family:monospace;font-size:12px">777/TB-THƯƠNG</td>
+        </tr>
+        <tr>
+            <td>bench_055.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>15.64s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>577</td>
+            <td>0.2556</td>
+            <td>0.2774</td>
+            <td>0.5000</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">813/TB-TP.HCM</td>
+        </tr>
+        <tr>
+            <td>bench_056.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>15.37s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>588</td>
+            <td>0.2268</td>
+            <td>0.2482</td>
+            <td>0.6667</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">649/TB-NAI</td>
+        </tr>
+        <tr>
+            <td>bench_057.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>14.84s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>563</td>
+            <td>0.2500</td>
+            <td>0.2388</td>
+            <td>0.5000</td>
+            <td>Khác</td>
+            <td style="font-family:monospace;font-size:12px">229/TB-THƯƠNG</td>
+        </tr>
+        <tr>
+            <td>bench_058.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>15.49s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>568</td>
+            <td>0.2289</td>
+            <td>0.2652</td>
+            <td>0.6667</td>
+            <td>Khác</td>
+            <td style="font-family:monospace;font-size:12px">69/TB-THƯƠNG</td>
+        </tr>
+        <tr>
+            <td>bench_059.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>15.75s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>593</td>
+            <td>0.2127</td>
+            <td>0.2409</td>
+            <td>0.8000</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">925/QĐ-KHOA</td>
+        </tr>
+        <tr>
+            <td>bench_060.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>15.21s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>567</td>
+            <td>0.1843</td>
+            <td>0.2164</td>
+            <td>0.9091</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">104/QĐ-KHOA</td>
+        </tr>
+        <tr>
+            <td>bench_061.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>15.01s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>574</td>
+            <td>0.1825</td>
+            <td>0.1852</td>
+            <td>0.8000</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">49/QĐ-KHOA</td>
+        </tr>
+        <tr>
+            <td>bench_062.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>14.57s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>568</td>
+            <td>0.2488</td>
+            <td>0.2707</td>
+            <td>0.8000</td>
+            <td>Thông báo</td>
+            <td style="font-family:monospace;font-size:12px">405/TB-TP.HCM</td>
+        </tr>
+        <tr>
+            <td>bench_063.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>15.98s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>568</td>
+            <td>0.3867</td>
+            <td>0.4307</td>
+            <td>0.2857</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">403/TB-Tạo</td>
+        </tr>
+        <tr>
+            <td>bench_064.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>15.35s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>571</td>
+            <td>0.2480</td>
+            <td>0.2857</td>
+            <td>0.8000</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">630/QĐ-VINAMILK</td>
+        </tr>
+        <tr>
+            <td>bench_065.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>14.88s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>591</td>
+            <td>0.1795</td>
+            <td>0.2164</td>
+            <td>0.8000</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">773/TB-VINAMILK</td>
+        </tr>
+        <tr>
+            <td>bench_066.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>14.7s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>560</td>
+            <td>0.2651</td>
+            <td>0.3106</td>
+            <td>0.9091</td>
+            <td>Thông báo</td>
+            <td style="font-family:monospace;font-size:12px">937/TB-KHOA</td>
+        </tr>
+        <tr>
+            <td>bench_067.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>15.49s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>577</td>
+            <td>0.2341</td>
+            <td>0.2518</td>
+            <td>0.6667</td>
+            <td>Thông báo</td>
+            <td style="font-family:monospace;font-size:12px">359/TB-Tạo</td>
+        </tr>
+        <tr>
+            <td>bench_068.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>15.21s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>577</td>
+            <td>0.2085</td>
+            <td>0.2388</td>
+            <td>0.8000</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">243/TB-TP.HCM</td>
+        </tr>
+        <tr>
+            <td>bench_069.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>14.96s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>576</td>
+            <td>0.2297</td>
+            <td>0.2336</td>
+            <td>0.8000</td>
+            <td>Thông báo</td>
+            <td style="font-family:monospace;font-size:12px">839/TB-THƯƠNG</td>
+        </tr>
+        <tr>
+            <td>bench_070.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>15.22s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>573</td>
+            <td>0.1538</td>
+            <td>0.1567</td>
+            <td>0.8000</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">782/TB-KHOA</td>
+        </tr>
+        <tr>
+            <td>bench_071.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>14.47s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>565</td>
+            <td>0.3105</td>
+            <td>0.3282</td>
+            <td>0.6667</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">266/TB-TP.HCM</td>
+        </tr>
+        <tr>
+            <td>bench_072.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>14.67s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>583</td>
+            <td>0.2684</td>
+            <td>0.2879</td>
+            <td>0.9091</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">25/QĐ-THƯƠNG</td>
+        </tr>
+        <tr>
+            <td>bench_073.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>14.15s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>566</td>
+            <td>0.2338</td>
+            <td>0.2632</td>
+            <td>0.8000</td>
+            <td>Tờ trình</td>
+            <td style="font-family:monospace;font-size:12px">610/TB-TP.HCM</td>
+        </tr>
+        <tr>
+            <td>bench_074.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>14.74s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>574</td>
+            <td>0.2703</td>
+            <td>0.3094</td>
+            <td>0.6667</td>
+            <td>Khác</td>
+            <td style="font-family:monospace;font-size:12px">182/TB-Tạo</td>
+        </tr>
+        <tr>
+            <td>bench_075.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>14.9s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>562</td>
+            <td>0.3339</td>
+            <td>0.3383</td>
+            <td>0.8000</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">244/QĐ-TP.HCM</td>
+        </tr>
+        <tr>
+            <td>bench_076.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>15.05s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>580</td>
+            <td>0.3550</td>
+            <td>0.3481</td>
+            <td>0.6667</td>
+            <td>Thông báo</td>
+            <td style="font-family:monospace;font-size:12px">546/TB-VINAMILK</td>
+        </tr>
+        <tr>
+            <td>bench_077.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>15.1s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>592</td>
+            <td>0.1310</td>
+            <td>0.1387</td>
+            <td>0.8000</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">334/TB-NAI</td>
+        </tr>
+        <tr>
+            <td>bench_078.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>14.7s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>575</td>
+            <td>0.2181</td>
+            <td>0.2481</td>
+            <td>0.6667</td>
+            <td>Tờ trình</td>
+            <td style="font-family:monospace;font-size:12px">14/TB-VINAMILK</td>
+        </tr>
+        <tr>
+            <td>bench_079.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>14.74s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>583</td>
+            <td>0.3223</td>
+            <td>0.3259</td>
+            <td>0.8000</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">375/QĐ-THƯƠNG</td>
+        </tr>
+        <tr>
+            <td>bench_080.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>14.87s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>578</td>
+            <td>0.2189</td>
+            <td>0.2406</td>
+            <td>0.6667</td>
+            <td>Thông báo</td>
+            <td style="font-family:monospace;font-size:12px">280/TB-TP.HCM</td>
+        </tr>
+        <tr>
+            <td>bench_081.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>14.95s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>580</td>
+            <td>0.2463</td>
+            <td>0.2632</td>
+            <td>0.6667</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">571/TB-Tạo</td>
+        </tr>
+        <tr>
+            <td>bench_082.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>15.7s</td>
+            <td>1</td>
+            <td>2</td>
+            <td>580</td>
+            <td>0.2692</td>
+            <td>0.2782</td>
+            <td>0.9091</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">779/QĐ-TP.HCM</td>
+        </tr>
+        <tr>
+            <td>bench_083.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>16.34s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>587</td>
+            <td>0.1659</td>
+            <td>0.1679</td>
+            <td>0.8000</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">709/QĐ-TẠO</td>
+        </tr>
+        <tr>
+            <td>bench_084.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>15.11s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>573</td>
+            <td>0.3207</td>
+            <td>0.3459</td>
+            <td>0.9091</td>
+            <td>Thông báo</td>
+            <td style="font-family:monospace;font-size:12px">667/TB-Tạo</td>
+        </tr>
+        <tr>
+            <td>bench_085.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>15.0s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>571</td>
+            <td>0.2622</td>
+            <td>0.3008</td>
+            <td>0.8000</td>
+            <td>Thông báo</td>
+            <td style="font-family:monospace;font-size:12px">174/TB-TP.HCM</td>
+        </tr>
+        <tr>
+            <td>bench_086.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>14.67s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>585</td>
+            <td>0.1622</td>
+            <td>0.1679</td>
+            <td>0.6667</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">850/TB-THƯƠNG</td>
+        </tr>
+        <tr>
+            <td>bench_087.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>15.38s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>573</td>
+            <td>0.2781</td>
+            <td>0.3053</td>
+            <td>0.6667</td>
+            <td>Thông báo</td>
+            <td style="font-family:monospace;font-size:12px">362/TB-NAI</td>
+        </tr>
+        <tr>
+            <td>bench_088.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>15.2s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>570</td>
+            <td>0.2310</td>
+            <td>0.2672</td>
+            <td>0.8000</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">121/QĐ-NAI</td>
+        </tr>
+        <tr>
+            <td>bench_089.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>15.1s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>564</td>
+            <td>0.3388</td>
+            <td>0.3731</td>
+            <td>0.5000</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">489/TB-Tạo</td>
+        </tr>
+        <tr>
+            <td>bench_090.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>14.71s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>562</td>
+            <td>0.2916</td>
+            <td>0.3511</td>
+            <td>0.8000</td>
+            <td>Tờ trình</td>
+            <td style="font-family:monospace;font-size:12px">616/TB-KHOA</td>
+        </tr>
+        <tr>
+            <td>bench_091.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>14.83s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>570</td>
+            <td>0.1388</td>
+            <td>0.1429</td>
+            <td>0.8000</td>
+            <td>Khác</td>
+            <td style="font-family:monospace;font-size:12px">834/TB-KHOA</td>
+        </tr>
+        <tr>
+            <td>bench_092.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>16.19s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>572</td>
+            <td>0.2306</td>
+            <td>0.2519</td>
+            <td>0.6667</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">83/QĐ-VINAMILK</td>
+        </tr>
+        <tr>
+            <td>bench_093.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>15.61s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>583</td>
+            <td>0.1126</td>
+            <td>0.1231</td>
+            <td>0.8000</td>
+            <td>Thông báo</td>
+            <td style="font-family:monospace;font-size:12px">676/TB-THƯƠNG</td>
+        </tr>
+        <tr>
+            <td>bench_094.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>16.82s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>581</td>
+            <td>0.2591</td>
+            <td>0.2595</td>
+            <td>0.8000</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">756/TB-KHOA</td>
+        </tr>
+        <tr>
+            <td>bench_095.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>16.15s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>570</td>
+            <td>0.2707</td>
+            <td>0.2741</td>
+            <td>0.6667</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">773/QĐ-NAI</td>
+        </tr>
+        <tr>
+            <td>bench_096.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>15.14s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>581</td>
+            <td>0.2431</td>
+            <td>0.2672</td>
+            <td>0.9091</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">938/QĐ-VINAMILK</td>
+        </tr>
+        <tr>
+            <td>bench_097.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>15.53s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>574</td>
+            <td>0.1541</td>
+            <td>0.1418</td>
+            <td>0.6667</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">125/TB-THƯƠNG</td>
+        </tr>
+        <tr>
+            <td>bench_098.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>15.69s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>585</td>
+            <td>0.2357</td>
+            <td>0.2920</td>
+            <td>0.6667</td>
+            <td>Quyết định</td>
+            <td style="font-family:monospace;font-size:12px">594/TB-VINAMILK</td>
+        </tr>
+        <tr>
+            <td>bench_099.jpg</td>
+            <td><span class="badge success">success</span></td>
+            <td>15.38s</td>
+            <td>1</td>
+            <td>1</td>
+            <td>562</td>
+            <td>0.1824</td>
+            <td>0.1880</td>
+            <td>0.8000</td>
+            <td>Thông báo</td>
+            <td style="font-family:monospace;font-size:12px">127/TB-TP.HCM</td>
+        </tr>
+            </tbody>
+        </table>
+
+        <div class="footer">
+            VietIDP NeuralIDP Enterprise v3.0 — Benchmark Report
+        </div>
+    </div>
+</body>
+</html>

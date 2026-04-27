@@ -1,0 +1,12 @@
+{
+    "source_file": "bench_013",
+    "ocr_raw_text": "SỞ Y TẾ TP.HCM\nCỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nSố: 751/TB-TP.HCM\nĐộc lập\nTự do\nHạnh phúc\n03 năm 2021\nNgày 07\nCHỈ THỊ\nán đầu tư\nviệc ban hành quy định quản lý\nCăn cứ vào Luật Tổ chức chính phủ ngày 19\nnăm 2015;\nCăn cứ vào\nđịnh số 123/2016/NĐ-CP của Chính phủ:\nXét đề nghị của Giám đốc Sở Nội vụ và Trưởng phòng Hành chính,\nQUYẾT ĐỊNH/THÔNG BÁO:\nĐiều 1. Phê duyệt về việc ban hành quy đinh quản lý dự án đầu tư đối với các cơ quan, đơn\nĐiều 2. Giao cho phòng Tài chính\nKế toán chịu trách nhiệm thi hành\nĐiều 3. Quyết định/Thông báo này có hiệu lực kể từ ngày ký.\nGIÁM ĐỐC\nBì",
+    "extraction_result": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "751/TB-TP.HCM",
+        "ngay_ban_hanh": "03/2021",
+        "co_quan_ban_hanh": "Sở Y tế TP.HCM",
+        "trich_yeu": "Phê duyệt về việc ban hành quy định quản lý dự án đầu tư đối với các cơ quan, đơn vị",
+        "nguoi_ky": ""
+    }
+}

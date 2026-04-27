@@ -1,0 +1,12 @@
+{
+    "source_file": "bench_083",
+    "ocr_raw_text": "GIÁO DỤC VÀ ĐÀO TẠO\nCỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nSố: 709/QĐ-TẠO\nĐộc lập\nTự do\nHạnh phúc\nNgày 13 tháng 10 năm 2024\nQUYẾT ĐỊNH\nTriển khai\ntác\nsinh năm\nmới\nnăm 2015;\nTăn cứ vào Luật Tổ chức chính phủ ngày 19 tháng\nCăn cứ vào nghị định số 123/2016/NĐ-CP của Chính phủ;\nXét đề nghị của Giám đốc Sở Nội vụ và Trưởng phòng Hành chính,\nQUYẾT ĐỊNH/THÔNG BÁO:\nĐiều\n1. Phê duyệt triển khai công tác tuyển sinh năm học mới đối với các cơ quan, đơn vị\nĐiều 2. Giao cho phòng Tài chính\nKế toán chịu trách nhiệm thi hành\nĐiều 3. Quyết định/Thông báo này có hiệu lực kể từ ngày ký.\nBỘ TRƯỞNG\nVà Và",
+    "extraction_result": {
+        "loai_van_ban": "Quyết định",
+        "so_hieu": "709/QĐ-TẠO",
+        "ngay_ban_hanh": "13/10/2024",
+        "co_quan_ban_hanh": "Giáo dục và Đào tạo Cộng hòa xã hội chủ nghĩa Việt Nam",
+        "trich_yeu": "Triển khai công tác tuyển sinh năm học mới đối với các cơ quan, đơn vị; Giao phòng Tài chính Kế toán chịu trách nhiệm thi hành",
+        "nguoi_ky": ""
+    }
+}

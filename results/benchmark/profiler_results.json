@@ -1,11 +1,11 @@
 {
   "input_file": "data/raw/sample_test.jpg",
-  "total_time_s": 10.246,
-  "peak_vram_mb": 0.0,
+  "total_time_s": 27.354,
+  "peak_vram_mb": 2425.0,
   "stages": [
     {
       "stage": "1. Load Image",
-      "latency_s": 0.048,
+      "latency_s": 0.086,
       "vram_before_mb": 0.0,
       "vram_after_mb": 0.0,
       "vram_peak_mb": 0.0,
@@ -13,34 +13,34 @@
     },
     {
       "stage": "2. YOLO Detection",
-      "latency_s": 1.069,
+      "latency_s": 1.651,
       "vram_before_mb": 0.0,
-      "vram_after_mb": 0.0,
-      "vram_peak_mb": 0.0,
-      "vram_delta_mb": 0.0
+      "vram_after_mb": 11.7,
+      "vram_peak_mb": 63.7,
+      "vram_delta_mb": 11.7
     },
     {
       "stage": "3. Stamp Matting",
-      "latency_s": 2.471,
-      "vram_before_mb": 0.0,
-      "vram_after_mb": 0.0,
-      "vram_peak_mb": 0.0,
+      "latency_s": 2.551,
+      "vram_before_mb": 11.7,
+      "vram_after_mb": 11.7,
+      "vram_peak_mb": 11.7,
       "vram_delta_mb": 0.0
     },
     {
       "stage": "4. OCR (VietOCR + EasyOCR)",
-      "latency_s": 0.003,
-      "vram_before_mb": 0.0,
-      "vram_after_mb": 0.0,
-      "vram_peak_mb": 0.0,
-      "vram_delta_mb": 0.0
+      "latency_s": 15.228,
+      "vram_before_mb": 11.7,
+      "vram_after_mb": 285.9,
+      "vram_peak_mb": 2425.0,
+      "vram_delta_mb": 274.2
     },
     {
       "stage": "5. LLM Extraction (Qwen2.5-7B)",
-      "latency_s": 6.655,
-      "vram_before_mb": 0.0,
-      "vram_after_mb": 0.0,
-      "vram_peak_mb": 0.0,
+      "latency_s": 7.838,
+      "vram_before_mb": 285.9,
+      "vram_after_mb": 285.9,
+      "vram_peak_mb": 285.9,
       "vram_delta_mb": 0.0
     }
   ]
