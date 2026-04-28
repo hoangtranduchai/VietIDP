@@ -190,7 +190,7 @@ class HybridStampMatting:
 | ngay_ban_hanh | 14/04/2026 | 14/04/2026 | ✓ |
 | co_quan_ban_hanh | Trường ĐH Bách Khoa | Trường Đại học Bách Khoa | ✓ |
 | trich_yeu | Nghỉ lễ Giỗ Tổ 30/4, 01/5 | Thời gian nghỉ lễ Giỗ Tổ... | ✓ |
-| nguoi_ky | PGS.TS. Huỳnh Hữu Nghị | (trống) | ✗ |
+| nguoi_ky | PGS.TS. Huỳnh Phương Nam | (trống) | ✗ |
 
 > *5/6 trường trích xuất chính xác (F1 = 0.83). `nguoi_ky` bị miss do text nằm trong vùng con dấu.*
 
