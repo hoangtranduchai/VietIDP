@@ -6,39 +6,39 @@ Main application entry point. Tich hop:
 - Routes API (process, documents CRUD, chat, export)
 - Database (SQLAlchemy + PostgreSQL/SQLite)
 - CORS + Security middleware
-- Static file serving cho uploaded images
 - Pipeline singleton (load 1 lan khi startup)
 
 Chay: uvicorn src.api.fastapi_app:app --host 0.0.0.0 --port 8000 --reload
 """
 
-import os
 import logging
 import sys
-from datetime import datetime, timezone
 from contextlib import asynccontextmanager
+from datetime import datetime, timezone
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
 from fastapi.responses import JSONResponse
 
-from src.config import Config
-from src.api.routes import router as api_router
 from src.api.database import init_db
+from src.api.routes import router as api_router
+from src.config import Config
 
 # ── Logging Setup ────────────────────────────────────────────────────
 logging.basicConfig(
     level=logging.INFO,
     format="[%(asctime)s] %(levelname)s - %(name)s - %(message)s",
     datefmt="%H:%M:%S",
-    handlers=[logging.StreamHandler(sys.stdout)]
+    handlers=[logging.StreamHandler(sys.stdout)],
 )
+logger = logging.getLogger(__name__)
+
 
 # ── Logging Filter ───────────────────────────────────────────────────
 class EndpointFilter(logging.Filter):
     def filter(self, record: logging.LogRecord) -> bool:
         return record.getMessage().find("GET /api/health") == -1
+
 
 logging.getLogger("uvicorn.access").addFilter(EndpointFilter())
 
@@ -55,6 +55,7 @@ def get_pipeline():
     global _pipeline
     if _pipeline is None:
         from src.pipeline.ocr_llm_pipeline import VietIDPPipeline
+
         _pipeline = VietIDPPipeline(load_yolo=True, load_ocr=True, load_llm=True)
     return _pipeline
 
@@ -64,9 +65,8 @@ def get_pipeline():
 # ═══════════════════════════════════════════════════════════════════════
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(_app: FastAPI):
     """Startup / shutdown lifecycle."""
-    # ── Startup ──────────────────────────────────────────────────
     print("=" * 60)
     print(" VietIDP FastAPI Server v3.0")
     print(f" LLM Model: {Config.OLLAMA_MODEL}")
@@ -74,9 +74,8 @@ async def lifespan(app: FastAPI):
     print("=" * 60)
     init_db()
 
-    yield  # App is running
+    yield
 
-    # ── Shutdown ─────────────────────────────────────────────────
     global _pipeline
     _pipeline = None
     print("VietIDP server stopped.")
@@ -104,21 +103,20 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ── Static files (uploaded documents, images) ────────────────────────
-upload_dir = Config.DATA_DIR / "uploads"
-upload_dir.mkdir(parents=True, exist_ok=True)
-app.mount("/uploads", StaticFiles(directory=str(upload_dir)), name="uploads")
-
 # ── Routes ───────────────────────────────────────────────────────────
 app.include_router(api_router)
 
 
 # ── Error Handlers ───────────────────────────────────────────────────
 @app.exception_handler(Exception)
-async def global_exception_handler(request: Request, exc: Exception):
+async def global_exception_handler(request: Request, _exc: Exception):
+    logger.exception("Unhandled server error for %s %s", request.method, request.url.path)
     return JSONResponse(
         status_code=500,
-        content={"error": str(exc), "timestamp": datetime.now(timezone.utc).isoformat()}
+        content={
+            "error": "Internal server error",
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+        },
     )
 
 
@@ -129,5 +127,5 @@ async def root():
         "name": "VietIDP API",
         "version": "3.0.0",
         "docs": "/docs",
-        "status": "active"
+        "status": "active",
     }

@@ -3,8 +3,7 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { useDropzone } from 'react-dropzone'
 import { useLocale } from '../LocaleContext'
 import { useApi } from '../hooks/useApi'
-import { getDocument, updateDocument, getExportUrl, processDocument } from '../services/api'
-import api from '../services/api'
+import { downloadExport, getDocument, getDocumentPreviewBlobUrl, updateDocument, processDocument } from '../services/api'
 import TopBar from '../layouts/TopBar'
 import DocumentViewer from '../components/DocumentViewer'
 import ChatPanel from '../components/ChatPanel'
@@ -26,13 +25,35 @@ export default function WorkspacePage() {
   const [activeTab, setActiveTab] = useState('overview') // 'overview' | 'extraction' | 'chat'
   const [hasUnreadChat, setHasUnreadChat] = useState(false)
   const [highlightBboxes, setHighlightBboxes] = useState(null)
-  
+  const [previewUrls, setPreviewUrls] = useState([])
+
   const [leftWidth, setLeftWidth] = useState(50)
+  const previewUrlsRef = useRef([])
+  const previewRequestsRef = useRef(new Set())
+  const previewGenerationRef = useRef(0)
   const [isDragging, setIsDragging] = useState(false)
   const [rightCollapsed, setRightCollapsed] = useState(false)
   
   const uploadDialogOpened = useRef(false)
   const dualPaneRef = useRef(null)
+
+  const clearPreviewUrls = useCallback((urls) => {
+    urls.forEach((url) => {
+      if (url) URL.revokeObjectURL(url)
+    })
+  }, [])
+
+  const replacePreviewUrls = useCallback((updater) => {
+    const current = previewUrlsRef.current
+    const next = typeof updater === 'function' ? updater(current) : updater
+    current.forEach((url, index) => {
+      if (url && url !== next[index]) {
+        URL.revokeObjectURL(url)
+      }
+    })
+    previewUrlsRef.current = next
+    setPreviewUrls(next)
+  }, [])
 
   const handleMouseMove = useCallback((e) => {
     if (!isDragging || !dualPaneRef.current) return;
@@ -108,9 +129,13 @@ export default function WorkspacePage() {
     } catch {}
   }
 
-  const handleExport = (format) => {
+  const handleExport = async (format) => {
     if (!id) return
-    window.open(getExportUrl(id, format), '_blank')
+    try {
+      await downloadExport(id, format)
+    } catch {
+      // Error handled by interceptor
+    }
   }
 
   const completedIdx = PIPELINE_STAGES.findIndex(s => s.key === currentStage)
@@ -121,14 +146,74 @@ export default function WorkspacePage() {
   }))
 
   const doc = docApi.data
+  const docId = doc?.id
+  const rawPages = Array.isArray(extraction?.raw_json?.pages) ? extraction.raw_json.pages.filter(Boolean) : []
+  const hasGeneratedPagePreviews = rawPages.length > 0
 
-  const imageUrl = doc?.storage_name
-    ? `${api.defaults.baseURL}/uploads/${doc.storage_name}`
-    : null
+  const requestPreviewPage = useCallback(async (pageIndex) => {
+    const pageNumber = pageIndex + 1
+    const generation = previewGenerationRef.current
+    const requestKey = `${generation}:${pageNumber}`
+    const shouldFetchPage = hasGeneratedPagePreviews || pageIndex === 0
 
-  const pageUrls = extraction?.raw_json?.pages 
-    ? extraction.raw_json.pages.map(p => `${api.defaults.baseURL}/uploads/${p}`)
-    : []
+    if (!id || !docId || pageIndex < 0 || !shouldFetchPage) return
+    if (previewUrlsRef.current[pageIndex] || previewRequestsRef.current.has(requestKey)) return
+
+    previewRequestsRef.current.add(requestKey)
+    try {
+      const url = await getDocumentPreviewBlobUrl(id, pageNumber)
+      if (previewGenerationRef.current !== generation) {
+        URL.revokeObjectURL(url)
+        return
+      }
+      replacePreviewUrls((current) => {
+        const next = [...current]
+        next[pageIndex] = url
+        return next
+      })
+    } catch {
+      // Error handled by interceptor
+    } finally {
+      previewRequestsRef.current.delete(requestKey)
+    }
+  }, [docId, hasGeneratedPagePreviews, id, replacePreviewUrls])
+
+  useEffect(() => {
+    previewGenerationRef.current += 1
+    previewRequestsRef.current.clear()
+
+    if (!id || !docId) {
+      clearPreviewUrls(previewUrlsRef.current)
+      previewUrlsRef.current = []
+      setPreviewUrls([])
+      return
+    }
+
+    clearPreviewUrls(previewUrlsRef.current)
+    previewUrlsRef.current = []
+    setPreviewUrls([])
+    requestPreviewPage(0)
+
+    return () => {
+      previewGenerationRef.current += 1
+      previewRequestsRef.current.clear()
+    }
+  }, [clearPreviewUrls, docId, hasGeneratedPagePreviews, id, requestPreviewPage])
+
+  useEffect(() => {
+    return () => {
+      previewGenerationRef.current += 1
+      clearPreviewUrls(previewUrlsRef.current)
+      previewRequestsRef.current.clear()
+    }
+  }, [clearPreviewUrls])
+
+  const imageUrl = previewUrls[0] || null
+  const previewDocumentUrl = !hasGeneratedPagePreviews ? imageUrl : null
+  const pageUrls = previewUrls
+  const pageCount = hasGeneratedPagePreviews
+    ? Math.max(rawPages.length, doc?.num_pages || 0, pageUrls.length, imageUrl ? 1 : 0)
+    : imageUrl ? 1 : 0
 
   // ── Drag & Drop Logic ──────────────────────────────────────────
   const onDrop = useCallback(async (files) => {
@@ -333,10 +418,14 @@ export default function WorkspacePage() {
           <>
             <DocumentViewer
               imageUrl={imageUrl}
+              documentUrl={previewDocumentUrl}
+              useGeneratedPagePreviews={hasGeneratedPagePreviews}
               stamps={extraction?.stamp_coordinates || []}
               highlightBboxes={highlightBboxes}
               filename={doc?.filename}
               pages={pageUrls}
+              pageCount={pageCount}
+              onPageRequest={requestPreviewPage}
               style={{ width: rightCollapsed ? '100%' : `calc(${leftWidth}% - 10px)`, flex: 'none' }}
               onToggleCollapse={() => setRightCollapsed(!rightCollapsed)}
               isCollapsed={rightCollapsed}

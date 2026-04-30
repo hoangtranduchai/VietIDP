@@ -5,15 +5,24 @@
 import axios from 'axios'
 import { toast } from 'react-toastify'
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+const configuredBase = (import.meta.env.VITE_API_URL || '').trim()
+const API_BASE = configuredBase.replace(/\/$/, '')
+// Vite env vars are bundled into the browser, so this header is only for local/dev convenience.
+const BROWSER_API_KEY = (import.meta.env.VITE_API_KEY || '').trim()
 
 const api = axios.create({
   baseURL: API_BASE,
-  timeout: 120000, // 2 min for heavy pipeline
-  headers: { 'Content-Type': 'application/json' },
+  timeout: 120000,
+  headers: {
+    'Content-Type': 'application/json',
+    ...(BROWSER_API_KEY ? { 'X-API-Key': BROWSER_API_KEY } : {}),
+  },
 })
 
-// ── Response interceptor: centralized error handling ─────────
+function getApiPath(path) {
+  return `${API_BASE}${path}`
+}
+
 api.interceptors.response.use(
   (res) => res,
   (err) => {
@@ -22,17 +31,12 @@ api.interceptors.response.use(
       || err.message
       || 'Unknown error'
 
-    // Don't toast on cancelled requests or background health checks
     if (!axios.isCancel(err) && !err.config?.url?.includes('/health') && !err.config?.skipToast) {
       toast.error(msg, { toastId: msg.slice(0, 30) })
     }
     return Promise.reject(err)
   }
 )
-
-// ═══════════════════════════════════════════════════════════════
-// Document Processing
-// ═══════════════════════════════════════════════════════════════
 
 export async function processDocument(file, onProgress) {
   const formData = new FormData()
@@ -48,10 +52,6 @@ export async function getTaskStatus(taskId) {
   const res = await api.get(`/api/task_status/${taskId}`)
   return res.data
 }
-
-// ═══════════════════════════════════════════════════════════════
-// Document CRUD
-// ═══════════════════════════════════════════════════════════════
 
 export async function getDocuments(skip = 0, limit = 50, status) {
   const params = { skip, limit }
@@ -76,17 +76,35 @@ export async function deleteDocument(id) {
   return res.data
 }
 
-// ═══════════════════════════════════════════════════════════════
-// Export
-// ═══════════════════════════════════════════════════════════════
+export async function downloadExport(id, format = 'json') {
+  const res = await api.get(`/api/export/${id}`, {
+    params: { format },
+    responseType: 'blob',
+  })
 
-export function getExportUrl(id, format = 'json') {
-  return `${API_BASE}/api/export/${id}?format=${format}`
+  const contentType = res.headers['content-type'] || (format === 'csv' ? 'text/csv' : 'application/json')
+  const blob = new Blob([res.data], { type: contentType })
+  const objectUrl = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = objectUrl
+  link.download = `doc_${id}.${format}`
+  document.body.appendChild(link)
+  link.click()
+  link.remove()
+  URL.revokeObjectURL(objectUrl)
 }
 
-// ═══════════════════════════════════════════════════════════════
-// Chat
-// ═══════════════════════════════════════════════════════════════
+export async function getDocumentPreviewBlobUrl(id, page = 1) {
+  const res = await api.get(`/api/documents/${id}/preview`, {
+    params: { page },
+    responseType: 'blob',
+  })
+  return URL.createObjectURL(res.data)
+}
+
+export function getDocumentPreviewPath(id, page = 1) {
+  return getApiPath(`/api/documents/${id}/preview?page=${page}`)
+}
 
 export async function chatWithDocument(question, documentId, context) {
   const res = await api.post('/api/chat', {
@@ -97,17 +115,11 @@ export async function chatWithDocument(question, documentId, context) {
   return res.data
 }
 
-// ═══════════════════════════════════════════════════════════════
-// System
-// ═══════════════════════════════════════════════════════════════
-
 export async function healthCheck() {
   try {
-    // Pass a custom config flag to explicitly skip toast if needed, though interceptor checks url
     const res = await api.get('/api/health', { skipToast: true })
     return res.data
   } catch (err) {
-    // Swallow the error so it doesn't propagate to the hook unhandled
     throw err
   }
 }

@@ -5,13 +5,11 @@ VietIDP Benchmark — Evaluation Pipeline
 Chạy pipeline trên tập dữ liệu test, tính CER/WER/F1.
 
 Sử dụng:
-    conda activate vietidp
-    cd /d E:\\OCR-LLM_Research\\OCR-LLM_Research
     python src/evaluation/benchmark.py --input data/test --ground-truth data/test/labels
+    python src/evaluation/benchmark.py --manifest data/benchmarks/synthetic_regenerated/manifest.json --official
 """
 
 import os
-import re
 import sys
 import json
 import time
@@ -23,6 +21,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
 from src.config import Config
+from src.evaluation.extraction_metrics import compute_field_metrics
+from src.evaluation.manifest import INPUT_SUFFIXES, DatasetManifest, ManifestEntry, ManifestError
 
 
 # ═══════════════════════════════════════════════════════════════════════
@@ -120,28 +120,76 @@ def extraction_f1(predicted: dict, ground_truth: dict) -> dict:
 class BenchmarkRunner:
     """Chạy benchmark toàn bộ pipeline."""
 
-    def __init__(self, input_dir, gt_dir=None, output_dir=None, limit=None):
+    def __init__(self, input_dir=None, gt_dir=None, output_dir=None, limit=None, manifest_path=None, official=False):
         self.input_dir = input_dir
         self.gt_dir = gt_dir
         self.output_dir = output_dir or str(Config.RESULTS_DIR / "benchmark")
         self.limit = limit
+        self.official = official
+        self.manifest = DatasetManifest.load(manifest_path) if manifest_path else None
+        self.manifest_sha256 = self.manifest.manifest_sha256 if self.manifest else None
         os.makedirs(self.output_dir, exist_ok=True)
+
+        if self.manifest:
+            self.manifest.validate(require_labels=True, verify_hashes=True, check_split_leakage=True)
+        elif self.official:
+            self._validate_official_inputs()
+
+    def _validate_official_inputs(self):
+        input_path = Path(self.input_dir)
+        if not input_path.exists():
+            raise ManifestError(f"Official benchmark input directory does not exist: {input_path}")
+
+        input_ids = {
+            path.stem for path in input_path.iterdir()
+            if path.is_file() and path.suffix.lower() in INPUT_SUFFIXES
+        }
+        label_path = Path(self.gt_dir) if self.gt_dir else input_path / "labels"
+        label_ids = {path.stem for path in label_path.glob("*.json")} if label_path.exists() else set()
+
+        if label_ids and not input_ids:
+            raise ManifestError(f"Official benchmark has labels in {label_path} but no matching input files in {input_path}")
+        missing_inputs = sorted(label_ids - input_ids)
+        missing_labels = sorted(input_ids - label_ids) if label_path.exists() else sorted(input_ids)
+        if missing_inputs:
+            raise ManifestError("Official benchmark labels without input files: " + ", ".join(missing_inputs[:20]))
+        if missing_labels:
+            raise ManifestError("Official benchmark inputs without labels: " + ", ".join(missing_labels[:20]))
 
     def find_test_files(self):
         """Tìm tất cả file test."""
+        if self.manifest:
+            return list(self.manifest.iter_files(self.limit))
+
         files = []
         for f in sorted(os.listdir(self.input_dir)):
-            if f.lower().endswith(('.pdf', '.png', '.jpg', '.jpeg')):
+            if Path(f).suffix.lower() in INPUT_SUFFIXES:
                 files.append(os.path.join(self.input_dir, f))
         if self.limit:
             files = files[:self.limit]
         return files
 
-    def load_ground_truth(self, filename):
+    def _filename(self, file_ref):
+        if isinstance(file_ref, ManifestEntry):
+            return file_ref.input_path.name
+        return os.path.basename(file_ref)
+
+    def _filepath(self, file_ref):
+        if isinstance(file_ref, ManifestEntry):
+            return str(file_ref.input_path)
+        return str(file_ref)
+
+    def load_ground_truth(self, file_ref):
         """Load ground truth JSON cho 1 file."""
+        if isinstance(file_ref, ManifestEntry):
+            if file_ref.label_path and file_ref.label_path.exists():
+                with file_ref.label_path.open('r', encoding='utf-8') as f:
+                    return json.load(f)
+            return None
+
         if not self.gt_dir:
             return None
-        base = os.path.splitext(filename)[0]
+        base = os.path.splitext(os.path.basename(file_ref))[0]
         gt_path = os.path.join(self.gt_dir, base + '.json')
         if os.path.exists(gt_path):
             with open(gt_path, 'r', encoding='utf-8') as f:
@@ -156,8 +204,11 @@ class BenchmarkRunner:
             return None
 
         print(f"\n📊 Starting benchmark on {len(files)} files...")
-        print(f"   Input: {self.input_dir}")
-        print(f"   GT: {self.gt_dir or 'None'}")
+        print(f"   Manifest: {self.manifest.path if self.manifest else 'None'}")
+        print(f"   Manifest SHA256: {self.manifest_sha256 or 'None'}")
+        print(f"   Input: {self.input_dir or self.manifest.root}")
+        print(f"   GT: {self.gt_dir or 'manifest labels' if self.manifest else 'None'}")
+        print(f"   Official: {self.official}")
 
         # Load pipeline
         from src.pipeline.ocr_llm_pipeline import VietIDPPipeline
@@ -167,8 +218,9 @@ class BenchmarkRunner:
         total_time = 0
         vram_peak = 0
 
-        for i, filepath in enumerate(files):
-            filename = os.path.basename(filepath)
+        for i, file_ref in enumerate(files):
+            filename = self._filename(file_ref)
+            filepath = self._filepath(file_ref)
             print(f"\n[{i+1}/{len(files)}] {filename}")
 
             try:
@@ -203,10 +255,16 @@ class BenchmarkRunner:
                     'text_length': len(result.get('full_text', '')),
                     'extraction': result.get('extraction', {}),
                 }
+                if isinstance(file_ref, ManifestEntry):
+                    entry['manifest_entry_id'] = file_ref.id
+                    entry['input_sha256'] = file_ref.input_sha256
+                    entry['label_sha256'] = file_ref.label_sha256
+                    entry['split'] = file_ref.split
+                    entry['source_type'] = file_ref.source_type
 
                 # Compare with ground truth
-                gt = self.load_ground_truth(filename)
-                if gt:
+                gt = self.load_ground_truth(file_ref)
+                if gt is not None:
                     ocr_gt_text = gt.get('full_text', '')
                     ocr_pred_text = result.get('full_text', '')
 
@@ -214,8 +272,10 @@ class BenchmarkRunner:
                     entry['wer'] = word_error_rate(ocr_pred_text, ocr_gt_text)
 
                     gt_extraction = gt.get('extraction', gt)
-                    f1_result = extraction_f1(result.get('extraction', {}), gt_extraction)
-                    entry['f1_score'] = f1_result
+                    legacy_f1_result = extraction_f1(result.get('extraction', {}), gt_extraction)
+                    strict_metrics = compute_field_metrics(result.get('extraction', {}), gt_extraction)
+                    entry['legacy_debug_extraction_f1'] = legacy_f1_result
+                    entry['strict_extraction_metrics'] = strict_metrics
 
                 results.append(entry)
                 print(f"   ✅ {elapsed:.1f}s | {entry['text_length']} chars | "
@@ -237,6 +297,9 @@ class BenchmarkRunner:
         with open(output_path, 'w', encoding='utf-8') as f:
             json.dump({
                 'timestamp': datetime.now().isoformat(),
+                'official': self.official,
+                'manifest_path': str(self.manifest.path) if self.manifest else None,
+                'manifest_sha256': self.manifest_sha256,
                 'summary': summary,
                 'results': results,
             }, f, ensure_ascii=False, indent=2)
@@ -251,7 +314,26 @@ class BenchmarkRunner:
         times = [r['processing_time'] for r in successful if 'processing_time' in r]
         cer_scores = [r['cer'] for r in successful if 'cer' in r]
         wer_scores = [r['wer'] for r in successful if 'wer' in r]
-        f1_scores = [r['f1_score']['f1'] for r in successful if 'f1_score' in r]
+        legacy_debug_f1_scores = [
+            r['legacy_debug_extraction_f1']['f1']
+            for r in successful if 'legacy_debug_extraction_f1' in r
+        ]
+        strict_macro_strict = [
+            r['strict_extraction_metrics']['macro']['strict_exact_match']
+            for r in successful if 'strict_extraction_metrics' in r
+        ]
+        strict_macro_normalized = [
+            r['strict_extraction_metrics']['macro']['normalized_exact_match']
+            for r in successful if 'strict_extraction_metrics' in r
+        ]
+        strict_macro_token_f1 = [
+            r['strict_extraction_metrics']['macro']['token_f1']
+            for r in successful if 'strict_extraction_metrics' in r
+        ]
+        strict_macro_char_similarity = [
+            r['strict_extraction_metrics']['macro']['character_similarity']
+            for r in successful if 'strict_extraction_metrics' in r
+        ]
 
         return {
             'total_files': len(results),
@@ -265,7 +347,11 @@ class BenchmarkRunner:
             'max_time': round(max(times), 2) if times else 0,
             'avg_cer': round(np.mean(cer_scores), 4) if cer_scores else None,
             'avg_wer': round(np.mean(wer_scores), 4) if wer_scores else None,
-            'avg_f1': round(np.mean(f1_scores), 4) if f1_scores else None,
+            'legacy_debug_avg_f1': round(np.mean(legacy_debug_f1_scores), 4) if legacy_debug_f1_scores else None,
+            'strict_macro_exact_match': round(np.mean(strict_macro_strict), 4) if strict_macro_strict else None,
+            'strict_macro_normalized_exact_match': round(np.mean(strict_macro_normalized), 4) if strict_macro_normalized else None,
+            'strict_macro_token_f1': round(np.mean(strict_macro_token_f1), 4) if strict_macro_token_f1 else None,
+            'strict_macro_character_similarity': round(np.mean(strict_macro_char_similarity), 4) if strict_macro_char_similarity else None,
             'vram_peak_gb': round(vram_peak, 2),
         }
 
@@ -285,9 +371,16 @@ class BenchmarkRunner:
             print(f"    CER: {summary['avg_cer']:.4f}")
             print(f"    WER: {summary['avg_wer']:.4f}")
 
-        if summary['avg_f1'] is not None:
+        if summary['legacy_debug_avg_f1'] is not None:
             print(f"\n  Extraction Metrics:")
-            print(f"    F1 Score: {summary['avg_f1']:.4f}")
+            print(f"    Legacy debug F1: {summary['legacy_debug_avg_f1']:.4f}")
+
+        if summary['strict_macro_exact_match'] is not None:
+            print(f"\n  Strict Extraction Metrics:")
+            print(f"    Macro strict exact: {summary['strict_macro_exact_match']:.4f}")
+            print(f"    Macro normalized exact: {summary['strict_macro_normalized_exact_match']:.4f}")
+            print(f"    Macro token F1: {summary['strict_macro_token_f1']:.4f}")
+            print(f"    Macro char similarity: {summary['strict_macro_character_similarity']:.4f}")
 
 
 # ═══════════════════════════════════════════════════════════════════════
@@ -298,32 +391,47 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="VietIDP Benchmark")
     parser.add_argument("--input", default="data/test", help="Input directory")
     parser.add_argument("--ground-truth", default=None, help="Ground truth JSON directory")
+    parser.add_argument("--manifest", default=None, help="Dataset manifest JSON")
     parser.add_argument("--output", default=None, help="Output directory")
     parser.add_argument("--limit", type=int, default=None, help="Limit number of files")
-    parser.add_argument("--use-raw", action="store_true", help="Fallback to data/raw if data/test is empty")
+    parser.add_argument("--official", action="store_true", help="Require manifest or complete input/label pairs; disable raw fallback")
+    parser.add_argument("--use-raw", action="store_true", help="Explicitly use data/raw if selected input has no files")
     args = parser.parse_args()
 
     input_dir = args.input
     gt_dir = args.ground_truth
 
-    # Auto-fallback: if data/test has no images, try data/raw
-    if not any(f.lower().endswith(('.pdf', '.png', '.jpg', '.jpeg'))
-               for f in os.listdir(input_dir) if os.path.isfile(os.path.join(input_dir, f))):
-        fallback = "data/raw"
-        if os.path.isdir(fallback) and not args.use_raw:
-            print(f"[INFO] {input_dir} is empty, auto-fallback to {fallback}")
-            print(f"       (or use --use-raw explicitly)")
-            input_dir = fallback
-        elif args.use_raw and os.path.isdir(fallback):
-            input_dir = fallback
+    if not args.manifest:
+        if not os.path.isdir(input_dir):
+            raise SystemExit(f"[ERROR] Input directory does not exist: {input_dir}")
 
-    # Auto-detect ground-truth directory
-    if gt_dir is None:
-        candidate = os.path.join(input_dir, "labels")
-        if os.path.isdir(candidate):
-            gt_dir = candidate
-            print(f"[INFO] Auto-detected ground truth: {gt_dir}")
+        has_inputs = any(
+            Path(f).suffix.lower() in INPUT_SUFFIXES
+            for f in os.listdir(input_dir)
+            if os.path.isfile(os.path.join(input_dir, f))
+        )
+        if not has_inputs and args.use_raw and not args.official:
+            fallback = "data/raw"
+            if os.path.isdir(fallback):
+                print(f"[INFO] {input_dir} is empty, explicit fallback to {fallback}")
+                input_dir = fallback
 
-    runner = BenchmarkRunner(input_dir, gt_dir, args.output, args.limit)
-    runner.run()
+        # Auto-detect ground-truth directory
+        if gt_dir is None:
+            candidate = os.path.join(input_dir, "labels")
+            if os.path.isdir(candidate):
+                gt_dir = candidate
+                print(f"[INFO] Auto-detected ground truth: {gt_dir}")
 
+    try:
+        runner = BenchmarkRunner(
+            input_dir=input_dir,
+            gt_dir=gt_dir,
+            output_dir=args.output,
+            limit=args.limit,
+            manifest_path=args.manifest,
+            official=args.official,
+        )
+        runner.run()
+    except ManifestError as exc:
+        raise SystemExit(f"[ERROR] {exc}")

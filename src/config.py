@@ -10,6 +10,20 @@ import os
 from pathlib import Path
 
 
+def _env_flag(name: str, default: bool = False) -> bool:
+    value = os.environ.get(name)
+    if value is None:
+        return default
+    return value.strip().lower() in {"1", "true", "yes", "on"}
+
+
+def _env_csv(name: str, default: list[str]) -> list[str]:
+    value = os.environ.get(name)
+    if value is None:
+        return default
+    return [item.strip() for item in value.split(",") if item.strip()]
+
+
 class Config:
     """Configuration chính cho toàn bộ VietIDP pipeline."""
 
@@ -103,14 +117,16 @@ class Config:
     CELERY_RESULT_BACKEND = os.environ.get("CELERY_RESULT_BACKEND", REDIS_URL)
 
     # ── Security ─────────────────────────────────────────────────────────
-    API_KEY = os.environ.get("VIETIDP_API_KEY", "")
-    CORS_ORIGINS = [
+    APP_ENV = os.environ.get("VIETIDP_ENV", os.environ.get("ENV", "development")).strip().lower()
+    API_KEY = os.environ.get("VIETIDP_API_KEY", "").strip()
+    REQUIRE_API_KEY = _env_flag("VIETIDP_REQUIRE_API_KEY", default=APP_ENV in {"production", "staging"})
+    CORS_ORIGINS = _env_csv("VIETIDP_CORS_ORIGINS", [
         "http://localhost:3000",
         "http://localhost:5173",
         "http://127.0.0.1:5173",
         "http://127.0.0.1:5174",
-        "http://localhost:5174"
-    ]
+        "http://localhost:5174",
+    ])
 
     # ── Vietnamese Fonts (Windows → Linux fallback) ──────────────────────
     FONT_PATHS = [
