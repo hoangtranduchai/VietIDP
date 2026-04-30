@@ -1,17 +1,29 @@
 import { useState, useEffect } from 'react'
 import { useLocale } from '../LocaleContext'
 
-export default function DocumentViewer({ imageUrl, stamps = [], highlightBboxes = null, filename, pages = [], style, onToggleCollapse, isCollapsed }) {
+export default function DocumentViewer({ imageUrl, documentUrl = null, useGeneratedPagePreviews = false, stamps = [], highlightBboxes = null, filename, pages = [], pageCount = 0, onPageRequest, style, onToggleCollapse, isCollapsed }) {
   const [zoom, setZoom] = useState(1)
   const [imgSize, setImgSize] = useState({ w: 1, h: 1 })
   const [currentPageIndex, setCurrentPageIndex] = useState(0)
   const [currentStampIndex, setCurrentStampIndex] = useState(-1)
   const { t } = useLocale()
   
-  const isPdf = imageUrl?.toLowerCase().endsWith('.pdf')
+  const isPdf = (filename || imageUrl || '').toLowerCase().endsWith('.pdf')
+  const usesImagePages = !isPdf || useGeneratedPagePreviews
 
-  const allPages = pages.length > 0 ? pages : (imageUrl ? [imageUrl] : [])
-  const currentImage = allPages[currentPageIndex] || imageUrl
+  const totalPages = Math.max(pageCount, pages.length, imageUrl ? 1 : 0)
+  const allPages = Array.from({ length: totalPages }, (_, index) => pages[index] || null)
+  const currentImage = allPages[currentPageIndex] || null
+
+  useEffect(() => {
+    setCurrentPageIndex((current) => Math.min(current, Math.max(totalPages - 1, 0)))
+  }, [totalPages])
+
+  useEffect(() => {
+    if (usesImagePages && onPageRequest && totalPages > 0) {
+      onPageRequest(currentPageIndex)
+    }
+  }, [currentPageIndex, onPageRequest, totalPages, usesImagePages])
 
   useEffect(() => {
     if (highlightBboxes && highlightBboxes.length > 0) {
@@ -70,24 +82,29 @@ export default function DocumentViewer({ imageUrl, stamps = [], highlightBboxes 
       <div className="pane-body" style={{ display: 'flex', flexDirection: 'row', position: 'relative' }}>
         
         {/* Thumbnail Sidebar */}
-        {!isPdf && allPages.length > 0 && (
+        {usesImagePages && totalPages > 0 && (
           <div style={{
             width: 80, borderRight: '1px solid var(--border)', background: 'var(--bg-elevated)',
             display: 'flex', flexDirection: 'column', gap: 10, padding: 10, overflowY: 'auto', flexShrink: 0
           }}>
             {allPages.map((pageUrl, idx) => (
-              <div 
-                key={idx} 
+              <div
+                key={idx}
                 onClick={() => setCurrentPageIndex(idx)}
                 style={{
                   width: '100%', aspectRatio: '1/1.4', borderRadius: 4, cursor: 'pointer',
                   border: currentPageIndex === idx ? '2px solid var(--accent)' : '1px solid var(--border)',
                   overflow: 'hidden', position: 'relative',
                   background: 'white', opacity: currentPageIndex === idx ? 1 : 0.6,
-                  transition: 'all 0.2s'
+                  transition: 'all 0.2s',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center'
                 }}
               >
-                <img src={pageUrl} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt={`Page ${idx + 1}`} />
+                {pageUrl ? (
+                  <img src={pageUrl} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt={`Page ${idx + 1}`} />
+                ) : (
+                  <span className="material-symbols-outlined" style={{ fontSize: 20, color: 'var(--text-muted)' }}>hourglass_top</span>
+                )}
                 {stamps.length > 0 && currentPageIndex === idx && (
                   <div style={{ position: 'absolute', top: 4, right: 4, width: 8, height: 8, borderRadius: '50%', background: 'var(--accent-error)' }} />
                 )}
@@ -101,7 +118,7 @@ export default function DocumentViewer({ imageUrl, stamps = [], highlightBboxes 
         <div className="document-viewer" style={{ flex: 1, position: 'relative', overflow: 'auto' }}>
           
           {/* Stamp Navigator Overlay */}
-          {!isPdf && stamps.length > 0 && (
+          {usesImagePages && stamps.length > 0 && (
             <div style={{
               position: 'absolute', top: 16, right: 16, zIndex: 100,
               background: 'rgba(10, 14, 23, 0.85)', backdropFilter: 'blur(10px)',
@@ -126,24 +143,31 @@ export default function DocumentViewer({ imageUrl, stamps = [], highlightBboxes 
             </div>
           )}
 
-          {currentImage ? (
-            isPdf ? (
+          {isPdf && !useGeneratedPagePreviews ? (
+            documentUrl ? (
               <div className="document-canvas" style={{ height: '100%', minHeight: 600 }}>
-                <iframe src={`${imageUrl}#toolbar=0&navpanes=0&scrollbar=0`} width="100%" height="100%" style={{ border: 'none', borderRadius: 4 }} title="PDF Document" />
+                <iframe src={`${documentUrl}#toolbar=0&navpanes=0&scrollbar=0`} width="100%" height="100%" style={{ border: 'none', borderRadius: 4 }} title="PDF Document" />
               </div>
             ) : (
-              <div className="document-canvas" style={{ width: `${zoom * 100}%`, transition: 'width 0.2s var(--ease)', margin: '0 auto', position: 'relative' }}>
-                <img 
-                  src={currentImage} 
-                  alt={filename || 'Document'} 
-                  onLoad={(e) => setImgSize({ w: e.target.naturalWidth || 1, h: e.target.naturalHeight || 1 })}
-                />
-                {/* YOLO Stamp BBox overlays */}
-                {stamps.map((stamp, i) => {
-                  if ((stamp.page || 1) !== currentPageIndex + 1) return null;
-                  
-                  return (
-                    <div key={i} style={{
+              <div className="document-placeholder">
+                <span className="material-symbols-outlined">description</span>
+                <h3>{t('noDoc')}</h3>
+                <p>{t('noDocSub')}</p>
+              </div>
+            )
+          ) : currentImage ? (
+            <div className="document-canvas" style={{ width: `${zoom * 100}%`, transition: 'width 0.2s var(--ease)', margin: '0 auto', position: 'relative' }}>
+              <img
+                src={currentImage}
+                alt={filename || 'Document'}
+                onLoad={(e) => setImgSize({ w: e.target.naturalWidth || 1, h: e.target.naturalHeight || 1 })}
+              />
+              {/* YOLO Stamp BBox overlays */}
+              {stamps.map((stamp, i) => {
+                if ((stamp.page || 1) !== currentPageIndex + 1) return null
+
+                return (
+                  <div key={i} style={{
                     position: 'absolute',
                     left: `${(stamp.x1 / imgSize.w) * 100}%`, top: `${(stamp.y1 / imgSize.h) * 100}%`,
                     width: `${((stamp.x2 - stamp.x1) / imgSize.w) * 100}%`,
@@ -170,30 +194,29 @@ export default function DocumentViewer({ imageUrl, stamps = [], highlightBboxes 
                       Dấu pháp lý - Confidence: {Math.round(stamp.confidence * 100)}%
                     </div>
                   </div>
-                  );
-                })}
+                )
+              })}
 
-                {/* Text Grounding BBox overlays */}
-                {highlightBboxes && highlightBboxes.map((bbox, i) => {
-                  if ((bbox.page || 1) !== currentPageIndex + 1) return null;
-                  
-                  return (
-                    <div key={`hl-${i}`} style={{
-                      position: 'absolute',
-                      left: `${(bbox.x1 / imgSize.w) * 100}%`, top: `${(bbox.y1 / imgSize.h) * 100}%`,
-                      width: `${((bbox.x2 - bbox.x1) / imgSize.w) * 100}%`,
-                      height: `${((bbox.y2 - bbox.y1) / imgSize.h) * 100}%`,
-                      border: '2px solid var(--accent-cyan)',
-                      borderRadius: 2,
-                      background: 'rgba(34, 211, 238, 0.2)',
-                      pointerEvents: 'none',
-                      boxShadow: '0 0 10px rgba(34, 211, 238, 0.5), inset 0 0 5px rgba(34, 211, 238, 0.3)',
-                      zIndex: 15,
-                    }} />
-                  )
-                })}
-              </div>
-            )
+              {/* Text Grounding BBox overlays */}
+              {highlightBboxes && highlightBboxes.map((bbox, i) => {
+                if ((bbox.page || 1) !== currentPageIndex + 1) return null
+
+                return (
+                  <div key={`hl-${i}`} style={{
+                    position: 'absolute',
+                    left: `${(bbox.x1 / imgSize.w) * 100}%`, top: `${(bbox.y1 / imgSize.h) * 100}%`,
+                    width: `${((bbox.x2 - bbox.x1) / imgSize.w) * 100}%`,
+                    height: `${((bbox.y2 - bbox.y1) / imgSize.h) * 100}%`,
+                    border: '2px solid var(--accent-cyan)',
+                    borderRadius: 2,
+                    background: 'rgba(34, 211, 238, 0.2)',
+                    pointerEvents: 'none',
+                    boxShadow: '0 0 10px rgba(34, 211, 238, 0.5), inset 0 0 5px rgba(34, 211, 238, 0.3)',
+                    zIndex: 15,
+                  }} />
+                )
+              })}
+            </div>
           ) : (
             <div className="document-placeholder">
               <span className="material-symbols-outlined">description</span>

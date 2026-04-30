@@ -26,7 +26,10 @@ services:
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
       - OLLAMA_URL=http://ollama:11434/api/generate
       - OLLAMA_MODEL=qwen2.5:7b
+      - VIETIDP_ENV=${VIETIDP_ENV:-development}
+      - VIETIDP_REQUIRE_API_KEY=${VIETIDP_REQUIRE_API_KEY:-false}
       - VIETIDP_API_KEY=${VIETIDP_API_KEY:-}
+      - VIETIDP_CORS_ORIGINS=${VIETIDP_CORS_ORIGINS:-http://localhost:3000,http://localhost:5173,http://127.0.0.1:5173,http://127.0.0.1:5174,http://localhost:5174}
     depends_on:
       postgres:
         condition: service_healthy
@@ -61,6 +64,10 @@ services:
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
       - OLLAMA_URL=http://ollama:11434/api/generate
       - OLLAMA_MODEL=qwen2.5:7b
+      - VIETIDP_ENV=${VIETIDP_ENV:-development}
+      - VIETIDP_REQUIRE_API_KEY=${VIETIDP_REQUIRE_API_KEY:-false}
+      - VIETIDP_API_KEY=${VIETIDP_API_KEY:-}
+      - VIETIDP_CORS_ORIGINS=${VIETIDP_CORS_ORIGINS:-http://localhost:3000,http://localhost:5173,http://127.0.0.1:5173,http://127.0.0.1:5174,http://localhost:5174}
     depends_on:
       - backend
     deploy:
@@ -77,6 +84,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.frontend
+      args:
+        VITE_API_URL: ${VITE_API_URL:-}
+        VITE_API_KEY: ${VITE_API_KEY:-}
     container_name: vietidp-frontend
     ports:
       - "3000:80"

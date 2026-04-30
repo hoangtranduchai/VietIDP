@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import annotations
+
 """
 VietIDP Report Generator
 ==========================
@@ -20,6 +22,24 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
 
+def _format_metric(value):
+    return f"{value:.4f}" if isinstance(value, (int, float)) else 'N/A'
+
+
+def _legacy_debug_f1(result: dict):
+    legacy = result.get('legacy_debug_extraction_f1') or result.get('f1_score')
+    if isinstance(legacy, dict):
+        return legacy.get('f1')
+    return None
+
+
+def _summary_metric(summary: dict, preferred_key: str, fallback_key: str | None = None):
+    value = summary.get(preferred_key)
+    if value is None and fallback_key:
+        value = summary.get(fallback_key)
+    return _format_metric(value)
+
+
 def generate_html_report(data: dict, output_path: str):
     """Sinh báo cáo HTML từ benchmark results."""
     summary = data.get('summary', {})
@@ -30,11 +50,12 @@ def generate_html_report(data: dict, output_path: str):
     rows_html = ""
     for r in results:
         status_class = 'success' if r.get('status') == 'success' else 'fail'
-        cer = f"{r.get('cer', 'N/A'):.4f}" if isinstance(r.get('cer'), (int, float)) else 'N/A'
-        wer = f"{r.get('wer', 'N/A'):.4f}" if isinstance(r.get('wer'), (int, float)) else 'N/A'
-        f1 = 'N/A'
-        if r.get('f1_score'):
-            f1 = f"{r['f1_score'].get('f1', 0):.4f}"
+        cer = _format_metric(r.get('cer'))
+        wer = _format_metric(r.get('wer'))
+        legacy_f1 = _format_metric(_legacy_debug_f1(r))
+        strict_macro = r.get('strict_extraction_metrics', {}).get('macro', {})
+        strict_normalized = _format_metric(strict_macro.get('normalized_exact_match'))
+        strict_token_f1 = _format_metric(strict_macro.get('token_f1'))
 
         extraction = r.get('extraction', {})
         doc_type = extraction.get('loai_van_ban', '')
@@ -50,7 +71,9 @@ def generate_html_report(data: dict, output_path: str):
             <td>{r.get('text_length', '')}</td>
             <td>{cer}</td>
             <td>{wer}</td>
-            <td>{f1}</td>
+            <td>{legacy_f1}</td>
+            <td>{strict_normalized}</td>
+            <td>{strict_token_f1}</td>
             <td>{doc_type}</td>
             <td style="font-family:monospace;font-size:12px">{doc_id}</td>
         </tr>"""
@@ -105,18 +128,28 @@ def generate_html_report(data: dict, output_path: str):
             </div>
             <div class="card">
                 <div class="card-label">Avg CER</div>
-                <div class="card-value">{summary.get('avg_cer', 'N/A') if summary.get('avg_cer') is None else f"{summary['avg_cer']:.4f}"}</div>
+                <div class="card-value">{_format_metric(summary.get('avg_cer'))}</div>
                 <div class="card-sub">Character Error Rate</div>
             </div>
             <div class="card">
                 <div class="card-label">Avg WER</div>
-                <div class="card-value">{summary.get('avg_wer', 'N/A') if summary.get('avg_wer') is None else f"{summary['avg_wer']:.4f}"}</div>
+                <div class="card-value">{_format_metric(summary.get('avg_wer'))}</div>
                 <div class="card-sub">Word Error Rate</div>
             </div>
             <div class="card">
-                <div class="card-label">Avg F1</div>
-                <div class="card-value">{summary.get('avg_f1', 'N/A') if summary.get('avg_f1') is None else f"{summary['avg_f1']:.4f}"}</div>
-                <div class="card-sub">Extraction Accuracy</div>
+                <div class="card-label">Legacy Debug F1</div>
+                <div class="card-value">{_summary_metric(summary, 'legacy_debug_avg_f1', 'avg_f1')}</div>
+                <div class="card-sub">Substring legacy metric</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Strict Normalized</div>
+                <div class="card-value">{_format_metric(summary.get('strict_macro_normalized_exact_match'))}</div>
+                <div class="card-sub">Macro normalized exact</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Strict Token F1</div>
+                <div class="card-value">{_format_metric(summary.get('strict_macro_token_f1'))}</div>
+                <div class="card-sub">Macro token overlap</div>
             </div>
         </div>
 
@@ -132,7 +165,9 @@ def generate_html_report(data: dict, output_path: str):
                     <th>Chars</th>
                     <th>CER</th>
                     <th>WER</th>
-                    <th>F1</th>
+                    <th>Legacy Debug F1</th>
+                    <th>Strict Norm</th>
+                    <th>Token F1</th>
                     <th>Doc Type</th>
                     <th>Doc ID</th>
                 </tr>

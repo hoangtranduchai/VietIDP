@@ -20,16 +20,38 @@ data/llm_training/*
 # Thư mục chứa tài liệu Upload của người dùng qua giao diện Web
 apps/backend/uploads/
 apps/frontend/public/temp_uploads/
+data/uploads/
+
+# Runtime artifacts / local volumes
+results/
+debug_outputs/
+artifacts/
+cache/
+.tmp/
+tmp/
+pgdata/
+postgres_data/
+redis-data/
+redis_data/
+chromadb/
+data/chromadb/
+data/cache/
+data/tmp/
+/vietidp.db
+*.sqlite
+*.sqlite3
+data/*.db
+data/**/*.db
 
 # Các định dạng tài liệu nhạy cảm nếu vô tình để quên ở Root
-*.pdf
-*.docx
-*.doc
-*.png
-*.jpg
-*.jpeg
-*.tif
-*.tiff
+/*.pdf
+/*.docx
+/*.doc
+/*.png
+/*.jpg
+/*.jpeg
+/*.tif
+/*.tiff
 # Ngoại trừ các ảnh phục vụ cho README.md
 !docs/images/
 !README.md

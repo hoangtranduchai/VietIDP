@@ -1,37 +1,23 @@
-# Use Python 3.10 and Node 20 as base
-FROM nikolaik/python-nodejs:python3.10-nodejs20
+FROM python:3.10-slim
 
 WORKDIR /app
 
-# Install system dependencies required for OpenCV + PaddleOCR
-RUN apt-get update && apt-get install -y \
+ENV PYTHONUNBUFFERED=1
+
+# Install system dependencies required by OCR/image libraries
+RUN apt-get update && apt-get install -y --no-install-recommends \
     libgl1 \
     libglib2.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy backend requirements and install
-COPY backend/package*.json ./backend/
-RUN cd backend && npm install
-
-# Install Python requirements
-COPY requirements.txt ./
+# Install Python dependencies first for better layer caching
+COPY requirements.txt setup.py ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
-COPY ai/ ./ai/
+# Copy only the canonical FastAPI application source
 COPY src/ ./src/
-COPY backend/ ./backend/
-COPY setup.py ./
-COPY .env.example ./.env
+RUN pip install --no-cache-dir -e .
 
-# Install src as package
-RUN pip install -e .
+EXPOSE 8000
 
-# Expose backend API port
-EXPOSE 5000
-
-# Set environment to production
-ENV NODE_ENV=production
-
-# Start Node.js server
-CMD ["node", "backend/index.js"]
+CMD ["python", "-m", "uvicorn", "src.api.fastapi_app:app", "--host", "0.0.0.0", "--port", "8000"]
