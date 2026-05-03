@@ -1,20 +1,38 @@
 # -*- coding: utf-8 -*-
 """
-Database Models (SQLAlchemy + PostgreSQL)
-==========================================
+Database Models (SQLAlchemy + PostgreSQL/SQLite)
+================================================
 Models lưu trữ văn bản, kết quả trích xuất và log xử lý.
+
+Database selection:
+- Production: PostgreSQL (set DATABASE_URL env var)
+- Development: SQLite auto-fallback (explicit, not silent)
 """
 
+import logging
 import os
-from datetime import datetime
+from datetime import datetime, timezone
+
 from sqlalchemy import (
-    create_engine, Column, Integer, String, Text, Float,
-    DateTime, JSON, Boolean, ForeignKey, Enum
+    Boolean, Column, DateTime, Float, ForeignKey,
+    Integer, JSON, String, Text, create_engine, event,
 )
-from sqlalchemy.orm import declarative_base, sessionmaker, relationship
+from sqlalchemy.orm import declarative_base, relationship, sessionmaker
+
 from src.config import Config
 
+logger = logging.getLogger(__name__)
+
 Base = declarative_base()
+
+
+# ═══════════════════════════════════════════════════════════════════════
+# ORM Models
+# ═══════════════════════════════════════════════════════════════════════
+
+
+def _utcnow():
+    return datetime.now(timezone.utc)
 
 
 class Document(Base):
@@ -28,8 +46,8 @@ class Document(Base):
     file_size = Column(Integer)  # bytes
     num_pages = Column(Integer, default=1)
     status = Column(String(20), default="pending")  # pending, processing, completed, failed
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = Column(DateTime, default=_utcnow)
+    updated_at = Column(DateTime, default=_utcnow, onupdate=_utcnow)
 
     # Relationships
     extraction = relationship("ExtractionResult", back_populates="document", uselist=False, cascade="all, delete-orphan")
@@ -79,7 +97,7 @@ class ExtractionResult(Base):
     processing_time = Column(Float)  # seconds
 
     # Timestamps
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=_utcnow)
     verified_by_user = Column(Boolean, default=False)
 
     # Relationship
@@ -117,7 +135,7 @@ class ProcessingLog(Base):
     status = Column(String(20))  # started, completed, failed
     message = Column(Text)
     duration = Column(Float)  # seconds
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=_utcnow)
 
     document = relationship("Document", back_populates="logs")
 
@@ -130,22 +148,70 @@ _engine = None
 _SessionLocal = None
 
 
+def _resolve_database_url() -> str:
+    """Resolve the database URL with explicit dev/prod logic.
+
+    - Production (VIETIDP_ENV=production): PostgreSQL required, no fallback.
+    - Development (default): Try PostgreSQL first, fallback to SQLite with warning.
+    """
+    db_url = Config.DATABASE_URL
+    is_prod = Config.APP_ENV in {"production", "staging"}
+
+    if db_url.startswith("sqlite"):
+        # Explicit SQLite — always allowed
+        logger.info("Using explicit SQLite database: %s", db_url)
+        return db_url
+
+    # Try PostgreSQL connection
+    try:
+        test_engine = create_engine(db_url, echo=False)
+        with test_engine.connect() as conn:
+            conn.execute(test_engine.raw_connection().cursor().execute("SELECT 1") or "SELECT 1")
+        test_engine.dispose()
+        logger.info("Connected to PostgreSQL: %s", db_url[:50])
+        return db_url
+    except Exception as e:
+        if is_prod:
+            logger.critical("PostgreSQL connection failed in production mode: %s", e)
+            raise RuntimeError(
+                f"PostgreSQL is required in production mode but connection failed: {e}. "
+                "Set DATABASE_URL to a valid PostgreSQL connection string."
+            ) from e
+
+        # Dev mode: graceful SQLite fallback
+        sqlite_path = str(Config.DATA_DIR / "vietidp.db")
+        sqlite_url = f"sqlite:///{sqlite_path}"
+        logger.warning(
+            "PostgreSQL unavailable (%s). Using SQLite dev fallback: %s",
+            type(e).__name__, sqlite_path,
+        )
+        return sqlite_url
+
+
 def get_engine():
     """Lấy hoặc tạo database engine."""
     global _engine
     if _engine is None:
-        db_url = Config.DATABASE_URL
-        # Fallback sang SQLite nếu PostgreSQL không available
-        try:
-            _engine = create_engine(db_url, echo=Config.DATABASE_ECHO)
-            # Test connection
-            with _engine.connect() as conn:
-                conn.execute(Base.metadata.create_all(_engine) or "SELECT 1")
-        except Exception:
-            print("⚠️ PostgreSQL không khả dụng, dùng SQLite fallback")
-            sqlite_path = str(Config.DATA_DIR / "vietidp.db")
-            db_url = f"sqlite:///{sqlite_path}"
-            _engine = create_engine(db_url, echo=Config.DATABASE_ECHO)
+        db_url = _resolve_database_url()
+
+        connect_args = {}
+        if db_url.startswith("sqlite"):
+            connect_args["check_same_thread"] = False
+
+        _engine = create_engine(
+            db_url,
+            echo=Config.DATABASE_ECHO,
+            connect_args=connect_args,
+        )
+
+        # Enable WAL mode for SQLite (better concurrent reads)
+        if db_url.startswith("sqlite"):
+            @event.listens_for(_engine, "connect")
+            def set_sqlite_pragma(dbapi_conn, connection_record):
+                cursor = dbapi_conn.cursor()
+                cursor.execute("PRAGMA journal_mode=WAL")
+                cursor.execute("PRAGMA foreign_keys=ON")
+                cursor.close()
 
         Base.metadata.create_all(_engine)
     return _engine
@@ -163,4 +229,6 @@ def init_db():
     """Khởi tạo database (tạo tất cả bảng)."""
     engine = get_engine()
     Base.metadata.create_all(engine)
-    print("✅ Database initialized")
+
+    db_type = "PostgreSQL" if "postgresql" in str(engine.url) else "SQLite"
+    logger.info("✅ Database initialized (%s)", db_type)

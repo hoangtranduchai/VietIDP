@@ -1,0 +1,96 @@
+name: VietIDP CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # ── Python Backend Tests ─────────────────────────────────────────
+  backend-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install fastapi uvicorn sqlalchemy pydantic python-multipart
+          pip install pytest pytest-cov
+
+      - name: Run backend tests
+        run: pytest tests/ -v --tb=short -x
+        env:
+          DATABASE_URL: "sqlite:///test.db"
+          VIETIDP_ENV: "test"
+
+  # ── Frontend Build ───────────────────────────────────────────────
+  frontend-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install frontend dependencies
+        working-directory: apps/frontend
+        run: npm ci
+
+      - name: Build frontend
+        working-directory: apps/frontend
+        run: npm run build
+
+  # ── Artifact Guard ──────────────────────────────────────────────
+  artifact-guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for sensitive files
+        run: |
+          FAIL=0
+          # Check for model weights
+          if git ls-files | grep -E '\.(pt|pth|onnx|safetensors|gguf|bin|h5)$'; then
+            echo "::error::Model weight files found in tracked files!"
+            FAIL=1
+          fi
+          # Check for sensitive documents
+          if git ls-files | grep -E '\.(pdf|docx|doc)$' | grep -v 'docs/'; then
+            echo "::error::Sensitive document files found in tracked files!"
+            FAIL=1
+          fi
+          # Check for database files
+          if git ls-files | grep -E '\.(db|sqlite|sqlite3)$'; then
+            echo "::error::Database files found in tracked files!"
+            FAIL=1
+          fi
+          # Check for log files
+          if git ls-files | grep -E '\.log$'; then
+            echo "::error::Log files found in tracked files!"
+            FAIL=1
+          fi
+          # Check for large files (>10MB)
+          git ls-files -z | xargs -0 -I{} sh -c 'size=$(wc -c < "{}"); if [ $size -gt 10485760 ]; then echo "LARGE: {} ($size bytes)"; exit 1; fi' || FAIL=1
+          exit $FAIL
+
+  # ── Docker Build Smoke ─────────────────────────────────────────
+  docker-smoke:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build backend image
+        run: docker build -f Dockerfile.backend -t vietidp-backend:test .
+
+      - name: Build frontend image
+        run: docker build -f Dockerfile.frontend -t vietidp-frontend:test .

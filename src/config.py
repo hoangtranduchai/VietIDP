@@ -104,10 +104,12 @@ class Config:
     LLM_NUM_EPOCHS = 3
     LLM_LEARNING_RATE = 2e-4
 
-    # ── PostgreSQL Database ──────────────────────────────────────────────
+    # ── Database ─────────────────────────────────────────────────────────
+    # Production: set DATABASE_URL to PostgreSQL connection string
+    # Development: defaults to SQLite for zero-setup dev experience
     DATABASE_URL = os.environ.get(
         "DATABASE_URL",
-        "postgresql://vietidp:vietidp@localhost:5432/vietidp"
+        f"sqlite:///{os.path.join(os.environ.get('VIETIDP_BASE_DIR', str(Path(__file__).resolve().parent.parent)), 'data', 'vietidp.db')}"
     )
     DATABASE_ECHO = os.environ.get("DATABASE_ECHO", "false").lower() == "true"
 
