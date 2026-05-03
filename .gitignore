@@ -1,12 +1,13 @@
 # =========================================================================
-# OCR-LLM RESEARCH - MASTER MLOPS GITIGNORE
+# VietIDP — MASTER GITIGNORE
 # =========================================================================
-# Mục tiêu: Đảm bảo bảo mật 100% dữ liệu hành chính (On-premise)
-#          Ngăn chặn rò rỉ tài nguyên, rác VRAM và giới hạn GitHub.
+# Canonical stack: FastAPI + React/Vite + PostgreSQL + Ollama
+# Mục tiêu: Bảo mật 100% dữ liệu hành chính (On-premise)
+#           Ngăn rò rỉ tài nguyên, giới hạn GitHub 100MB/file.
 
 # -------------------------------------------------------------------------
-# 1. BẢO MẬT DỮ LIỆU & TÀI LIỆU (DATA SECURITY - CẤP ĐỘ 1)
-# Tuyệt đối không đẩy bất kỳ dữ liệu thật nào của Quốc gia/Cơ quan lên Mạng.
+# 1. BẢO MẬT DỮ LIỆU & TÀI LIỆU (DATA SECURITY)
+# Tuyệt đối không đẩy dữ liệu thật của Quốc gia/Cơ quan lên Mạng.
 # -------------------------------------------------------------------------
 data/raw/*
 data/interim/*
@@ -17,10 +18,12 @@ data/llm_training/*
 !data/interim/.gitkeep
 !data/processed/.gitkeep
 
-# Thư mục chứa tài liệu Upload của người dùng qua giao diện Web
+# Upload directories (user documents via web UI)
+data/uploads/
 apps/backend/uploads/
 apps/frontend/public/temp_uploads/
-data/uploads/
+backend/uploads/
+uploads/
 
 # Runtime artifacts / local volumes
 results/
@@ -37,13 +40,15 @@ chromadb/
 data/chromadb/
 data/cache/
 data/tmp/
+
+# Database files
 /vietidp.db
 *.sqlite
 *.sqlite3
 data/*.db
 data/**/*.db
 
-# Các định dạng tài liệu nhạy cảm nếu vô tình để quên ở Root
+# Sensitive document formats at root
 /*.pdf
 /*.docx
 /*.doc
@@ -52,14 +57,13 @@ data/**/*.db
 /*.jpeg
 /*.tif
 /*.tiff
-# Ngoại trừ các ảnh phục vụ cho README.md
+# Exceptions for README assets
 !docs/images/
 !README.md
 !*.md
 
 # -------------------------------------------------------------------------
-# 2. TRỌNG SỐ MÔ HÌNH & CHUYÊN GIA AI (MODEL WEIGHTS)
-# GitHub giới hạn 100MB/file. Đẩy models lên sẽ gây lỗi sập Repository.
+# 2. MODEL WEIGHTS (GitHub 100MB limit per file)
 # -------------------------------------------------------------------------
 models/base_models/*
 models/finetuned/*
@@ -69,7 +73,7 @@ models/qwen_finetuned/*
 !models/finetuned/.gitkeep
 !models/stamp_model/.gitkeep
 
-# Chặn mọi đuôi file Model khổng lồ
+# Block all large model file types
 *.pt
 *.pth
 *.onnx
@@ -82,23 +86,23 @@ models/qwen_finetuned/*
 *.ckpt
 
 # -------------------------------------------------------------------------
-# 3. NHẬT KÝ HUẤN LUYỆN & THEO DÕI ĐO LƯỜNG (LOGS & METRICS)
+# 3. TRAINING LOGS & METRICS
 # -------------------------------------------------------------------------
-# Thư mục xuất hệ thống Unsloth/HuggingFace Trainer
 outputs/
 runs/
 wandb/
 .hydra/
 mlruns/
+unsloth_compiled_cache/
 
-# Logs Backend/Hệ thống
+# System/Backend logs
 logs/
 *.log
 apps/backend/out.log
 apps/backend/err.log
 
 # -------------------------------------------------------------------------
-# 4. THÔNG TIN CẤU HÌNH NHẠY CẢM (SECRETS & CONFIGS)
+# 4. SECRETS & CONFIG
 # -------------------------------------------------------------------------
 .env
 .env.*
@@ -108,7 +112,7 @@ client_secret.json
 auth.json
 
 # -------------------------------------------------------------------------
-# 5. MÔI TRƯỜNG PYTHON CỤC BỘ (PYTHON ENVIRONMENT)
+# 5. PYTHON ENVIRONMENT
 # -------------------------------------------------------------------------
 __pycache__/
 *.py[cod]
@@ -123,16 +127,18 @@ venv.bak/
 pip-log.txt
 pip-delete-this-directory.txt
 .pytest_cache/
+*.egg-info/
+dist/
 
 # -------------------------------------------------------------------------
-# 6. MÔI TRƯỜNG THỰC THI JUPYTER (NOTEBOOKS)
+# 6. JUPYTER NOTEBOOKS
 # -------------------------------------------------------------------------
 .ipynb_checkpoints
 profile_default/
 ipython_config.py
 
 # -------------------------------------------------------------------------
-# 7. MÔI TRƯỜNG REACT/NODEJS (FRONTEND/BACKEND)
+# 7. NODE.JS / REACT / FRONTEND
 # -------------------------------------------------------------------------
 node_modules/
 apps/frontend/node_modules/
@@ -147,7 +153,7 @@ yarn-error.log*
 out/
 
 # -------------------------------------------------------------------------
-# 8. HỆ ĐIỀU HÀNH & CÔNG CỤ PHÁT TRIỂN (OS & IDE)
+# 8. OS & IDE
 # -------------------------------------------------------------------------
 .DS_Store
 .DS_Store?
@@ -163,3 +169,18 @@ ehthumbs_vista.db
 *.suo
 *.user
 *.pid
+
+# -------------------------------------------------------------------------
+# 9. LEGACY / QUARANTINED
+# -------------------------------------------------------------------------
+# Express backend is archived — do not commit its node_modules
+apps/backend/node_modules/
+apps/backend/package-lock.json
+apps/backend/package_lock.json
+
+# -------------------------------------------------------------------------
+# 10. CLAUDE / GEMINI / AI AGENT STATE
+# -------------------------------------------------------------------------
+.claude/
+.gemini/
+.playwright-mcp/

@@ -21,6 +21,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
 from src.config import Config
+from src.evaluation.bootstrap import DEFAULT_BOOTSTRAP_ITERATIONS, DEFAULT_CONFIDENCE, DEFAULT_SEED, bootstrap_ci_from_metric_path
 from src.evaluation.extraction_metrics import compute_field_metrics
 from src.evaluation.manifest import INPUT_SUFFIXES, DatasetManifest, ManifestEntry, ManifestError
 
@@ -335,6 +336,16 @@ class BenchmarkRunner:
             for r in successful if 'strict_extraction_metrics' in r
         ]
 
+        confidence_intervals = {
+            'avg_cer': bootstrap_ci_from_metric_path(successful, 'cer'),
+            'avg_wer': bootstrap_ci_from_metric_path(successful, 'wer'),
+            'legacy_debug_avg_f1': bootstrap_ci_from_metric_path(successful, 'legacy_debug_extraction_f1.f1'),
+            'strict_macro_exact_match': bootstrap_ci_from_metric_path(successful, 'strict_extraction_metrics.macro.strict_exact_match'),
+            'strict_macro_normalized_exact_match': bootstrap_ci_from_metric_path(successful, 'strict_extraction_metrics.macro.normalized_exact_match'),
+            'strict_macro_token_f1': bootstrap_ci_from_metric_path(successful, 'strict_extraction_metrics.macro.token_f1'),
+            'strict_macro_character_similarity': bootstrap_ci_from_metric_path(successful, 'strict_extraction_metrics.macro.character_similarity'),
+        }
+
         return {
             'total_files': len(results),
             'successful': len(successful),
@@ -352,6 +363,7 @@ class BenchmarkRunner:
             'strict_macro_normalized_exact_match': round(np.mean(strict_macro_normalized), 4) if strict_macro_normalized else None,
             'strict_macro_token_f1': round(np.mean(strict_macro_token_f1), 4) if strict_macro_token_f1 else None,
             'strict_macro_character_similarity': round(np.mean(strict_macro_char_similarity), 4) if strict_macro_char_similarity else None,
+            'confidence_intervals': confidence_intervals,
             'vram_peak_gb': round(vram_peak, 2),
         }
 
@@ -366,14 +378,27 @@ class BenchmarkRunner:
         print(f"  Avg time/file: {summary['avg_time']:.1f}s")
         print(f"  VRAM peak: {summary['vram_peak_gb']:.2f} GB")
 
+        def _print_ci(metric_key, label):
+            ci = summary.get('confidence_intervals', {}).get(metric_key)
+            if ci and ci.get('lower') is not None and ci.get('upper') is not None:
+                confidence_pct = int(round(ci.get('confidence', DEFAULT_CONFIDENCE) * 100))
+                print(
+                    f"      {label} {confidence_pct}% CI: "
+                    f"[{ci['lower']:.4f}, {ci['upper']:.4f}] "
+                    f"(n={ci.get('sample_size', 0)}, iters={ci.get('iterations', DEFAULT_BOOTSTRAP_ITERATIONS)}, seed={ci.get('seed', DEFAULT_SEED)})"
+                )
+
         if summary['avg_cer'] is not None:
             print(f"\n  OCR Metrics (vs Ground Truth):")
             print(f"    CER: {summary['avg_cer']:.4f}")
             print(f"    WER: {summary['avg_wer']:.4f}")
+            _print_ci('avg_cer', 'CER')
+            _print_ci('avg_wer', 'WER')
 
         if summary['legacy_debug_avg_f1'] is not None:
             print(f"\n  Extraction Metrics:")
             print(f"    Legacy debug F1: {summary['legacy_debug_avg_f1']:.4f}")
+            _print_ci('legacy_debug_avg_f1', 'Legacy debug F1')
 
         if summary['strict_macro_exact_match'] is not None:
             print(f"\n  Strict Extraction Metrics:")
@@ -381,6 +406,10 @@ class BenchmarkRunner:
             print(f"    Macro normalized exact: {summary['strict_macro_normalized_exact_match']:.4f}")
             print(f"    Macro token F1: {summary['strict_macro_token_f1']:.4f}")
             print(f"    Macro char similarity: {summary['strict_macro_character_similarity']:.4f}")
+            _print_ci('strict_macro_exact_match', 'Macro strict exact')
+            _print_ci('strict_macro_normalized_exact_match', 'Macro normalized exact')
+            _print_ci('strict_macro_token_f1', 'Macro token F1')
+            _print_ci('strict_macro_character_similarity', 'Macro char similarity')
 
 
 # ═══════════════════════════════════════════════════════════════════════

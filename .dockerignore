@@ -1,48 +1,82 @@
-node_modules/
+# =========================================================================
+# VietIDP — Docker Build Ignore
+# =========================================================================
+# Do NOT copy these into Docker image layers.
+# Data, models, and results should be mounted as volumes at runtime.
+
+# Git & IDE
 .git/
-.env
+.gitignore
+.vscode/
+.idea/
+.claude/
 .gemini/
-__pycache__/
-.pytest_cache/
+.playwright-mcp/
+
+# Python environment (image has its own)
 .venv/
+venv/
+env/
+__pycache__/
 *.pyc
 *.pyo
+.pytest_cache/
+*.egg-info/
 
-# Runtime artifacts / data volumes
+# Node (frontend has its own build stage)
+node_modules/
+apps/backend/node_modules/
+
+# Data volumes — mount at runtime, do NOT bake into image
+data/
 uploads/
 apps/backend/uploads/
-data/uploads/
 results/
 debug_outputs/
 artifacts/
-cache/
-.tmp/
-tmp/
-logs/
-*.log
-/vietidp.db
-*.sqlite
-*.sqlite3
-data/*.db
-data/**/*.db
-pgdata/
-postgres_data/
-redis-data/
-redis_data/
-chromadb/
-data/chromadb/
-data/cache/
-data/tmp/
 
-# Model weights and local training outputs
+# Model weights — mount at runtime
 models/
-outputs/
-runs/
-wandb/
-mlruns/
 *.pt
 *.pth
 *.onnx
 *.safetensors
 *.bin
 *.gguf
+*.h5
+
+# Training outputs
+outputs/
+runs/
+wandb/
+mlruns/
+unsloth_compiled_cache/
+
+# Database & cache
+*.sqlite
+*.sqlite3
+*.db
+pgdata/
+postgres_data/
+redis-data/
+redis_data/
+chromadb/
+cache/
+.tmp/
+tmp/
+
+# Logs
+logs/
+*.log
+
+# Secrets
+.env
+.env.*
+!.env.example
+credentials.json
+
+# Docs & non-runtime files
+docs/
+notebooks/
+*.md
+LICENSE

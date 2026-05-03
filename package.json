@@ -1,13 +1,15 @@
 {
-  "name": "ai_science",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "vietidp",
+  "version": "3.0.0",
+  "private": true,
+  "description": "VietIDP — Vietnamese Intelligent Document Processing (monorepo root)",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev:frontend": "cd apps/frontend && npm run dev",
+    "build:frontend": "cd apps/frontend && npm run build",
+    "lint:frontend": "cd apps/frontend && npm run lint",
+    "audit": "python scripts/audit_artifacts.py"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs"
+  "keywords": ["ocr", "llm", "vietnamese", "document-processing"],
+  "author": "VietIDP Research Team",
+  "license": "MIT"
 }

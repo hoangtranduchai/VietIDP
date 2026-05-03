@@ -16,6 +16,7 @@ import os
 import sys
 import json
 import argparse
+from html import escape
 from datetime import datetime
 from pathlib import Path
 
@@ -24,6 +25,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
 def _format_metric(value):
     return f"{value:.4f}" if isinstance(value, (int, float)) else 'N/A'
+
+
+def _html(value) -> str:
+    return escape(str(value), quote=True)
 
 
 def _legacy_debug_f1(result: dict):
@@ -40,11 +45,42 @@ def _summary_metric(summary: dict, preferred_key: str, fallback_key: str | None 
     return _format_metric(value)
 
 
+def _summary_value(summary: dict, key: str, default='N/A', suffix: str = '') -> str:
+    value = summary.get(key, default)
+    return f"{_html(value)}{suffix}"
+
+
+def _summary_percent(summary: dict, key: str) -> str:
+    value = summary.get(key, 0)
+    if isinstance(value, (int, float)):
+        return f"{value * 100:.1f}%"
+    return _html(value)
+
+
+def _metric_ci(summary: dict, metric_key: str) -> str:
+    ci = (summary.get('confidence_intervals') or {}).get(metric_key) or {}
+    lower = ci.get('lower')
+    upper = ci.get('upper')
+    if lower is None or upper is None:
+        return ''
+    confidence_pct = int(round((ci.get('confidence') or 0.95) * 100))
+    return f"{confidence_pct}% CI: {lower:.4f}–{upper:.4f}"
+
+
+def _card_subtitle(base_text: str, ci_text: str) -> str:
+    if not ci_text:
+        return base_text
+    return f"{base_text}<br>{ci_text}"
+
+
 def generate_html_report(data: dict, output_path: str):
     """Sinh báo cáo HTML từ benchmark results."""
     summary = data.get('summary', {})
     results = data.get('results', [])
-    timestamp = data.get('timestamp', datetime.now().isoformat())
+    timestamp = _html(data.get('timestamp', datetime.now().isoformat()))
+    manifest_path = _html(data.get('manifest_path') or 'N/A')
+    manifest_sha256 = _html(data.get('manifest_sha256') or 'N/A')
+    official_flag = 'Yes' if data.get('official') else 'No'
 
     # Build table rows
     rows_html = ""
@@ -58,17 +94,23 @@ def generate_html_report(data: dict, output_path: str):
         strict_token_f1 = _format_metric(strict_macro.get('token_f1'))
 
         extraction = r.get('extraction', {})
-        doc_type = extraction.get('loai_van_ban', '')
-        doc_id = extraction.get('so_hieu', '')
+        doc_type = _html(extraction.get('loai_van_ban', ''))
+        doc_id = _html(extraction.get('so_hieu', ''))
+        filename = _html(r.get('filename', ''))
+        status_text = _html(r.get('status', 'unknown'))
+        processing_time = _html(r.get('processing_time', 'N/A'))
+        num_pages = _html(r.get('num_pages', ''))
+        total_stamps = _html(r.get('total_stamps', ''))
+        text_length = _html(r.get('text_length', ''))
 
         rows_html += f"""
         <tr>
-            <td>{r.get('filename', '')}</td>
-            <td><span class="badge {status_class}">{r.get('status', 'unknown')}</span></td>
-            <td>{r.get('processing_time', 'N/A')}s</td>
-            <td>{r.get('num_pages', '')}</td>
-            <td>{r.get('total_stamps', '')}</td>
-            <td>{r.get('text_length', '')}</td>
+            <td>{filename}</td>
+            <td><span class="badge {status_class}">{status_text}</span></td>
+            <td>{processing_time}s</td>
+            <td>{num_pages}</td>
+            <td>{total_stamps}</td>
+            <td>{text_length}</td>
             <td>{cer}</td>
             <td>{wer}</td>
             <td>{legacy_f1}</td>
@@ -109,47 +151,65 @@ def generate_html_report(data: dict, output_path: str):
     <div class="container">
         <h1>VietIDP Benchmark Report</h1>
         <p class="subtitle">Generated: {timestamp} | Model: Qwen2.5-7B + VietOCR + YOLOv8x</p>
+        <div style="background:white;border:1px solid #e2e8f0;border-radius:12px;padding:16px 20px;margin-bottom:24px;box-shadow:0 1px 3px rgba(0,0,0,0.05)">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#94a3b8;margin-bottom:8px">Benchmark Provenance</div>
+            <div style="font-size:13px;color:#334155;line-height:1.7">
+                <div><strong>Official benchmark:</strong> {official_flag}</div>
+                <div><strong>Manifest path:</strong> <span style="font-family:monospace">{manifest_path}</span></div>
+                <div><strong>Manifest SHA256:</strong> <span style="font-family:monospace">{manifest_sha256}</span></div>
+            </div>
+        </div>
 
         <div class="cards">
             <div class="card">
                 <div class="card-label">Total Files</div>
-                <div class="card-value">{summary.get('total_files', 0)}</div>
-                <div class="card-sub">{summary.get('success_rate', 0)*100:.1f}% success rate</div>
+                <div class="card-value">{_summary_value(summary, 'total_files', 0)}</div>
+                <div class="card-sub">{_summary_percent(summary, 'success_rate')} success rate</div>
             </div>
             <div class="card">
                 <div class="card-label">Avg Processing</div>
-                <div class="card-value">{summary.get('avg_time', 0)}s</div>
-                <div class="card-sub">Median: {summary.get('median_time', 0)}s</div>
+                <div class="card-value">{_summary_value(summary, 'avg_time', 0, 's')}</div>
+                <div class="card-sub">Median: {_summary_value(summary, 'median_time', 0, 's')}</div>
             </div>
             <div class="card">
                 <div class="card-label">Peak VRAM</div>
-                <div class="card-value">{summary.get('vram_peak_gb', 0)} GB</div>
+                <div class="card-value">{_summary_value(summary, 'vram_peak_gb', 0, ' GB')}</div>
                 <div class="card-sub">RTX 5070 (8GB)</div>
             </div>
             <div class="card">
                 <div class="card-label">Avg CER</div>
                 <div class="card-value">{_format_metric(summary.get('avg_cer'))}</div>
-                <div class="card-sub">Character Error Rate</div>
+                <div class="card-sub">{_card_subtitle('Character Error Rate', _metric_ci(summary, 'avg_cer'))}</div>
             </div>
             <div class="card">
                 <div class="card-label">Avg WER</div>
                 <div class="card-value">{_format_metric(summary.get('avg_wer'))}</div>
-                <div class="card-sub">Word Error Rate</div>
+                <div class="card-sub">{_card_subtitle('Word Error Rate', _metric_ci(summary, 'avg_wer'))}</div>
             </div>
             <div class="card">
                 <div class="card-label">Legacy Debug F1</div>
                 <div class="card-value">{_summary_metric(summary, 'legacy_debug_avg_f1', 'avg_f1')}</div>
-                <div class="card-sub">Substring legacy metric</div>
+                <div class="card-sub">{_card_subtitle('Substring legacy metric', _metric_ci(summary, 'legacy_debug_avg_f1'))}</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Strict Exact</div>
+                <div class="card-value">{_format_metric(summary.get('strict_macro_exact_match'))}</div>
+                <div class="card-sub">{_card_subtitle('Macro exact match', _metric_ci(summary, 'strict_macro_exact_match'))}</div>
             </div>
             <div class="card">
                 <div class="card-label">Strict Normalized</div>
                 <div class="card-value">{_format_metric(summary.get('strict_macro_normalized_exact_match'))}</div>
-                <div class="card-sub">Macro normalized exact</div>
+                <div class="card-sub">{_card_subtitle('Macro normalized exact', _metric_ci(summary, 'strict_macro_normalized_exact_match'))}</div>
             </div>
             <div class="card">
                 <div class="card-label">Strict Token F1</div>
                 <div class="card-value">{_format_metric(summary.get('strict_macro_token_f1'))}</div>
-                <div class="card-sub">Macro token overlap</div>
+                <div class="card-sub">{_card_subtitle('Macro token overlap', _metric_ci(summary, 'strict_macro_token_f1'))}</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Strict Char Sim</div>
+                <div class="card-value">{_format_metric(summary.get('strict_macro_character_similarity'))}</div>
+                <div class="card-sub">{_card_subtitle('Macro character similarity', _metric_ci(summary, 'strict_macro_character_similarity'))}</div>
             </div>
         </div>
 
