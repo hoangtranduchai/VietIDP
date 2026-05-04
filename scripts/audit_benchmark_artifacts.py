@@ -27,19 +27,37 @@ def list_labels(labels_dir: Path) -> dict[str, Path]:
 
 def audit_pairing(input_dir: Path, labels_dir: Path) -> list[str]:
     issues: list[str] = []
-    inputs = list_inputs(input_dir)
-    labels = list_labels(labels_dir)
+    input_paths = sorted(input_dir.iterdir()) if input_dir.exists() else []
+    label_paths = sorted(labels_dir.glob("*.json")) if labels_dir.exists() else []
+    inputs: dict[str, Path] = {}
+    labels: dict[str, Path] = {}
+
+    for input_path in input_paths:
+        if not input_path.is_file() or input_path.suffix.lower() not in INPUT_SUFFIXES:
+            continue
+        if input_path.stem in inputs:
+            issues.append(f"duplicate input stem: {inputs[input_path.stem]} and {input_path}")
+        inputs[input_path.stem] = input_path
+
+    for label_path in label_paths:
+        if not label_path.is_file():
+            continue
+        if label_path.stem in labels:
+            issues.append(f"duplicate label stem: {labels[label_path.stem]} and {label_path}")
+        labels[label_path.stem] = label_path
 
     for label_id, label_path in labels.items():
         if label_id not in inputs:
             issues.append(f"label without input: {label_path}")
 
     for input_id, input_path in inputs.items():
-        if labels and input_id not in labels:
+        if input_id not in labels:
             issues.append(f"input without label: {input_path}")
 
     if labels and not inputs:
         issues.append(f"labels exist in {labels_dir} but no benchmark inputs were found in {input_dir}")
+    if inputs and not labels:
+        issues.append(f"inputs exist in {input_dir} but no labels were found in {labels_dir}")
 
     return issues
 

@@ -4,9 +4,14 @@ import random
 import sys
 from pathlib import Path
 
-import cv2
-import numpy as np
-from PIL import Image, ImageDraw, ImageFont
+try:
+    import cv2
+    import numpy as np
+    from PIL import Image, ImageDraw, ImageFont
+except ModuleNotFoundError as exc:
+    raise SystemExit(
+        f"[ERROR] Missing synthetic benchmark dependency: {exc.name}. Install dependencies with: pip install -r requirements.txt"
+    ) from exc
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
@@ -65,7 +70,7 @@ def generate_document(idx, output_dir, labels_dir, noise_profile):
     day = random.randint(1, 28)
     month = random.randint(1, 12)
     year = random.randint(2020, 2026)
-    ngay_ban_hanh = f"{day:02d}/{month:02d}/{year}"
+    ngay_ban_hanh = f"{year:04d}-{month:02d}-{day:02d}"
     ngay_text = f"Ngày {day:02d} tháng {month:02d} năm {year}"
     trich_yeu = random.choice(TRICH_YEU)
     title = random.choice(NGUOI_KY_TITLE)
@@ -99,7 +104,7 @@ def generate_document(idx, output_dir, labels_dir, noise_profile):
     cv_img = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
     cv_img = apply_noise(cv_img, noise_profile)
 
-    stamp_files = list(STAMPS_DIR.glob("*.png"))
+    stamp_files = sorted(STAMPS_DIR.glob("*.png"))
     if stamp_files:
         stamp_path = random.choice(stamp_files)
         stamp = cv2.imread(str(stamp_path), cv2.IMREAD_UNCHANGED)
@@ -135,6 +140,14 @@ def generate_document(idx, output_dir, labels_dir, noise_profile):
             "co_quan_ban_hanh": co_quan,
             "trich_yeu": trich_yeu,
             "nguoi_ky": name,
+        },
+        "evidence": {
+            "loai_van_ban": [{"page": 1, "text": loai_vb, "note": "synthetic generated title"}],
+            "so_hieu": [{"page": 1, "text": f"Số: {so_hieu}", "note": "synthetic generated header"}],
+            "ngay_ban_hanh": [{"page": 1, "text": ngay_text, "note": "synthetic generated header date"}],
+            "co_quan_ban_hanh": [{"page": 1, "text": co_quan, "note": "synthetic generated agency"}],
+            "trich_yeu": [{"page": 1, "text": trich_yeu, "note": "synthetic generated subject"}],
+            "nguoi_ky": [{"page": 1, "text": name, "note": "synthetic generated signer"}],
         },
     }
     with open(labels_dir / f"bench_{idx:03d}.json", "w", encoding="utf-8") as f:

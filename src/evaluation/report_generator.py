@@ -31,6 +31,10 @@ def _html(value) -> str:
     return escape(str(value), quote=True)
 
 
+def _safe_dict(value) -> dict:
+    return value if isinstance(value, dict) else {}
+
+
 def _legacy_debug_f1(result: dict):
     legacy = result.get('legacy_debug_extraction_f1') or result.get('f1_score')
     if isinstance(legacy, dict):
@@ -61,9 +65,10 @@ def _metric_ci(summary: dict, metric_key: str) -> str:
     ci = (summary.get('confidence_intervals') or {}).get(metric_key) or {}
     lower = ci.get('lower')
     upper = ci.get('upper')
-    if lower is None or upper is None:
+    if not isinstance(lower, (int, float)) or not isinstance(upper, (int, float)):
         return ''
-    confidence_pct = int(round((ci.get('confidence') or 0.95) * 100))
+    confidence = ci.get('confidence') if isinstance(ci.get('confidence'), (int, float)) else 0.95
+    confidence_pct = int(round(confidence * 100))
     return f"{confidence_pct}% CI: {lower:.4f}–{upper:.4f}"
 
 
@@ -81,6 +86,27 @@ def generate_html_report(data: dict, output_path: str):
     manifest_path = _html(data.get('manifest_path') or 'N/A')
     manifest_sha256 = _html(data.get('manifest_sha256') or 'N/A')
     official_flag = 'Yes' if data.get('official') else 'No'
+    provenance = _safe_dict(data.get('provenance'))
+    model = _safe_dict(provenance.get('model'))
+    runtime = _safe_dict(provenance.get('runtime'))
+    hardware = _safe_dict(provenance.get('hardware'))
+    model_name = _html(model.get('ollama_model') or 'N/A')
+    ocr_model = _html(model.get('vietocr_model') or 'N/A')
+    model_checksum = _html(model.get('checksum') or 'N/A')
+    command = _html(provenance.get('command') or 'N/A')
+    code_commit = _html(provenance.get('code_commit') or 'N/A')
+    split = _html(provenance.get('split') or 'N/A')
+    source_type = _html(provenance.get('source_type') or 'N/A')
+    runtime_summary = _html(
+        f"Python {runtime.get('python_version', 'N/A')} | OCR DPI {runtime.get('ocr_dpi', 'N/A')} | "
+        f"LLM temp {runtime.get('ollama_temperature', 'N/A')}"
+    )
+    if hardware.get('gpu_name'):
+        hardware_summary = _html(hardware.get('gpu_name'))
+    elif hardware.get('cuda_available') is False:
+        hardware_summary = 'CUDA unavailable'
+    else:
+        hardware_summary = 'N/A'
 
     # Build table rows
     rows_html = ""
@@ -150,13 +176,19 @@ def generate_html_report(data: dict, output_path: str):
 <body>
     <div class="container">
         <h1>VietIDP Benchmark Report</h1>
-        <p class="subtitle">Generated: {timestamp} | Model: Qwen2.5-7B + VietOCR + YOLOv8x</p>
+        <p class="subtitle">Generated: {timestamp} | Model: {model_name} | OCR: {ocr_model}</p>
         <div style="background:white;border:1px solid #e2e8f0;border-radius:12px;padding:16px 20px;margin-bottom:24px;box-shadow:0 1px 3px rgba(0,0,0,0.05)">
             <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#94a3b8;margin-bottom:8px">Benchmark Provenance</div>
             <div style="font-size:13px;color:#334155;line-height:1.7">
                 <div><strong>Official benchmark:</strong> {official_flag}</div>
                 <div><strong>Manifest path:</strong> <span style="font-family:monospace">{manifest_path}</span></div>
                 <div><strong>Manifest SHA256:</strong> <span style="font-family:monospace">{manifest_sha256}</span></div>
+                <div><strong>Split/source:</strong> {split} / {source_type}</div>
+                <div><strong>Command:</strong> <span style="font-family:monospace">{command}</span></div>
+                <div><strong>Code commit:</strong> <span style="font-family:monospace">{code_commit}</span></div>
+                <div><strong>Model checksum:</strong> <span style="font-family:monospace">{model_checksum}</span></div>
+                <div><strong>Runtime:</strong> {runtime_summary}</div>
+                <div><strong>Hardware:</strong> {hardware_summary}</div>
             </div>
         </div>
 

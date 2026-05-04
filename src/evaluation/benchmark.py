@@ -14,7 +14,10 @@ import sys
 import json
 import time
 import argparse
-import numpy as np
+import platform
+import shlex
+import statistics
+import subprocess
 from datetime import datetime
 from pathlib import Path
 
@@ -38,7 +41,7 @@ def character_error_rate(prediction: str, reference: str) -> float:
     pred = prediction.strip()
     ref = reference.strip()
 
-    d = np.zeros((len(pred) + 1, len(ref) + 1), dtype=int)
+    d = [[0 for _ in range(len(ref) + 1)] for _ in range(len(pred) + 1)]
     for i in range(len(pred) + 1):
         d[i][0] = i
     for j in range(len(ref) + 1):
@@ -60,7 +63,7 @@ def word_error_rate(prediction: str, reference: str) -> float:
     if not ref_words:
         return 0.0 if not pred_words else 1.0
 
-    d = np.zeros((len(pred_words) + 1, len(ref_words) + 1), dtype=int)
+    d = [[0 for _ in range(len(ref_words) + 1)] for _ in range(len(pred_words) + 1)]
     for i in range(len(pred_words) + 1):
         d[i][0] = i
     for j in range(len(ref_words) + 1):
@@ -118,6 +121,77 @@ def extraction_f1(predicted: dict, ground_truth: dict) -> dict:
 # Benchmark Runner
 # ═══════════════════════════════════════════════════════════════════════
 
+def _current_git_commit() -> str | None:
+    try:
+        result = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=Path(__file__).resolve().parent.parent.parent,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            check=False,
+        )
+    except Exception:
+        return None
+    commit = result.stdout.strip()
+    return commit or None
+
+
+def _cuda_runtime_info() -> dict:
+    info = {"cuda_available": None, "gpu_name": None}
+    try:
+        torch = __import__("torch")
+        info["cuda_available"] = bool(torch.cuda.is_available())
+        if info["cuda_available"]:
+            info["gpu_name"] = torch.cuda.get_device_name(0)
+    except Exception:
+        pass
+    return info
+
+
+def _reset_cuda_peak_memory() -> None:
+    try:
+        torch = __import__("torch")
+        if torch.cuda.is_available():
+            torch.cuda.reset_peak_memory_stats()
+    except Exception:
+        pass
+
+
+def _cuda_peak_memory_gb() -> float | None:
+    try:
+        torch = __import__("torch")
+        if torch.cuda.is_available():
+            return torch.cuda.max_memory_allocated() / (1024**3)
+    except Exception:
+        return None
+    return None
+
+
+def _runtime_provenance(manifest: DatasetManifest | None, official: bool) -> dict:
+    return {
+        "command": " ".join(shlex.quote(arg) for arg in sys.argv),
+        "code_commit": _current_git_commit(),
+        "model": {
+            "ollama_model": Config.OLLAMA_MODEL,
+            "vietocr_model": Config.VIETOCR_MODEL,
+            "yolo_model": str(Config.STAMP_DETECTION_MODEL),
+            "checksum": None,
+        },
+        "runtime": {
+            "python_version": platform.python_version(),
+            "platform": platform.platform(),
+            "ocr_dpi": Config.OCR_DPI,
+            "ollama_temperature": Config.OLLAMA_TEMPERATURE,
+            "ollama_num_predict": Config.OLLAMA_NUM_PREDICT,
+        },
+        "hardware": _cuda_runtime_info(),
+        "split": manifest.metadata.get("split") if manifest else None,
+        "source_type": manifest.metadata.get("source_type") if manifest else None,
+        "official": official,
+    }
+
+
 class BenchmarkRunner:
     """Chạy benchmark toàn bộ pipeline."""
 
@@ -127,35 +201,18 @@ class BenchmarkRunner:
         self.output_dir = output_dir or str(Config.RESULTS_DIR / "benchmark")
         self.limit = limit
         self.official = official
+        if self.official and not manifest_path:
+            raise ManifestError("Official benchmark requires --manifest")
+        if self.official and self.limit is not None:
+            raise ManifestError("Official benchmark cannot use --limit; evaluate the full manifest")
+
         self.manifest = DatasetManifest.load(manifest_path) if manifest_path else None
         self.manifest_sha256 = self.manifest.manifest_sha256 if self.manifest else None
+        self.provenance = _runtime_provenance(self.manifest, self.official)
         os.makedirs(self.output_dir, exist_ok=True)
 
         if self.manifest:
             self.manifest.validate(require_labels=True, verify_hashes=True, check_split_leakage=True)
-        elif self.official:
-            self._validate_official_inputs()
-
-    def _validate_official_inputs(self):
-        input_path = Path(self.input_dir)
-        if not input_path.exists():
-            raise ManifestError(f"Official benchmark input directory does not exist: {input_path}")
-
-        input_ids = {
-            path.stem for path in input_path.iterdir()
-            if path.is_file() and path.suffix.lower() in INPUT_SUFFIXES
-        }
-        label_path = Path(self.gt_dir) if self.gt_dir else input_path / "labels"
-        label_ids = {path.stem for path in label_path.glob("*.json")} if label_path.exists() else set()
-
-        if label_ids and not input_ids:
-            raise ManifestError(f"Official benchmark has labels in {label_path} but no matching input files in {input_path}")
-        missing_inputs = sorted(label_ids - input_ids)
-        missing_labels = sorted(input_ids - label_ids) if label_path.exists() else sorted(input_ids)
-        if missing_inputs:
-            raise ManifestError("Official benchmark labels without input files: " + ", ".join(missing_inputs[:20]))
-        if missing_labels:
-            raise ManifestError("Official benchmark inputs without labels: " + ", ".join(missing_labels[:20]))
 
     def find_test_files(self):
         """Tìm tất cả file test."""
@@ -225,27 +282,16 @@ class BenchmarkRunner:
             print(f"\n[{i+1}/{len(files)}] {filename}")
 
             try:
-                # Track VRAM
-                try:
-                    import torch
-                    if torch.cuda.is_available():
-                        torch.cuda.reset_peak_memory_stats()
-                except Exception:
-                    pass
+                _reset_cuda_peak_memory()
 
                 start = time.time()
                 result = pipeline.process_file(filepath, save_result=False)
                 elapsed = time.time() - start
                 total_time += elapsed
 
-                # VRAM
-                try:
-                    import torch
-                    if torch.cuda.is_available():
-                        peak = torch.cuda.max_memory_allocated() / (1024**3)
-                        vram_peak = max(vram_peak, peak)
-                except Exception:
-                    pass
+                peak = _cuda_peak_memory_gb()
+                if peak is not None:
+                    vram_peak = max(vram_peak, peak)
 
                 entry = {
                     'filename': filename,
@@ -301,6 +347,7 @@ class BenchmarkRunner:
                 'official': self.official,
                 'manifest_path': str(self.manifest.path) if self.manifest else None,
                 'manifest_sha256': self.manifest_sha256,
+                'provenance': self.provenance,
                 'summary': summary,
                 'results': results,
             }, f, ensure_ascii=False, indent=2)
@@ -352,17 +399,17 @@ class BenchmarkRunner:
             'failed': len(results) - len(successful),
             'success_rate': round(len(successful) / max(len(results), 1), 4),
             'total_time': round(total_time, 2),
-            'avg_time': round(np.mean(times), 2) if times else 0,
-            'median_time': round(np.median(times), 2) if times else 0,
+            'avg_time': round(statistics.mean(times), 2) if times else 0,
+            'median_time': round(statistics.median(times), 2) if times else 0,
             'min_time': round(min(times), 2) if times else 0,
             'max_time': round(max(times), 2) if times else 0,
-            'avg_cer': round(np.mean(cer_scores), 4) if cer_scores else None,
-            'avg_wer': round(np.mean(wer_scores), 4) if wer_scores else None,
-            'legacy_debug_avg_f1': round(np.mean(legacy_debug_f1_scores), 4) if legacy_debug_f1_scores else None,
-            'strict_macro_exact_match': round(np.mean(strict_macro_strict), 4) if strict_macro_strict else None,
-            'strict_macro_normalized_exact_match': round(np.mean(strict_macro_normalized), 4) if strict_macro_normalized else None,
-            'strict_macro_token_f1': round(np.mean(strict_macro_token_f1), 4) if strict_macro_token_f1 else None,
-            'strict_macro_character_similarity': round(np.mean(strict_macro_char_similarity), 4) if strict_macro_char_similarity else None,
+            'avg_cer': round(statistics.mean(cer_scores), 4) if cer_scores else None,
+            'avg_wer': round(statistics.mean(wer_scores), 4) if wer_scores else None,
+            'legacy_debug_avg_f1': round(statistics.mean(legacy_debug_f1_scores), 4) if legacy_debug_f1_scores else None,
+            'strict_macro_exact_match': round(statistics.mean(strict_macro_strict), 4) if strict_macro_strict else None,
+            'strict_macro_normalized_exact_match': round(statistics.mean(strict_macro_normalized), 4) if strict_macro_normalized else None,
+            'strict_macro_token_f1': round(statistics.mean(strict_macro_token_f1), 4) if strict_macro_token_f1 else None,
+            'strict_macro_character_similarity': round(statistics.mean(strict_macro_char_similarity), 4) if strict_macro_char_similarity else None,
             'confidence_intervals': confidence_intervals,
             'vram_peak_gb': round(vram_peak, 2),
         }
@@ -423,12 +470,17 @@ if __name__ == "__main__":
     parser.add_argument("--manifest", default=None, help="Dataset manifest JSON")
     parser.add_argument("--output", default=None, help="Output directory")
     parser.add_argument("--limit", type=int, default=None, help="Limit number of files")
-    parser.add_argument("--official", action="store_true", help="Require manifest or complete input/label pairs; disable raw fallback")
+    parser.add_argument("--official", action="store_true", help="Require a manifest and disable raw fallback")
     parser.add_argument("--use-raw", action="store_true", help="Explicitly use data/raw if selected input has no files")
     args = parser.parse_args()
 
     input_dir = args.input
     gt_dir = args.ground_truth
+
+    if args.official and not args.manifest:
+        raise SystemExit("[ERROR] Official benchmark requires --manifest")
+    if args.official and args.limit is not None:
+        raise SystemExit("[ERROR] Official benchmark cannot use --limit; evaluate the full manifest")
 
     if not args.manifest:
         if not os.path.isdir(input_dir):

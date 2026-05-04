@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import statistics
 import sys
 import tempfile
@@ -125,6 +126,23 @@ class BootstrapEvaluationTests(unittest.TestCase):
                 "official": True,
                 "manifest_path": "/tmp/<script>manifest</script>.json",
                 "manifest_sha256": "abc123<img src=x onerror=alert(1)>",
+                "provenance": {
+                    "command": "python <script>benchmark</script>.py",
+                    "code_commit": "abc<script>123</script>",
+                    "split": "validation<script>",
+                    "source_type": "synthetic<script>",
+                    "model": {
+                        "ollama_model": "qwen<script>",
+                        "vietocr_model": "vietocr<script>",
+                        "checksum": "sha<script>",
+                    },
+                    "runtime": {
+                        "python_version": "3.10<script>",
+                        "ocr_dpi": "200<script>",
+                        "ollama_temperature": "0.1<script>",
+                    },
+                    "hardware": {"gpu_name": "RTX<script>"},
+                },
                 "summary": {
                     "total_files": "2<script>",
                     "success_rate": "100<script>%",
@@ -170,6 +188,13 @@ class BootstrapEvaluationTests(unittest.TestCase):
             self.assertIn("Official benchmark", html)
             self.assertIn("/tmp/&lt;script&gt;manifest&lt;/script&gt;.json", html)
             self.assertIn("abc123&lt;img src=x onerror=alert(1)&gt;", html)
+            self.assertIn("python &lt;script&gt;benchmark&lt;/script&gt;.py", html)
+            self.assertIn("abc&lt;script&gt;123&lt;/script&gt;", html)
+            self.assertIn("validation&lt;script&gt; / synthetic&lt;script&gt;", html)
+            self.assertIn("qwen&lt;script&gt;", html)
+            self.assertIn("vietocr&lt;script&gt;", html)
+            self.assertIn("sha&lt;script&gt;", html)
+            self.assertIn("RTX&lt;script&gt;", html)
             self.assertNotIn("<script>", html)
             self.assertNotIn("<img src=x", html)
             self.assertIn("2&lt;script&gt;", html)
@@ -185,6 +210,120 @@ class BootstrapEvaluationTests(unittest.TestCase):
             self.assertIn("0.4200–0.5800", html)
             self.assertIn("Strict Char Sim", html)
             self.assertIn("0.7200–0.8800", html)
+
+    def test_official_benchmark_requires_full_manifest(self):
+        from src.evaluation.manifest import ManifestError, build_manifest_payload, write_manifest
+
+        with self.assertRaisesRegex(ManifestError, "requires --manifest"):
+            BenchmarkRunner(output_dir=".", official=True)
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            dataset_dir = Path(tmp_dir)
+            labels_dir = dataset_dir / "labels"
+            labels_dir.mkdir()
+            (dataset_dir / "doc-1.jpg").write_bytes(b"fake image bytes")
+            (labels_dir / "doc-1.json").write_text(
+                '{"filename":"doc-1.jpg","extraction":{},"evidence":{}}',
+                encoding="utf-8",
+            )
+            manifest_path = dataset_dir / "manifest.json"
+            payload = build_manifest_payload(
+                dataset_dir,
+                labels_dir,
+                output_path=manifest_path,
+                dataset_name="unit",
+                split="validation",
+                source_type="synthetic",
+            )
+            write_manifest(payload, manifest_path)
+
+            with self.assertRaisesRegex(ManifestError, "cannot use --limit"):
+                BenchmarkRunner(output_dir=".", manifest_path=manifest_path, official=True, limit=1)
+
+    def test_manifest_validation_detects_hash_mismatch_and_split_leakage(self):
+        from src.evaluation.manifest import DatasetManifest, ManifestError, build_manifest_payload, write_manifest
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            dataset_dir = Path(tmp_dir)
+            labels_dir = dataset_dir / "labels"
+            labels_dir.mkdir()
+            for name in ("doc-a", "doc-b"):
+                (dataset_dir / f"{name}.jpg").write_bytes(b"same-content")
+                (labels_dir / f"{name}.json").write_text(
+                    f'{{"filename":"{name}.jpg","extraction":{{}},"evidence":{{}}}}',
+                    encoding="utf-8",
+                )
+
+            manifest_path = dataset_dir / "manifest.json"
+            payload = build_manifest_payload(
+                dataset_dir,
+                labels_dir,
+                output_path=manifest_path,
+                dataset_name="unit",
+                split="optimization",
+                source_type="synthetic",
+            )
+            payload["entries"][1]["split"] = "validation"
+            write_manifest(payload, manifest_path)
+
+            manifest = DatasetManifest.load(manifest_path)
+            with self.assertRaisesRegex(ManifestError, "multiple splits"):
+                manifest.validate(require_labels=True, verify_hashes=True, check_split_leakage=True)
+
+            payload["entries"][1]["split"] = "optimization"
+            write_manifest(payload, manifest_path)
+            (dataset_dir / "doc-a.jpg").write_bytes(b"changed")
+            manifest = DatasetManifest.load(manifest_path)
+            with self.assertRaisesRegex(ManifestError, "input hash mismatch"):
+                manifest.validate(require_labels=True, verify_hashes=True, check_split_leakage=True)
+
+            fixed_payload = build_manifest_payload(
+                dataset_dir,
+                labels_dir,
+                output_path=manifest_path,
+                dataset_name="unit",
+                split="optimization",
+                source_type="synthetic",
+            )
+            write_manifest(fixed_payload, manifest_path)
+            missing_metadata = json.loads(manifest_path.read_text(encoding="utf-8"))
+            missing_metadata["metadata"].pop("split")
+            write_manifest(missing_metadata, manifest_path)
+            manifest = DatasetManifest.load(manifest_path)
+            with self.assertRaisesRegex(ManifestError, "metadata missing split"):
+                manifest.validate(require_labels=True, verify_hashes=True, check_split_leakage=True)
+
+            write_manifest(fixed_payload, manifest_path)
+            tampered = json.loads(manifest_path.read_text(encoding="utf-8"))
+            tampered["metadata"]["split"] = "validation"
+            manifest_path.write_text(json.dumps(tampered), encoding="utf-8")
+            manifest = DatasetManifest.load(manifest_path)
+            with self.assertRaisesRegex(ManifestError, "manifest_sha256"):
+                manifest.validate(require_labels=True, verify_hashes=True, check_split_leakage=True)
+
+    def test_normalization_and_strict_metrics_do_not_use_substring_credit(self):
+        from src.evaluation.extraction_metrics import compute_field_metrics
+        from src.evaluation.normalization import normalize_extraction_value
+
+        self.assertEqual(
+            normalize_extraction_value("Ngày 02 tháng 05 năm 2026", date_field=True),
+            "2026-05-02",
+        )
+        metrics = compute_field_metrics(
+            {
+                "so_hieu": "123/QĐ-UBND extra",
+                "ngay_ban_hanh": "ngày 2 tháng 5 năm 2026",
+            },
+            {
+                "so_hieu": "123/QĐ-UBND",
+                "ngay_ban_hanh": "2026-05-02",
+            },
+        )
+
+        self.assertEqual(metrics["fields"]["so_hieu"]["status"], "wrong")
+        self.assertFalse(metrics["fields"]["so_hieu"]["normalized_exact_match"])
+        self.assertEqual(metrics["fields"]["ngay_ban_hanh"]["status"], "correct")
+        self.assertTrue(metrics["fields"]["ngay_ban_hanh"]["normalized_exact_match"])
 
 
 if __name__ == "__main__":

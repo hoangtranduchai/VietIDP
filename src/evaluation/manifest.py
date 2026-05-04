@@ -30,6 +30,10 @@ def canonical_json_hash(payload: dict) -> str:
     return hashlib.sha256(encoded).hexdigest()
 
 
+def manifest_content_hash(payload: dict) -> str:
+    return canonical_json_hash({key: value for key, value in payload.items() if key != "manifest_sha256"})
+
+
 @dataclass(frozen=True)
 class ManifestEntry:
     id: str
@@ -84,6 +88,8 @@ class DatasetManifest:
     metadata: dict
     entries: list[ManifestEntry]
     manifest_sha256: str
+    computed_sha256: str
+    schema_version: str | None = None
 
     @classmethod
     def load(cls, path: str | Path) -> "DatasetManifest":
@@ -99,18 +105,40 @@ class DatasetManifest:
 
         entries = [ManifestEntry.from_dict(entry, root) for entry in raw_entries]
         metadata = payload.get("metadata") if isinstance(payload.get("metadata"), dict) else {}
-        manifest_sha256 = payload.get("manifest_sha256") or canonical_json_hash({k: v for k, v in payload.items() if k != "manifest_sha256"})
-        return cls(manifest_path, root, metadata, entries, manifest_sha256)
+        manifest_sha256 = str(payload.get("manifest_sha256") or "")
+        computed_sha256 = manifest_content_hash(payload)
+        schema_version = str(payload["schema_version"]) if payload.get("schema_version") else None
+        return cls(manifest_path, root, metadata, entries, manifest_sha256, computed_sha256, schema_version)
 
     def validate(self, require_labels: bool = True, verify_hashes: bool = True, check_split_leakage: bool = True) -> None:
         errors: list[str] = []
         seen_ids: set[str] = set()
         seen_by_split: dict[str, set[str]] = {}
 
+        if self.schema_version != "vietidp-manifest-v1":
+            errors.append("manifest missing or unsupported schema_version")
+        if not self.manifest_sha256:
+            errors.append("manifest missing manifest_sha256")
+        elif self.manifest_sha256 != self.computed_sha256:
+            errors.append("manifest_sha256 does not match manifest contents")
+        if not self.metadata:
+            errors.append("manifest missing metadata")
+        elif require_labels:
+            if not self.metadata.get("split"):
+                errors.append("manifest metadata missing split")
+            if not self.metadata.get("source_type"):
+                errors.append("manifest metadata missing source_type")
+
         for entry in self.entries:
             if entry.id in seen_ids:
                 errors.append(f"duplicate entry id {entry.id}")
             seen_ids.add(entry.id)
+            if require_labels and not entry.label_sha256:
+                errors.append(f"{entry.id}: missing label_sha256")
+            if require_labels and not entry.split:
+                errors.append(f"{entry.id}: missing split")
+            if require_labels and not entry.source_type:
+                errors.append(f"{entry.id}: missing source_type")
             errors.extend(entry.validate_files(require_label=require_labels, verify_hashes=verify_hashes))
             if entry.split and entry.input_sha256:
                 seen_by_split.setdefault(entry.input_sha256, set()).add(entry.split)
@@ -174,13 +202,14 @@ def build_manifest_payload(
         },
         "entries": entries,
     }
-    payload["manifest_sha256"] = canonical_json_hash(payload)
+    payload["manifest_sha256"] = manifest_content_hash(payload)
     return payload
 
 
 def write_manifest(payload: dict, output_path: str | Path) -> Path:
     path = Path(output_path)
     path.parent.mkdir(parents=True, exist_ok=True)
+    payload["manifest_sha256"] = manifest_content_hash(payload)
     with path.open("w", encoding="utf-8") as file:
         json.dump(payload, file, ensure_ascii=False, indent=2)
         file.write("\n")
