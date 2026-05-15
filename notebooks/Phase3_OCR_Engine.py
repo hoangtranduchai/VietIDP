@@ -359,7 +359,7 @@ def evaluate_ocr(ocr_results_dir, ground_truth_dir, limit=50):
 
 # --- CHẠY OCR ---
 # engine = VietnameseOCREngine(use_gpu=True)
-# result = engine.process_pdf("data/test/QD_0001.pdf")
+# result = engine.process_pdf("data/test/pdf_test_0001.pdf")
 # print(result['full_text'][:500])
 
 # Batch OCR tất cả PDFs:

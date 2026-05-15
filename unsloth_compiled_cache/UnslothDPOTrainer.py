@@ -1,6 +1,6 @@
 """
-2026.4.9
-2026.4.7
+2026.5.1
+2026.5.2
 5.5.0
 0.24.0
 __UNSLOTH_VERSIONING__
@@ -28,7 +28,7 @@ import torch.nn as nn
 from torch.nn import functional as F
 from unsloth_zoo.temporary_patches.common import torch_compile
 from typing import Any, List, Optional, Tuple, Union, Dict, Set, Callable
-from trl.trainer.dpo_trainer import (Any, AutoProcessor, BaseImageProcessor, BaseTrainer, Callable, DPOConfig, DPOTrainer, DataCollator, DataCollatorForPreference, DataLoader, Dataset, EvalLoopOutput, F, FDivergenceConstants, FDivergenceType, FeatureExtractionMixin, IterableDataset, Literal, MODEL_FOR_IMAGE_TEXT_TO_TEXT_MAPPING_NAMES, Optional, PartialState, Path, PeftConfig, PeftModel, PreTrainedModel, PreTrainedTokenizerBase, ProcessorMixin, RunningMoments, SyncRefModelCallback, TrainerCallback, Union, autocast, cap_exp, contextmanager, create_model_from_path, create_reference_model, dataclass, defaultdict, disable_dropout_in_model, empty_cache, flush_left, flush_right, get_peft_model, inspect, is_comet_available, is_liger_kernel_available, is_mlflow_available, is_peft_available, is_wandb_available, log_table_to_comet_experiment, logger, logging, maybe_apply_chat_template, maybe_extract_prompt, nn, nullcontext, pad, pad_to_length, pd, peft_module_casting_to_bf16, prepare_deepspeed, prepare_fsdp, prepare_model_for_kbit_training, random, selective_log_softmax, shift_tokens_right, textwrap, torch, tqdm, warnings, Any, AutoProcessor, BaseImageProcessor, Callable, DPOConfig, DPOTrainer, DataCollator, DataCollatorForPreference, Dataset, EvalLoopOutput, F, FDivergenceConstants, FeatureExtractionMixin, IterableDataset, MODEL_FOR_IMAGE_TEXT_TO_TEXT_MAPPING_NAMES, Optional, PeftConfig, PeftModel, PreTrainedModel, PreTrainedTokenizerBase, ProcessorMixin, RunningMoments, SyncRefModelCallback, TrainerCallback, Union, create_model_from_path, create_reference_model, defaultdict, disable_dropout_in_model, is_comet_available, is_liger_kernel_available, is_mlflow_available, is_peft_available, is_wandb_available, logger, nn, pad, prepare_deepspeed, prepare_fsdp, torch, warnings, F, PeftModel, PreTrainedModel, is_peft_available, logger, torch)
+from trl.trainer.dpo_trainer import (Any, AutoProcessor, BaseImageProcessor, BaseTrainer, Callable, DPOConfig, DPOTrainer, DataCollator, DataCollatorForPreference, DataLoader, Dataset, EvalLoopOutput, F, FDivergenceConstants, FDivergenceType, FeatureExtractionMixin, IterableDataset, Literal, MODEL_FOR_IMAGE_TEXT_TO_TEXT_MAPPING_NAMES, Optional, PartialState, Path, PeftConfig, PeftModel, PreTrainedModel, PreTrainedTokenizerBase, ProcessorMixin, RunningMoments, SyncRefModelCallback, TrainerCallback, Union, autocast, cap_exp, contextmanager, create_model_from_path, create_reference_model, dataclass, defaultdict, disable_dropout_in_model, empty_cache, flush_left, flush_right, get_peft_model, inspect, is_comet_available, is_liger_kernel_available, is_mlflow_available, is_peft_available, is_wandb_available, log_table_to_comet_experiment, logger, logging, maybe_apply_chat_template, maybe_extract_prompt, nn, nullcontext, pad, pad_to_length, pd, peft_module_casting_to_bf16, prepare_deepspeed, prepare_fsdp, prepare_model_for_kbit_training, random, selective_log_softmax, shift_tokens_right, textwrap, torch, tqdm, warnings, Any, AutoProcessor, BaseImageProcessor, Callable, DPOConfig, DPOTrainer, DataCollator, DataCollatorForPreference, Dataset, EvalLoopOutput, F, FDivergenceConstants, FeatureExtractionMixin, IterableDataset, MODEL_FOR_IMAGE_TEXT_TO_TEXT_MAPPING_NAMES, Optional, PeftConfig, PeftModel, PreTrainedModel, PreTrainedTokenizerBase, ProcessorMixin, RunningMoments, SyncRefModelCallback, TrainerCallback, Union, create_model_from_path, create_reference_model, defaultdict, disable_dropout_in_model, is_comet_available, is_liger_kernel_available, is_mlflow_available, is_peft_available, is_wandb_available, logger, nn, pad, prepare_deepspeed, prepare_fsdp, torch, warnings, F, Union, flush_left, flush_right, nn, pad, shift_tokens_right, torch, BaseImageProcessor, DPOConfig, Dataset, F, FeatureExtractionMixin, IterableDataset, PartialState, PreTrainedTokenizerBase, ProcessorMixin, Union, maybe_apply_chat_template, maybe_extract_prompt, F, PeftModel, PreTrainedModel, is_peft_available, logger, torch, DPOTrainer, DataCollator, DataCollatorForPreference, F, F, Union, flush_left, flush_right, nn, pad, pad_to_length, selective_log_softmax, torch, F, Union, pad, pad_to_length, torch)
 
 
 import os
@@ -335,6 +335,73 @@ def sanitize_logprob(logprob):
         )
         return None
     return value
+def dpo_trainer_vision_process_row(
+    features,
+    processing_class,
+    max_prompt_length = None,
+    max_completion_length = None,
+    add_special_tokens = True,
+    is_chat = False,
+):
+    text = features.get("prompt", "")
+    images = features.get("images")
+    processor, tokenizer = processing_class, processing_class.tokenizer
+    processed_features = processor(
+        images = images,
+        text = text,
+        add_special_tokens = False,
+    )
+
+    prompt_input_ids = processed_features["input_ids"][0]
+    chosen_input_ids = tokenizer(features["chosen"], add_special_tokens = False)[
+        "input_ids"
+    ]
+    rejected_input_ids = tokenizer(features["rejected"], add_special_tokens = False)[
+        "input_ids"
+    ]
+
+    if add_special_tokens:
+        if tokenizer.bos_token_id is not None:
+            prompt_input_ids = [tokenizer.bos_token_id] + prompt_input_ids
+        if tokenizer.eos_token_id is not None:
+            prompt_input_ids = prompt_input_ids + [tokenizer.eos_token_id]
+    if not is_chat and tokenizer.eos_token_id is not None:
+        chosen_input_ids = chosen_input_ids + [tokenizer.eos_token_id]
+        rejected_input_ids = rejected_input_ids + [tokenizer.eos_token_id]
+
+    if max_prompt_length is not None:
+        prompt_input_ids = prompt_input_ids[-max_prompt_length:]
+    if max_completion_length is not None:
+        chosen_input_ids = chosen_input_ids[:max_completion_length]
+        rejected_input_ids = rejected_input_ids[:max_completion_length]
+
+    output = {
+        "prompt_input_ids": prompt_input_ids,
+        "chosen_input_ids": chosen_input_ids,
+        "rejected_input_ids": rejected_input_ids,
+    }
+    if "pixel_values" in processed_features:
+        output["pixel_values"] = processed_features["pixel_values"][0]
+    if "pixel_attention_mask" in processed_features:
+        output["pixel_attention_mask"] = processed_features["pixel_attention_mask"][0]
+    if "image_sizes" in processed_features:
+        output["image_sizes"] = processed_features["image_sizes"][0]
+    if "token_type_ids" in processed_features:
+        token_type_ids = processed_features["token_type_ids"][0]
+        if max_prompt_length is not None:
+            token_type_ids = token_type_ids[-max_prompt_length:]
+        output["token_type_ids"] = token_type_ids
+    if "pixel_position_ids" in processed_features:
+        output["pixel_position_ids"] = processed_features["pixel_position_ids"][0]
+    if "image_position_ids" in processed_features:
+        output["image_position_ids"] = processed_features["image_position_ids"][0]
+    if "mm_token_type_ids" in processed_features:
+        mm_token_type_ids = processed_features["mm_token_type_ids"][0]
+        if max_prompt_length is not None:
+            mm_token_type_ids = mm_token_type_ids[-max_prompt_length:]
+        output["mm_token_type_ids"] = mm_token_type_ids
+
+    return output
 @dataclass
 class UnslothDPOConfig(DPOConfig):
     """
@@ -1262,9 +1329,11 @@ class _UnslothDPOTrainer(BaseTrainer):
             # Tokenize the dataset
             if isinstance(dataset, Dataset):  # `IterableDataset.map` does not support `desc`
                 map_kwargs["desc"] = f"Tokenizing {dataset_name} dataset"
+            if self.is_vision_model:
+                map_kwargs.pop("num_proc", None)
 
             dataset = dataset.map(
-                self.tokenize_row if not self.is_vision_model else self.process_row,
+                self.tokenize_row if not self.is_vision_model else dpo_trainer_vision_process_row,
                 remove_columns=["chosen", "rejected"],
                 fn_kwargs={
                     "processing_class": processing_class,
@@ -1409,6 +1478,9 @@ class _UnslothDPOTrainer(BaseTrainer):
                 "chosen_input_ids",
                 "rejected_input_ids",
                 "image_sizes",
+                "pixel_position_ids",
+                "image_position_ids",
+                "mm_token_type_ids",
                 "token_type_ids",
                 "ref_chosen_logps",
                 "ref_rejected_logps",
@@ -1597,6 +1669,12 @@ class _UnslothDPOTrainer(BaseTrainer):
             )
         if "image_sizes" in batch:
             output["image_sizes"] = torch.cat([batch["image_sizes"], batch["image_sizes"]], dim=0)
+        if "pixel_position_ids" in batch:
+            output["pixel_position_ids"] = torch.cat((batch["pixel_position_ids"], batch["pixel_position_ids"]), dim=0)
+        if "image_position_ids" in batch:
+            output["image_position_ids"] = torch.cat((batch["image_position_ids"], batch["image_position_ids"]), dim=0)
+        if "mm_token_type_ids" in batch:
+            output["mm_token_type_ids"] = torch.cat((batch["mm_token_type_ids"], batch["mm_token_type_ids"]), dim=0)
         if "token_type_ids" in batch:
             output["token_type_ids"] = torch.cat((batch["token_type_ids"], batch["token_type_ids"]))
 
@@ -1857,6 +1935,12 @@ class _UnslothDPOTrainer(BaseTrainer):
             model_kwargs["pixel_attention_mask"] = concatenated_batch["pixel_attention_mask"]
         if "image_sizes" in concatenated_batch:
             model_kwargs["image_sizes"] = concatenated_batch["image_sizes"]
+        if "pixel_position_ids" in concatenated_batch:
+            model_kwargs["pixel_position_ids"] = concatenated_batch["pixel_position_ids"]
+        if "image_position_ids" in concatenated_batch:
+            model_kwargs["image_position_ids"] = concatenated_batch["image_position_ids"]
+        if "mm_token_type_ids" in concatenated_batch:
+            model_kwargs["mm_token_type_ids"] = concatenated_batch["mm_token_type_ids"]
 
         prompt_attention_mask = concatenated_batch["prompt_attention_mask"]
         completion_attention_mask = concatenated_batch["completion_attention_mask"]
@@ -2104,6 +2188,12 @@ class _UnslothDPOTrainer(BaseTrainer):
             model_kwargs["pixel_attention_mask"] = concatenated_batch["pixel_attention_mask"]
         if "image_sizes" in concatenated_batch:
             model_kwargs["image_sizes"] = concatenated_batch["image_sizes"]
+        if "pixel_position_ids" in concatenated_batch:
+            model_kwargs["pixel_position_ids"] = concatenated_batch["pixel_position_ids"]
+        if "image_position_ids" in concatenated_batch:
+            model_kwargs["image_position_ids"] = concatenated_batch["image_position_ids"]
+        if "mm_token_type_ids" in concatenated_batch:
+            model_kwargs["mm_token_type_ids"] = concatenated_batch["mm_token_type_ids"]
 
         prompt_input_ids = concatenated_batch["prompt_input_ids"]
         prompt_attention_mask = concatenated_batch["prompt_attention_mask"]
@@ -2830,6 +2920,44 @@ class UnslothDPOTrainer(_UnslothDPOTrainer):
             if all(x in column_names for x in check):
                 train_dataset = train_dataset.remove_columns(['chosen', 'rejected', 'prompt'])
             del check, column_names
+        if hasattr(train_dataset, 'column_names'):
+            column_names = set(train_dataset.column_names)
+            is_dpo_dataset = ({'chosen', 'rejected'}.issubset(column_names) or
+                              {'prompt_input_ids', 'chosen_input_ids', 'rejected_input_ids'}.issubset(column_names))
+            if is_dpo_dataset and isinstance(data_collator, TransformersDataCollatorForLanguageModeling):
+                data_collator = None
+            del is_dpo_dataset, column_names
+        from trl.trainer.dpo_trainer import DataCollatorForPreference
+        if not hasattr(DataCollatorForPreference, '_unsloth_vision_keys_patch'):
+            _old_dpo_collator_torch_call = DataCollatorForPreference.torch_call
+        
+            def _unsloth_dpo_torch_call(self, examples):
+                output = _old_dpo_collator_torch_call(self, examples)
+                import torch as _unsloth_torch
+                try:
+                    from trl.trainer.utils import pad as _unsloth_trl_pad
+                except Exception:
+                    _unsloth_trl_pad = None
+                for _k in ('pixel_position_ids', 'image_position_ids', 'mm_token_type_ids'):
+                    if not all(_k in example for example in examples):
+                        continue
+                    _is_position_key = _k.endswith('position_ids')
+                    _padding_value = -1 if _is_position_key else 0
+                    _padding_side = 'right' if _is_position_key else 'left'
+                    _values = [_unsloth_torch.as_tensor(example[_k]) for example in examples]
+                    try:
+                        if _unsloth_trl_pad is not None:
+                            output[_k] = _unsloth_trl_pad(_values, padding_value=_padding_value, padding_side=_padding_side)
+                        else:
+                            from torch.nn.utils.rnn import pad_sequence as _unsloth_pad_sequence
+                            output[_k] = _unsloth_pad_sequence(_values, batch_first=True, padding_value=_padding_value)
+                    except Exception:
+                        from torch.nn.utils.rnn import pad_sequence as _unsloth_pad_sequence
+                        output[_k] = _unsloth_pad_sequence(_values, batch_first=True, padding_value=_padding_value)
+                return output
+        
+            DataCollatorForPreference.torch_call = _unsloth_dpo_torch_call
+            DataCollatorForPreference._unsloth_vision_keys_patch = True
         
         # [TODO] Fix up DataParallel multiplying batch sizes
         # [TODO] DDP works, but DP seems to not work? [TODO]

@@ -1,6 +1,6 @@
 """
-2026.4.9
-2026.4.7
+2026.5.1
+2026.5.2
 5.5.0
 0.24.0
 __UNSLOTH_VERSIONING__
@@ -361,6 +361,51 @@ def _unsloth_get_final_logit_softcapping(config):
             softcap = getattr(text_cfg, "final_logit_softcapping", None)
     return 0 if softcap is None else softcap
 
+def _unsloth_get_mm_token_id(processing_class, attr_name, token):
+    tokenizer = getattr(processing_class, "tokenizer", processing_class)
+    token_id = getattr(processing_class, attr_name, None)
+    if token_id is None:
+        token_id = getattr(tokenizer, attr_name, None)
+
+    convert_tokens_to_ids = getattr(tokenizer, "convert_tokens_to_ids", None)
+    if token_id is None and convert_tokens_to_ids is not None:
+        token_id = convert_tokens_to_ids(token)
+
+    if type(token_id) is int and token_id >= 0:
+        if token_id != getattr(tokenizer, "unk_token_id", None):
+            return token_id
+    return None
+
+def _unsloth_fix_mm_token_type_ids(
+    processing_class, input_ids, mm_token_type_ids = None, completion_ids = None
+):
+    image_token_id = _unsloth_get_mm_token_id(
+        processing_class, "image_token_id", "<|image_pad|>"
+    )
+    video_token_id = _unsloth_get_mm_token_id(
+        processing_class, "video_token_id", "<|video_pad|>"
+    )
+
+    if image_token_id is not None or video_token_id is not None:
+        rebuilt = input_ids.new_zeros(input_ids.shape)
+        if image_token_id is not None:
+            rebuilt = rebuilt.masked_fill(input_ids == image_token_id, 1)
+        if video_token_id is not None:
+            rebuilt = rebuilt.masked_fill(input_ids == video_token_id, 2)
+        return rebuilt
+
+    if (
+        mm_token_type_ids is not None
+        and completion_ids is not None
+        and mm_token_type_ids.shape[0] == input_ids.shape[0]
+        and mm_token_type_ids.shape[1] + completion_ids.shape[1] == input_ids.shape[1]
+    ):
+        return torch.cat(
+            [mm_token_type_ids, mm_token_type_ids.new_zeros(completion_ids.shape)],
+            dim = 1,
+        )
+    return mm_token_type_ids
+
 def grpo_compute_loss(
     ref,
     new,
@@ -698,6 +743,10 @@ def grpo_accumulated_loss(
     # Transformers 5.x requires token_type_ids/mm_token_type_ids for some vision models
     token_type_ids = kwargs.get('token_type_ids',None)
     mm_token_type_ids = kwargs.get('mm_token_type_ids',None)
+    if mm_token_type_ids is not None or image_grid_thw is not None:
+        mm_token_type_ids = _unsloth_fix_mm_token_type_ids(
+            trainer.processing_class, input_ids, mm_token_type_ids
+        )
     sampling_per_token_logps = kwargs.get("sampling_per_token_logps", None) if getattr(trainer, "vllm_importance_sampling_correction", False) else None
     temperature = kwargs.get("temperature", 1.0)
     logit_scale_multiply = kwargs.get("logit_scale_multiply", 0.0)
@@ -2508,6 +2557,10 @@ class _UnslothGRPOTrainer(BaseTrainer):
             # Transformers 5.x needs token_type_ids/mm_token_type_ids for some vision models
             token_type_ids = kwargs.get("token_type_ids", None)
             mm_token_type_ids = kwargs.get("mm_token_type_ids", None)
+            if mm_token_type_ids is not None or image_grid_thw is not None:
+                mm_token_type_ids = _unsloth_fix_mm_token_type_ids(
+                    self.processing_class, input_ids, mm_token_type_ids
+                )
 
             unwrapped_model = self.accelerator.unwrap_model(
                 model, keep_fp32_wrapper = False
@@ -3130,6 +3183,14 @@ class _UnslothGRPOTrainer(BaseTrainer):
                 **kwargs,
             )
             generate_inputs = super()._prepare_inputs(generate_inputs)
+            if "mm_token_type_ids" in generate_inputs or "image_grid_thw" in generate_inputs:
+                mm_token_type_ids = _unsloth_fix_mm_token_type_ids(
+                    self.processing_class,
+                    generate_inputs["input_ids"],
+                    generate_inputs.get("mm_token_type_ids", None),
+                )
+                if mm_token_type_ids is not None:
+                    generate_inputs["mm_token_type_ids"] = mm_token_type_ids
 
             with (
                 profiling_context(self, "transformers.generate"),
@@ -3264,11 +3325,16 @@ class _UnslothGRPOTrainer(BaseTrainer):
             forward_kwargs["token_type_ids"] = torch.cat(
                 [token_type_ids, token_type_ids.new_zeros(completion_ids.shape)], dim=1
             )
-        if "mm_token_type_ids" in forward_kwargs:
-            mm_tti = forward_kwargs["mm_token_type_ids"]
-            forward_kwargs["mm_token_type_ids"] = torch.cat(
-                [mm_tti, mm_tti.new_zeros(completion_ids.shape)], dim=1
+
+        if "mm_token_type_ids" in forward_kwargs or "image_grid_thw" in forward_kwargs:
+            _mm_token_type_ids = _unsloth_fix_mm_token_type_ids(
+                self.processing_class,
+                prompt_completion_ids,
+                forward_kwargs.get("mm_token_type_ids", None),
+                completion_ids = completion_ids,
             )
+            if _mm_token_type_ids is not None:
+                forward_kwargs["mm_token_type_ids"] = _mm_token_type_ids
 
         logits_to_keep = completion_ids.size(1)  # we only need to compute the logits for the completion tokens
         
@@ -3563,6 +3629,13 @@ class _UnslothGRPOTrainer(BaseTrainer):
         input_ids = torch.cat([prompt_ids, completion_ids], dim = 1)
         bsz, qlen = input_ids.shape
         attention_mask = torch.cat([prompt_mask, completion_mask], dim = 1)
+        if mm_token_type_ids is not None or image_grid_thw is not None:
+            mm_token_type_ids = _unsloth_fix_mm_token_type_ids(
+                self.processing_class,
+                input_ids,
+                mm_token_type_ids,
+                completion_ids = completion_ids,
+            )
         # attention_mask = None
         logits_to_keep = completion_ids.size(
             1

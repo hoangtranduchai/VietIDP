@@ -48,7 +48,7 @@ class Config:
 
     # ── Model Directories ────────────────────────────────────────────────
     MODELS_DIR = BASE_DIR / "models"
-    STAMP_DETECTION_MODEL = MODELS_DIR / "finetuned" / "stamp_detector" / "weights" / "best.pt"
+    STAMP_DETECTION_MODEL = MODELS_DIR / "stamp_model" / "weights" / "best.pt"
     STAMP_REMOVAL_MODEL = MODELS_DIR / "finetuned" / "stamp_removal_gan" / "best_generator.pth"
     LLM_ADAPTER_PATH = MODELS_DIR / "qwen_finetuned" / "lora_adapters"
     YOLO_BASE_MODEL = BASE_DIR / "yolov8n.pt"
@@ -59,14 +59,14 @@ class Config:
     # ── Ollama LLM Configuration (Qwen2.5-7B) ───────────────────────────
     OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://localhost:11434/api/generate")
     OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "qwen2.5:7b")
-    OLLAMA_MAX_CHARS = int(os.environ.get("OLLAMA_MAX_CHARS", "32000"))
+    OLLAMA_MAX_CHARS = int(os.environ.get("OLLAMA_MAX_CHARS", "128000"))
     OLLAMA_NUM_PREDICT = int(os.environ.get("OLLAMA_NUM_PREDICT", "3000"))
-    OLLAMA_TEMPERATURE = float(os.environ.get("OLLAMA_TEMPERATURE", "0.1"))
+    OLLAMA_TEMPERATURE = float(os.environ.get("OLLAMA_TEMPERATURE", "0.0"))
     OLLAMA_TIMEOUT = int(os.environ.get("OLLAMA_TIMEOUT", "300"))
     OLLAMA_MAX_RETRIES = int(os.environ.get("OLLAMA_MAX_RETRIES", "3"))
 
     # ── OCR Configuration (VietOCR + EasyOCR) ────────────────────────────
-    OCR_DPI = int(os.environ.get("OCR_DPI", "200"))
+    OCR_DPI = int(os.environ.get("OCR_DPI", "400"))
     OCR_LANG = os.environ.get("OCR_LANG", "vi")
     OCR_MIN_TEXT_THRESHOLD = int(os.environ.get("OCR_MIN_TEXT_THRESHOLD", "100"))
     # VietOCR settings
@@ -89,20 +89,22 @@ class Config:
 
     # ── LLM Fine-tuning (Qwen2.5-7B QLoRA) ──────────────────────────────
     LLM_BASE_MODEL = os.environ.get(
-        "LLM_BASE_MODEL", "unsloth/Qwen2.5-7B-Instruct-bnb-4bit"
+        "LLM_BASE_MODEL", "unsloth/Qwen2.5-3B-Instruct-bnb-4bit"
     )
     LORA_R = 16
     LORA_ALPHA = 32
-    LORA_DROPOUT = 0.05
+    LORA_DROPOUT = 0.0           # PHẢI = 0 để Unsloth bật Fast Patching (10-50x nhanh hơn)
     LORA_TARGET_MODULES = [
         "q_proj", "k_proj", "v_proj", "o_proj",
         "gate_proj", "up_proj", "down_proj"
     ]
-    LLM_MAX_SEQ_LENGTH = 2048
+    LLM_MAX_SEQ_LENGTH = 1024    # Training: bao trọn 90% dataset
+    LLM_INFERENCE_SEQ_LENGTH = 4096  # Inference: đủ cho văn bản nhiều trang (VRAM ~3.5GB)
     LLM_BATCH_SIZE = 1
-    LLM_GRADIENT_ACCUM = 4
-    LLM_NUM_EPOCHS = 3
+    LLM_GRADIENT_ACCUM = 8       # Effective batch = 8 (ổn định gradient)
+    LLM_NUM_EPOCHS = 1           # 1 epoch = ~523 steps (~2h), đủ cho synthetic data
     LLM_LEARNING_RATE = 2e-4
+    LLM_BACKEND = os.environ.get("LLM_BACKEND", "ollama")  # "qlora" (GPU trực tiếp) hoặc "ollama" (server)
 
     # ── Database ─────────────────────────────────────────────────────────
     # Production: set DATABASE_URL to PostgreSQL connection string

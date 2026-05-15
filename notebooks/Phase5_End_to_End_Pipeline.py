@@ -631,7 +631,7 @@ def create_api_app():
 
 # --- Standalone ---
 # pipeline = OCRLLMPipeline(load_stamp_model=False, load_llm=False)
-# result = pipeline.process_file("data/test/QD_0001.pdf")
+# result = pipeline.process_file("data/test/pdf_test_0001.pdf")
 # print(json.dumps(result['extraction'], ensure_ascii=False, indent=2))
 
 # --- Batch ---

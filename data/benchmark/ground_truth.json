@@ -1,0 +1,802 @@
+{
+  "pdf_test_1.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "02/2026/QĐ-UBND",
+    "ngay_ban_hanh": "10/01/2026",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Đắk Lắk",
+    "trich_yeu": "Quy định mức tỷ lệ (%) cụ thể để xác định đơn giá thuê đất; mức tỷ lệ (%) để tính tiền thuê đối với đất xây dựng công trình ngầm, đất có mặt nước trên địa bàn tỉnh Đắk Lắk",
+    "nguoi_ky": "Hồ Thị Nguyên Thảo"
+  },
+  "pdf_test_2.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "02/2026/QĐ-TTg",
+    "ngay_ban_hanh": "08/01/2026",
+    "co_quan_ban_hanh": "Thủ tướng Chính phủ",
+    "trich_yeu": "Sửa đổi, bổ sung một số điều của các Quyết định để cắt giảm, đơn giản hóa thủ tục hành chính liên quan đến hoạt động sản xuất, kinh doanh thuộc phạm vi quản lý nhà nước của Bộ Khoa học và Công nghệ",
+    "nguoi_ky": "Nguyễn Chí Dũng"
+  },
+  "pdf_test_3.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "3/2025/QĐ-UBND",
+    "ngay_ban_hanh": "01/07/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Phú Thọ",
+    "trich_yeu": "Quy định chức năng, nhiệm vụ, quyền hạn và cơ cấu tổ chức của Sở Công Thương tỉnh Phú Thọ",
+    "nguoi_ky": "Trần Duy Đông"
+  },
+  "pdf_test_4.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "03/2026/QĐ-TTg",
+    "ngay_ban_hanh": "20/01/2026",
+    "co_quan_ban_hanh": "Thủ tướng Chính phủ",
+    "trich_yeu": "Sửa đổi, bổ sung một số điều của Quy chế xây dựng, quản lý, thực hiện Chương trình Thương hiệu quốc gia Việt Nam ban hành kèm theo Quyết định số 30/2019/QĐ-TTg ngày 08 tháng 10 năm 2019 của Thủ tướng Chính phủ",
+    "nguoi_ky": "Bùi Thanh Sơn"
+  },
+  "pdf_test_5.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "04/2026/QĐ-TTg",
+    "ngay_ban_hanh": "23/01/2026",
+    "co_quan_ban_hanh": "Thủ tướng Chính phủ",
+    "trich_yeu": "Ban hành Quy chế hoạt động ứng phó sự cố tràn dầu",
+    "nguoi_ky": "Trần Hồng Hà"
+  },
+  "pdf_test_6.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "05/2026/QĐ-TTg",
+    "ngay_ban_hanh": "27/01/2026",
+    "co_quan_ban_hanh": "Thủ tướng Chính phủ",
+    "trich_yeu": "Quy định nguyên tắc, tiêu chí, định mức phân bổ vốn ngân sách trung ương thực hiện Chương trình mục tiêu quốc gia phòng, chống ma túy đến năm 2030",
+    "nguoi_ky": "Hồ Đức Phớc"
+  },
+  "pdf_test_7.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "056/2025/QĐ-UBND",
+    "ngay_ban_hanh": "31/12/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Đắk Lắk",
+    "trich_yeu": "Bảng giá tính thuế tài nguyên đối với nhóm, loại tài nguyên có tính chất lý, hóa giống nhau trên địa bàn tỉnh Đắk Lắk",
+    "nguoi_ky": "Hồ Thị Nguyên Thảo"
+  },
+  "pdf_test_8.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "06/2026/QĐ-TTg",
+    "ngay_ban_hanh": "27/01/2026",
+    "co_quan_ban_hanh": "Thủ tướng Chính phủ",
+    "trich_yeu": "Về tổ chức, hoạt động, nguồn kinh phí và việc sử dụng nguồn kinh phí cho hoạt động bộ máy của Quỹ Dịch vụ viễn thông công ích Việt Nam",
+    "nguoi_ky": "Hồ Đức Phớc"
+  },
+  "pdf_test_9.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "07/2026/QĐ-TTg",
+    "ngay_ban_hanh": "27/01/2026",
+    "co_quan_ban_hanh": "Thủ tướng Chính phủ",
+    "trich_yeu": "Về việc thành lập, quản lý và sử dụng Quỹ phòng, chống tội phạm",
+    "nguoi_ky": "Hồ Đức Phớc"
+  },
+  "pdf_test_10.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "10/2025/QĐ-TTg",
+    "ngay_ban_hanh": "19/04/2025",
+    "co_quan_ban_hanh": "Thủ tướng Chính phủ",
+    "trich_yeu": "Quy định về việc thành lập, tổ chức, hoạt động của trung tâm giáo dục quốc phòng và an ninh",
+    "nguoi_ky": "Lê Thành Long"
+  },
+  "pdf_test_11.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "102/2025/QĐ-UBND",
+    "ngay_ban_hanh": "10/09/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Ninh Bình",
+    "trich_yeu": "Ban hành Quy định chức năng, nhiệm vụ, quyền hạn và cơ cấu tổ chức của Trung tâm Y tế Kim Bảng thuộc Sở Y tế tỉnh Ninh Bình",
+    "nguoi_ky": "Phạm Quang Ngọc"
+  },
+  "pdf_test_12.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "103/2025/QĐ-UBND",
+    "ngay_ban_hanh": "10/09/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Ninh Bình",
+    "trich_yeu": "Ban hành Quy định chức năng, nhiệm vụ, quyền hạn và cơ cấu tổ chức của Trung tâm Y tế Hoa Lư thuộc Sở Y tế tỉnh Ninh Bình",
+    "nguoi_ky": "Phạm Quang Ngọc"
+  },
+  "pdf_test_13.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "104/2025/QĐ-UBND",
+    "ngay_ban_hanh": "10/09/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Ninh Bình",
+    "trich_yeu": "Ban hành Quy định chức năng, nhiệm vụ quyền hạn và cơ cấu tổ chức của Ban Quản lý Khu Đại học Nam Cao và Khu Công nghệ cao tỉnh Ninh Bình",
+    "nguoi_ky": "Phạm Quang Ngọc"
+  },
+  "pdf_test_14.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "11/2025/QĐ-TTg",
+    "ngay_ban_hanh": "23/04/2025",
+    "co_quan_ban_hanh": "Thủ tướng Chính phủ",
+    "trich_yeu": "Ban hành Quy chế ứng phó sự cố chất thải",
+    "nguoi_ky": "Trần Hồng Hà"
+  },
+  "pdf_test_15.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "112/2025/QĐ-UBND",
+    "ngay_ban_hanh": "17/09/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Ninh Bình",
+    "trich_yeu": "Quy định chức năng, nhiệm vụ, quyền hạn và cơ cấu tổ chức của Trung tâm Y tế Tam Điệp thuộc Sở Y tế tỉnh Ninh Bình",
+    "nguoi_ky": "Phạm Quang Ngọc"
+  },
+  "pdf_test_16.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "113/2025/QĐ-UBND",
+    "ngay_ban_hanh": "17/09/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Ninh Bình",
+    "trich_yeu": "Quy định chức năng, nhiệm vụ, quyền hạn và cơ cấu tổ chức của Trung tâm Y tế Thanh Liêm thuộc Sở Y tế tỉnh Ninh Bình",
+    "nguoi_ky": "Phạm Quang Ngọc"
+  },
+  "pdf_test_17.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "118/2025/QĐ-UBND",
+    "ngay_ban_hanh": "26/09/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Ninh Bình",
+    "trich_yeu": "Ban hành Quy định chức năng, nhiệm vụ, quyền hạn và cơ cấu tổ chức của Trung tâm Y tế Nam Trực thuộc Sở Y tế tỉnh Ninh Bình",
+    "nguoi_ky": "Phạm Quang Ngọc"
+  },
+  "pdf_test_18.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "119/2025/QĐ-UBND",
+    "ngay_ban_hanh": "26/09/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Ninh Bình",
+    "trich_yeu": "Ban hành Quy định chức năng, nhiệm vụ, quyền hạn và cơ cấu tổ chức của Bệnh viện Đa khoa Nho Quan thuộc Sở Y tế tỉnh Ninh Bình",
+    "nguoi_ky": "Phạm Quang Ngọc"
+  },
+  "pdf_test_19.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "12/2025/QĐ-TTg",
+    "ngay_ban_hanh": "26/04/2025",
+    "co_quan_ban_hanh": "Thủ tướng Chính phủ",
+    "trich_yeu": "Quy định tiêu chí đối với chức danh chuyên gia, nhà khoa học đầu ngành, tổng công trình sư trong lĩnh vực công nghiệp quốc phòng, an ninh",
+    "nguoi_ky": "Nguyễn Hoà Bình"
+  },
+  "pdf_test_20.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "120/2025/QĐ-UBND",
+    "ngay_ban_hanh": "26/09/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Ninh Bình",
+    "trich_yeu": "Ban hành Quy định chức năng, nhiệm vụ, quyền hạn và cơ cấu tổ chức của Bệnh viện Đa khoa Kim Sơn thuộc Sở Y tế tỉnh Ninh Bình",
+    "nguoi_ky": "Phạm Quang Ngọc"
+  },
+  "pdf_test_21.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "1216/QĐ-BXD",
+    "ngay_ban_hanh": "05/08/2025",
+    "co_quan_ban_hanh": "Bộ Xây dựng",
+    "trich_yeu": "Về việc đính chính Nghị định số 145/2025/NĐ-CP ngày 12/6/2025 của Chính phủ quy định về phân định thẩm quyền của chính quyền địa phương 02 cấp, phân quyền, phân cấp trong lĩnh vực quy hoạch đô thị và nông thôn, Nghị định số 178/2025/NĐ-CP ngày 01/7/2025 của Chính phủ quy định chi tiết một số điều của Luật Quy hoạch đô thị và nông thôn và Quyết định số 18/2025/QĐ-TTg ngày 28/6/2025 của Thủ tướng Chính phủ quy định về trình tự, thủ tục phê duyệt điều chỉnh cục bộ Quy hoạch đô thị và nông thôn được Thủ tướng Chính phủ phê duyệt do Ủy ban nhân dân cấp tỉnh tổ chức lập 796]",
+    "nguoi_ky": "Nguyễn Tường Văn"
+  },
+  "pdf_test_22.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "122/2025/QĐ-UBND",
+    "ngay_ban_hanh": "26/09/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Ninh Bình",
+    "trich_yeu": "Ban hành Quy định chức năng, nhiệm vụ, quyền hạn và cơ cấu tổ chức của Trung tâm Y tế Duy Tiên thuộc Sở Y tế tỉnh Ninh Bình",
+    "nguoi_ky": "Phạm Quang Ngọc"
+  },
+  "pdf_test_23.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "123/2025/QĐ-UBND",
+    "ngay_ban_hanh": "26/09/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Ninh Bình",
+    "trich_yeu": "Ban hành Quy định chức năng, nhiệm vụ, quyền hạn và cơ cấu tổ chức của Trung tâm Y tế Kim Sơn thuộc Sở Y tế tỉnh Ninh Bình",
+    "nguoi_ky": "Phạm Quang Ngọc"
+  },
+  "pdf_test_24.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "124/2025/QĐ-UBND",
+    "ngay_ban_hanh": "26/09/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Ninh Bình",
+    "trich_yeu": "Ban hành Quy định chức năng, nhiệm vụ, quyền hạn và cơ cấu tổ chức của Trung tâm Y tế Hải Hậu thuộc Sở Y tế tỉnh Ninh Bình",
+    "nguoi_ky": "Phạm Quang Ngọc"
+  },
+  "pdf_test_25.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "125/2025/QĐ-UBND",
+    "ngay_ban_hanh": "26/09/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Ninh Bình",
+    "trich_yeu": "Ban hành Quy định chức năng, nhiệm vụ, quyền hạn và cơ cấu tổ chức của Trung tâm Y tế Giao Thủy thuộc Sở Y tế tỉnh Ninh Bình",
+    "nguoi_ky": "Phạm Quang Ngọc"
+  },
+  "pdf_test_26.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "126/2025/QĐ-UBND",
+    "ngay_ban_hanh": "26/09/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Ninh Bình",
+    "trich_yeu": "Ban hành Quy định chức năng, nhiệm vụ, quyền hạn và cơ cấu tổ chức của Trung tâm Y tế Lý Nhân thuộc Sở Y tế tỉnh Ninh Bình",
+    "nguoi_ky": "Phạm Quang Ngọc"
+  },
+  "pdf_test_27.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "127/2025/QĐ-UBND",
+    "ngay_ban_hanh": "26/09/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Ninh Bình",
+    "trich_yeu": "Ban hành Quy định chức năng, nhiệm vụ, quyền hạn và cơ cấu tổ chức của Trung tâm Y tế Nho Quan thuộc Sở Y tế tỉnh Ninh Bình",
+    "nguoi_ky": "Phạm Quang Ngọc"
+  },
+  "pdf_test_28.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "128/2025/QĐ-UBND",
+    "ngay_ban_hanh": "26/09/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Ninh Bình",
+    "trich_yeu": "Ban hành Quy định chức năng, nhiệm vụ, quyền hạn và cơ cấu tổ chức của Trung tâm Y tế Vụ Bản thuộc Sở Y tế tỉnh Ninh Bình",
+    "nguoi_ky": "Phạm Quang Ngọc"
+  },
+  "pdf_test_29.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "137/2025/QĐ-UBND",
+    "ngay_ban_hanh": "29/09/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Ninh Bình",
+    "trich_yeu": "Ban hành Quy định chức năng, nhiệm vụ, quyền hạn và cơ cấu tổ chức của Thanh tra tỉnh Ninh Bình",
+    "nguoi_ky": "Phạm Quang Ngọc"
+  },
+  "pdf_test_30.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "138/2025/QĐ-UBND",
+    "ngay_ban_hanh": "30/09/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Ninh Bình",
+    "trich_yeu": "Ban hành Quy định chức năng, nhiệm vụ, quyền hạn và cơ cấu tổ chức của Ban Quản lý dự án đầu tư xây dựng Hà Nam",
+    "nguoi_ky": "Phạm Quang Ngọc"
+  },
+  "pdf_test_31.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "14/2025/QĐ-TTg",
+    "ngay_ban_hanh": "29/05/2025",
+    "co_quan_ban_hanh": "Thủ tướng Chính phủ",
+    "trich_yeu": "Quy định về cơ cấu biểu giá bán lẻ điện",
+    "nguoi_ky": "Bùi Thanh Sơn"
+  },
+  "pdf_test_32.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "14/2025/QĐ-UBND",
+    "ngay_ban_hanh": "02/07/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Phú Thọ",
+    "trich_yeu": "Quy định chức năng, nhiệm vụ, quyền hạn và cơ cấu tổ chức của Sở Dân tộc và Tôn giáo tỉnh Phú Thọ",
+    "nguoi_ky": "Trần Duy Đông"
+  },
+  "pdf_test_33.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "15/2025/QĐ-UBND",
+    "ngay_ban_hanh": "11/07/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Phú Thọ",
+    "trich_yeu": "Quy định chức năng, nhiệm vụ, quyền hạn và cơ cấu tổ chức của Trường Đại học Hùng Vương",
+    "nguoi_ky": "Trần Duy Đông"
+  },
+  "pdf_test_34.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "15/2025/QĐ-TTg",
+    "ngay_ban_hanh": "14/06/2025",
+    "co_quan_ban_hanh": "Thủ tướng Chính phủ",
+    "trich_yeu": "Quy định tiêu chuẩn, định mức sử dụng máy móc, thiết bị",
+    "nguoi_ky": "Hồ Đức Phớc"
+  },
+  "pdf_test_35.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "154/2025/QĐ-UBND",
+    "ngay_ban_hanh": "10/09/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân thành phố Hải Phòng",
+    "trich_yeu": "Ban hành Quy định một số chỉ tiêu cụ thể khi áp dụng phương pháp định giá đất theo Nghị định số 71/2024/NĐ-CP ngày 27 tháng 6 năm 2024 của Chính phủ trên địa bàn thành phố Hải Phòng",
+    "nguoi_ky": "Lê Anh Quân"
+  },
+  "pdf_test_36.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "16/2025/QĐ-UBND",
+    "ngay_ban_hanh": "16/07/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Phú Thọ",
+    "trich_yeu": "Quy định chức năng, nhiệm vụ, quyền hạn và cơ cấu tổ chức của Ban Quản lý các Khu công nghiệp tỉnh Phú Thọ",
+    "nguoi_ky": "Trần Duy Đông"
+  },
+  "pdf_test_37.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "16/2025/QĐ-TTg",
+    "ngay_ban_hanh": "16/06/2025",
+    "co_quan_ban_hanh": "Thủ tướng Chính phủ",
+    "trich_yeu": "Về việc giải thể Ủy ban Giám sát tài chính Quốc gia",
+    "nguoi_ky": "Hồ Đức Phớc"
+  },
+  "pdf_test_38.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "17/2025/QĐ-TTg",
+    "ngay_ban_hanh": "16/06/2025",
+    "co_quan_ban_hanh": "Thủ tướng Chính phủ",
+    "trich_yeu": "Quy định chức năng, nhiệm vụ, quyền hạn và cơ cấu tổ chức của Học viện Chiến lược Khoa học và Công nghệ trực thuộc Bộ Khoa học và Công nghệ",
+    "nguoi_ky": "Nguyễn Chí Dũng"
+  },
+  "pdf_test_39.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "30/2025/QĐ-UBND",
+    "ngay_ban_hanh": "29/05/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Bến Tre",
+    "trich_yeu": "Sửa đổi, bổ sung một số điều của Quy định và Phụ lục ban hành kèm theo Quyết định số 20/2020/QĐ-UBND ngày 06 tháng 5 năm 2020, Quyết định số 23/2021/QĐ-UBND ngày 27 tháng 7 năm 2021, Quyết định số 23/2024/QĐ-UBND ngày 31 tháng 7 năm 2024 của Ủy ban nhân dân tỉnh",
+    "nguoi_ky": "Trần Ngọc Tam"
+  },
+  "pdf_test_40.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "31/2025/QĐ-TTg",
+    "ngay_ban_hanh": "02/09/2025",
+    "co_quan_ban_hanh": "Thủ tướng Chính phủ",
+    "trich_yeu": "Sửa đổi, bổ sung một số điều các Quyết định của Thủ tướng Chính phủ về thực hiện thủ tục biên phòng điện tử tại các cửa khẩu do Bộ Quốc phòng quản lý",
+    "nguoi_ky": "Phạm Minh Chính"
+  },
+  "pdf_test_41.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "31/2025/QĐ-UBND",
+    "ngay_ban_hanh": "10/06/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Lâm Đồng",
+    "trich_yeu": "Quy định mức sử dụng nước tối thiểu đối với cơ sở sản xuất công nghiệp phải trả tiền dịch vụ môi trường rừng và mức chi trả tiền dịch vụ môi trường rừng trong trường hợp chi trả ủy thác thông qua Quỹ Bảo vệ và phát triển rừng tỉnh Lâm Đồng",
+    "nguoi_ky": "Trần Hồng Thái"
+  },
+  "pdf_test_42.pdf": {
+    "loai_van_ban": "Nghị định",
+    "so_hieu": "13/VBHN-BXD",
+    "ngay_ban_hanh": "16/03/2026",
+    "co_quan_ban_hanh": "Bộ Xây dựng",
+    "trich_yeu": "Quy định chi tiết một số điều của Luật Nhà ở về phát triển và quản lý nhà ở xã hội",
+    "nguoi_ky": "Nguyễn Văn Sinh"
+  },
+  "pdf_test_43.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "32/2025/QĐ-UBND",
+    "ngay_ban_hanh": "12/06/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Lâm Đồng",
+    "trich_yeu": "Sửa đổi, bổ sung một số điều của Quyết định số 27/2024/QĐ-UBND ngày 30 tháng 9 năm 2024 của Ủy ban nhân dân tỉnh Lâm Đồng quy định điều kiện, diện tích tối thiểu được tách thửa đất, hợp thửa đất đối với từng loại đất trên địa bàn tỉnh Lâm Đồng",
+    "nguoi_ky": "Trần Hồng Thái"
+  },
+  "pdf_test_44.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "32/2025/QĐ-UBND",
+    "ngay_ban_hanh": "30/05/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Bến Tre",
+    "trich_yeu": "Về việc ban hành khung giá thuê nhà ở xã hội theo dự án được đầu tư xây dựng không bằng vốn đầu tư công, nguồn tài chính công đoàn; nhà ở xã hội do cá nhân tự đầu tư xây dựng và khung giá cho thuê nhà lưu trú công nhân trong khu công nghiệp trên địa bàn tỉnh Bến Tre",
+    "nguoi_ky": "Trần Ngọc Tam"
+  },
+  "pdf_test_45.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "33/2025/QĐ-TTg",
+    "ngay_ban_hanh": "15/09/2025",
+    "co_quan_ban_hanh": "Thủ tướng Chính phủ",
+    "trich_yeu": "Về Mạng truyền số liệu chuyên dùng phục vụ các cơ quan Đảng, Nhà nước",
+    "nguoi_ky": "Nguyễn Chí Dũng"
+  },
+  "pdf_test_46.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "33/2025/QĐ-UBND",
+    "ngay_ban_hanh": "12/06/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Lâm Đồng",
+    "trich_yeu": "Quy định mức nộp tiền để Nhà nước bổ sung diện tích đất chuyên trồng lúa bị mất hoặc tăng hiệu quả sử dụng đất trồng lúa trên địa bàn tỉnh Lâm Đồng",
+    "nguoi_ky": "Trần Hồng Thái"
+  },
+  "pdf_test_47.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "33/2025/QĐ-UBND",
+    "ngay_ban_hanh": "04/08/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Ninh Bình",
+    "trich_yeu": "Ban hành Quy định chức năng, nhiệm vụ, quyền hạn và cơ cấu tổ chức của Trung tâm Điều hành giao thông trực thuộc Sở Xây dựng tỉnh Ninh Bình",
+    "nguoi_ky": "Phạm Quang Ngọc"
+  },
+  "pdf_test_48.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "34/2025/QĐ-TTg",
+    "ngay_ban_hanh": "15/09/2025",
+    "co_quan_ban_hanh": "Thủ tướng Chính phủ",
+    "trich_yeu": "Về Quỹ Hỗ trợ việc làm ngoài nước",
+    "nguoi_ky": "Hồ Đức Phớc"
+  },
+  "pdf_test_49.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "34/2025/QĐ-UBND",
+    "ngay_ban_hanh": "19/06/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Lâm Đồng",
+    "trich_yeu": "Quy định Bảng giá tính thuế tài nguyên khai thác năm 2025 trên địa bàn tỉnh Lâm Đồng",
+    "nguoi_ky": "Trần Hồng Thái"
+  },
+  "pdf_test_50.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "35/2025/QĐ-UBND",
+    "ngay_ban_hanh": "19/06/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Lâm Đồng",
+    "trich_yeu": "Quy định áp dụng các hệ số K thành phần để chi trả tiền dịch vụ môi trường rừng trên địa bàn tỉnh Lâm Đồng",
+    "nguoi_ky": "Trần Hồng Thái"
+  },
+  "pdf_test_51.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "36/2025/QĐ-UBND",
+    "ngay_ban_hanh": "20/06/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Lâm Đồng",
+    "trich_yeu": "Ban hành Quy chế quản lý kiến trúc thị trấn Đạ M'ri, huyện Đạ Huoai, tỉnh Lâm Đồng",
+    "nguoi_ky": "Trần Hồng Thái"
+  },
+  "pdf_test_52.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "37/2025/QĐ-TTg",
+    "ngay_ban_hanh": "03/10/2025",
+    "co_quan_ban_hanh": "Thủ tướng Chính phủ",
+    "trich_yeu": "Ban hành Quy hoạch phổ tần số vô tuyến điện quốc gia",
+    "nguoi_ky": "Nguyễn Chí Dũng"
+  },
+  "pdf_test_53.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "46/2025/QĐ-TTg",
+    "ngay_ban_hanh": "11/12/2025",
+    "co_quan_ban_hanh": "Thủ tướng Chính phủ",
+    "trich_yeu": "Về việc bãi bỏ toàn bộ Quyết định số 53/2012/QĐ-TTg ngày 22 tháng 11 năm 2012 của Thủ tướng Chính phủ về việc ban hành lộ trình áp dụng tỷ lệ phối trộn nhiên liệu sinh học với nhiên liệu truyền thống",
+    "nguoi_ky": "Bùi Thanh Sơn"
+  },
+  "pdf_test_54.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "47/2025/QĐ-UBND",
+    "ngay_ban_hanh": "17/06/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Phú Thọ",
+    "trich_yeu": "Quy định chức năng, nhiệm vụ, quyền hạn và cơ cấu tổ chức của Chi cục Tiêu chuẩn đo lường chất lượng trực thuộc Sở Khoa học và Công nghệ tỉnh Phú Thọ",
+    "nguoi_ky": "Bùi Văn Quang"
+  },
+  "pdf_test_55.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "47/2025/QĐ-TTg",
+    "ngay_ban_hanh": "11/12/2025",
+    "co_quan_ban_hanh": "Thủ tướng Chính phủ",
+    "trich_yeu": "Ban hành Quy chế phối hợp hoạt động của các cơ quan tham gia hợp tác ASEAN",
+    "nguoi_ky": "Bùi Thanh Sơn"
+  },
+  "pdf_test_56.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "48/2025/QĐ-TTg",
+    "ngay_ban_hanh": "12/12/2025",
+    "co_quan_ban_hanh": "Thủ tướng Chính phủ",
+    "trich_yeu": "Ban hành Quy chế tiếp nhận, xử lý phản ánh, kiến nghị trên Hệ thống thông tin tiếp nhận, xử lý phản ánh, kiến nghị về văn bản quy phạm pháp luật",
+    "nguoi_ky": "Hồ Quốc Dũng"
+  },
+  "pdf_test_57.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "7/2025/QĐ-UBND",
+    "ngay_ban_hanh": "01/07/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Phú Thọ",
+    "trich_yeu": "Quy định vị trí, chức năng, nhiệm vụ, quyền hạn và cơ cấu tổ chức của Sở Xây dựng tỉnh Phú Thọ",
+    "nguoi_ky": "Trần Duy Đông"
+  },
+  "pdf_test_58.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "77/2025/QĐ-UBND",
+    "ngay_ban_hanh": "27/10/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Phú Thọ",
+    "trich_yeu": "Ban hành Quy chế quản lý, cập nhật, khai thác, sử dụng, chia sẻ cơ sở dữ liệu công chứng trên địa bàn tỉnh Phú Thọ",
+    "nguoi_ky": "Phùng Thị Kim Nga"
+  },
+  "pdf_test_59.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "77/2025/QĐ-UBND",
+    "ngay_ban_hanh": "29/07/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân thành phố Hải Phòng",
+    "trich_yeu": "Về việc ban hành Quy chế phối hợp trong công tác bồi thường, hỗ trợ và tái định cư khi Nhà nước thu hồi đất trên địa bàn thành phố Hải Phòng",
+    "nguoi_ky": "Lê Anh Quân"
+  },
+  "pdf_test_60.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "9/2025/QĐ-UBND",
+    "ngay_ban_hanh": "01/07/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Phú Thọ",
+    "trich_yeu": "Quy định chức năng, nhiệm vụ, quyền hạn và cơ cấu tổ chức của Sở Nông nghiệp và Môi trường tỉnh Phú Thọ",
+    "nguoi_ky": "Trần Duy Đông"
+  },
+  "pdf_test_61.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "90/2025/QĐ-UBND",
+    "ngay_ban_hanh": "01/09/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Ninh Bình",
+    "trich_yeu": "Ban hành Quy định chức năng, nhiệm vụ, quyền hạn và cơ cấu tổ chức của Trung tâm Kiểm soát bệnh tật tỉnh Ninh Bình trực thuộc Sở Y tế tỉnh Ninh Bình",
+    "nguoi_ky": "Phạm Quang Ngọc"
+  },
+  "pdf_test_62.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "91/2025/QĐ-UBND",
+    "ngay_ban_hanh": "01/09/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Ninh Bình",
+    "trich_yeu": "Ban hành Quy định chức năng, nhiệm vụ, quyền hạn và cơ cấu tổ chức của Trung tâm Điều dưỡng Người có công Ninh Bình trực thuộc Sở Nội vụ tỉnh Ninh Bình",
+    "nguoi_ky": "Phạm Quang Ngọc"
+  },
+  "pdf_test_63.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "92/2025/QĐ-UBND",
+    "ngay_ban_hanh": "01/09/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Ninh Bình",
+    "trich_yeu": "Ban hành Quy định chức năng, nhiệm vụ, quyền hạn và cơ cấu tổ chức của Trung tâm Kiểm nghiệm Dược phẩm, mỹ phẩm tỉnh Ninh Bình trực thuộc Sở Y tế tỉnh Ninh Bình",
+    "nguoi_ky": "Phạm Quang Ngọc"
+  },
+  "pdf_test_64.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "94/2025/QĐ-UBND",
+    "ngay_ban_hanh": "05/09/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Ninh Bình",
+    "trich_yeu": "Ban hành Quy định chức năng, nhiệm vụ, quyền hạn và cơ cấu tổ chức của Trung tâm Nuôi dưỡng thương bệnh binh nặng và Điều dưỡng Người có công Hà Nam thuộc Sở Nội vụ tỉnh Ninh Bình",
+    "nguoi_ky": "Phạm Quang Ngọc"
+  },
+  "pdf_test_65.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "28/2025/QĐ-UBND",
+    "ngay_ban_hanh": "01/09/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Phú Thọ",
+    "trich_yeu": "Quy định chi tiết tiêu chuẩn xét tặng danh hiệu \"Gia đình văn hóa\", \"Thôn tổ dân phố văn hóa\", \"Xã phường tiêu biểu\" trên địa bản tỉnh Phú Thọ",
+    "nguoi_ky": "Phùng Thị Kim Nga"
+  },
+  "pdf_test_66.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "63/2025/QĐ-CTUBND",
+    "ngay_ban_hanh": "17/10/2025",
+    "co_quan_ban_hanh": "Chủ tịch Ủy ban nhân dân tỉnh Phú Thọ",
+    "trich_yeu": "Ban hành Quy chế phối hợp trong quản lý người nước ngoài cư trú, hoạt động trên địa bàn tỉnh Phú Thọ",
+    "nguoi_ky": "Trần Duy Đông"
+  },
+  "pdf_test_67.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "21/2025/QĐ-UBND",
+    "ngay_ban_hanh": "26/04/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Lâm Đồng",
+    "trich_yeu": "Quy định khung giá dịch vụ quản lý vận hành nhà chung cư trên địa bàn tỉnh Lâm Đồng",
+    "nguoi_ky": "Trần Hồng Thái"
+  },
+  "pdf_test_68.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "22/2025/QĐ-UBND",
+    "ngay_ban_hanh": "26/04/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Lâm Đồng",
+    "trich_yeu": "Quy định khung giá thuê nhà ở xã hội được đầu tư xây dựng không bằng vốn đầu tư công, nguồn tài chính công đoàn trên địa bàn tỉnh Lâm Đồng",
+    "nguoi_ky": "Trần Hồng Thái"
+  },
+  "pdf_test_69.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "25/2025/QĐ-UBND",
+    "ngay_ban_hanh": "26/04/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Lâm Đồng",
+    "trich_yeu": "Quy định phân cấp thẩm quyền sát hạch, cấp chứng chỉ hành nghề hoạt động xây dựng hạng I, cấp chứng chỉ năng lực hoạt động xây dựng hạng I trên địa bàn tỉnh Lâm Đồng",
+    "nguoi_ky": "Trần Hồng Thái"
+  },
+  "pdf_test_70.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "30/2025/QĐ-UBND",
+    "ngay_ban_hanh": "28/05/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Lâm Đồng",
+    "trich_yeu": "Quy định giá cho thuê đối với nhà ở cũ thuộc tài sản công trên địa bàn tỉnh Lâm Đồng",
+    "nguoi_ky": "Trần Hồng Thái"
+  },
+  "pdf_test_71.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "38/2025/QĐ-UBND",
+    "ngay_ban_hanh": "30/06/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Lâm Đồng",
+    "trich_yeu": "Ban hành Quy chế quản lý kiến trúc đô thị Thạnh Mỹ, tỉnh Lâm Đồng",
+    "nguoi_ky": "Trần Hồng Thái"
+  },
+  "pdf_test_72.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "39/2025/QĐ-UBND",
+    "ngay_ban_hanh": "30/06/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Lâm Đồng",
+    "trich_yeu": "Ban hành Quy chế quản lý kiến trúc đô thị Lộc Thắng, tỉnh Lâm Đồng",
+    "nguoi_ky": "Trần Hồng Thái"
+  },
+  "pdf_test_73.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "40/2025/QĐ-UBND",
+    "ngay_ban_hanh": "30/06/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Lâm Đồng",
+    "trich_yeu": "Ban hành Quy chế quản lý kiến trúc đô thị Lạc Dương, tỉnh Lâm Đồng",
+    "nguoi_ky": "Trần Hồng Thái"
+  },
+  "pdf_test_74.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "41/2025/QĐ-UBND",
+    "ngay_ban_hanh": "10/06/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Bến Tre",
+    "trich_yeu": "Ban hành định mức kinh tế - kỹ thuật đăng ký đất đai, cấp Giấy chứng nhận quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất trên địa bàn tỉnh Bến Tre",
+    "nguoi_ky": "Trần Ngọc Tam"
+  },
+  "pdf_test_75.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "42/2025/QĐ-UBND",
+    "ngay_ban_hanh": "10/06/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Bến Tre",
+    "trich_yeu": "Ban hành Định mức kinh tế - kỹ thuật lĩnh vực xây dựng cơ sở dữ liệu đất đai trên địa bàn tỉnh Bến Tre (Cơ sở dữ liệu địa chính; Cơ sở dữ liệu thống kê, kiểm kê đất đai)",
+    "nguoi_ky": "Trần Ngọc Tam"
+  },
+  "pdf_test_76.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "43/2025/QĐ-UBND",
+    "ngay_ban_hanh": "10/06/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Bến Tre",
+    "trich_yeu": "Ban hành định mức kinh tế - kỹ thuật đo đạc lập bản đồ địa chính trên địa bàn tỉnh Bến Tre",
+    "nguoi_ky": "Trần Ngọc Tam"
+  },
+  "pdf_test_77.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "45/2025/QĐ-UBND",
+    "ngay_ban_hanh": "10/06/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Bến Tre",
+    "trich_yeu": "Quy định việc phối hợp cung cấp thông tin về nhà ở giữa cơ quan nhà nước có thẩm quyền làm thủ tục cấp giấy chứng nhận quyền sử dụng đất, quyền sở hữu nhà ở và tài sản khác gắn liền với đất và cơ quan quản lý nhà ở trên địa bàn tỉnh Bến Tre",
+    "nguoi_ky": "Trần Ngọc Tam"
+  },
+  "pdf_test_78.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "17/2025/QĐ-UBND",
+    "ngay_ban_hanh": "23/07/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Phú Thọ",
+    "trich_yeu": "Ban hành Quy chế làm việc của Ủy ban nhân dân tỉnh Phú Thọ nhiệm kỳ 2021-2026",
+    "nguoi_ky": "Trần Duy Đông"
+  },
+  "pdf_test_79.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "40/2025/QĐ-UBND",
+    "ngay_ban_hanh": "21/04/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Phú Thọ",
+    "trich_yeu": "Bãi bỏ Quyết định số 37/2018/QĐ-UBND ngày 20 tháng 12 năm 2018 của UBND tỉnh Phú Thọ về Quy chế quản lý vật liệu nổ công nghiệp, tiền chất thuốc nổ sử dụng để sản xuất vật liệu nổ công nghiệp trên địa bàn tỉnh Phú Thọ",
+    "nguoi_ky": "Nguyễn Mạnh Sơn"
+  },
+  "pdf_test_80.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "41/2025/QĐ-UBND",
+    "ngay_ban_hanh": "12/05/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Phú Thọ",
+    "trich_yeu": "Quy định chức năng, nhiệm vụ, quyền hạn và cơ cấu tổ chức của Trung tâm Khoa học công nghệ, đổi mới sáng tạo và chuyển đổi số tỉnh Phú Thọ",
+    "nguoi_ky": "Bùi Văn Quang"
+  },
+  "pdf_test_81.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "44/2025/QĐ-UBND",
+    "ngay_ban_hanh": "26/05/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Phú Thọ",
+    "trich_yeu": "Phân cấp thẩm quyền cấp chứng chỉ năng lực hoạt động xây dựng và sát hạch, cấp chứng chỉ hành nghề hoạt động xây dựng hạng I trên địa bàn tỉnh",
+    "nguoi_ky": "Bùi Văn Quang"
+  },
+  "pdf_test_82.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "45/2025/QĐ-UBND",
+    "ngay_ban_hanh": "29/05/2025",
+    "co_quan_ban_hanh": "Ủy ban nhân dân tỉnh Phú Thọ",
+    "trich_yeu": "Bãi bỏ Quyết định số 12/2020/QĐ-UBND ngày 29 tháng 6 năm 2020 của UBND tỉnh Phú Thọ về việc Quy định đơn giá dịch vụ thoát nước và xử lý nước thải; đơn giá thuê hạ tầng; giá dịch vụ công cộng tại Khu công nghiệp Thụy Vân, Khu công nghiệp Trung Hà, Cụm công nghiệp Bạch Hạc",
+    "nguoi_ky": "Nguyễn Mạnh Sơn"
+  },
+  "pdf_test_83.pdf": {
+    "loai_van_ban": "Nghị định",
+    "so_hieu": "99/2016/NĐ-CP",
+    "ngay_ban_hanh": "01/07/2016",
+    "co_quan_ban_hanh": "Chính phủ",
+    "trich_yeu": "Về quản lý và sử dụng con dấu",
+    "nguoi_ky": "Nguyễn Xuân Phúc"
+  },
+  "pdf_test_84.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "27/2025/QĐ-TTg",
+    "ngay_ban_hanh": "04/08/2025",
+    "co_quan_ban_hanh": "Thủ tướng Chính phủ",
+    "trich_yeu": "Quy định về xã, phường, đặc khu đạt chuẩn tiếp cận pháp luật",
+    "nguoi_ky": "Lê Thành Long"
+  },
+  "pdf_test_85.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "453/QĐ-TTg",
+    "ngay_ban_hanh": "18/03/2026",
+    "co_quan_ban_hanh": "Thủ tướng Chính phủ",
+    "trich_yeu": "Phê duyệt Đề án xây dựng cửa khẩu thông minh tại lối thông quan cầu đường bộ Kim Thành và lối thông quan Bản Vược thuộc cửa khẩu quốc tế Lào Cai",
+    "nguoi_ky": "Hồ Đức Phớc"
+  },
+  "pdf_test_86.pdf": {
+    "loai_van_ban": "Nghị quyết",
+    "so_hieu": "54/NQ-CP",
+    "ngay_ban_hanh": "18/03/2026",
+    "co_quan_ban_hanh": "Chính phủ",
+    "trich_yeu": "Về việc trình Ủy ban Thường vụ Quốc hội Đề án “Tổng rà soát hệ thống văn bản quy phạm pháp luật đáp ứng yêu cầu phát triển đất nước trong kỷ nguyên mới” và dự thảo Nghị quyết về tổng rà soát hệ thống văn bản quy phạm pháp luật",
+    "nguoi_ky": "Hồ Quốc Dũng"
+  },
+  "pdf_test_87.pdf": {
+    "loai_van_ban": "Luật",
+    "so_hieu": "51/VBHN-VPQH",
+    "ngay_ban_hanh": "18/03/2026",
+    "co_quan_ban_hanh": "Văn phòng Quốc hội",
+    "trich_yeu": "Luật Di sản văn hóa",
+    "nguoi_ky": "Lê Quang Mạnh"
+  },
+  "pdf_test_88.pdf": {
+    "loai_van_ban": "Công văn",
+    "so_hieu": "2285/VPCP-CN",
+    "ngay_ban_hanh": "17/03/2026",
+    "co_quan_ban_hanh": "Văn phòng Chính phủ",
+    "trich_yeu": "Về việc rà soát, đầu tư nâng cấp hoàn thiện các tuyến đường bộ cao tốc đã đầu tư theo quy mô phân kỳ",
+    "nguoi_ky": "Đặng Xuân Phong"
+  },
+  "pdf_test_89.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "452/QĐ-TTg",
+    "ngay_ban_hanh": "17/03/2026",
+    "co_quan_ban_hanh": "Thủ tướng Chính phủ",
+    "trich_yeu": "Ban hành Kế hoạch triển khai thi hành Luật Bảo vệ bí mật nhà nước",
+    "nguoi_ky": "Phạm Minh Chính"
+  },
+  "pdf_test_90.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "450/QĐ-TTg",
+    "ngay_ban_hanh": "17/03/2026",
+    "co_quan_ban_hanh": "Thủ tướng Chính phủ",
+    "trich_yeu": "Về việc điều động, bổ nhiệm ông Tạ Anh Tuấn giữ chức Thứ trưởng Bộ Tài chính",
+    "nguoi_ky": "Phạm Minh Chính"
+  },
+  "pdf_test_91.pdf": {
+    "loai_van_ban": "Thông báo",
+    "so_hieu": "129/TB-VPCP",
+    "ngay_ban_hanh": "17/03/2026",
+    "co_quan_ban_hanh": "Văn phòng Chính phủ",
+    "trich_yeu": "Kết luận của Thủ tướng Chính phủ Phạm Minh Chính - Trưởng Ban Chỉ đạo tại Phiên họp lần thứ 24 Ban Chỉ đạo Nhà nước các công trình, dự án quan trọng quốc gia, trọng điểm ngành giao thông vận tải",
+    "nguoi_ky": "Đặng Xuân Phong"
+  },
+  "pdf_test_92.pdf": {
+    "loai_van_ban": "Nghị định",
+    "so_hieu": "77/2026/NĐ-CP",
+    "ngay_ban_hanh": "17/03/2026",
+    "co_quan_ban_hanh": "Chính phủ",
+    "trich_yeu": "Quy định về tổ chức và hoạt động của Quỹ Đổi mới công nghệ quốc gia",
+    "nguoi_ky": "Hồ Đức Phớc"
+  },
+  "pdf_test_93.pdf": {
+    "loai_van_ban": "Luật",
+    "so_hieu": "50/VBHN-VPQH",
+    "ngay_ban_hanh": "17/03/2026",
+    "co_quan_ban_hanh": "Văn phòng Quốc hội",
+    "trich_yeu": "Công chứng",
+    "nguoi_ky": "Lê Quang Mạnh"
+  },
+  "pdf_test_94.pdf": {
+    "loai_van_ban": "Luật",
+    "so_hieu": "49/VBHN-VPQH",
+    "ngay_ban_hanh": "17/03/2026",
+    "co_quan_ban_hanh": "Văn phòng Quốc hội",
+    "trich_yeu": "Đường bộ",
+    "nguoi_ky": "Lê Quang Mạnh"
+  },
+  "pdf_test_95.pdf": {
+    "loai_van_ban": "Luật",
+    "so_hieu": "48/VBHN-VPQH",
+    "ngay_ban_hanh": "17/03/2026",
+    "co_quan_ban_hanh": "Văn phòng Quốc hội",
+    "trich_yeu": "Giáo dục quốc phòng và an ninh",
+    "nguoi_ky": "Lê Quang Mạnh"
+  },
+  "pdf_test_96.pdf": {
+    "loai_van_ban": "Luật",
+    "so_hieu": "47/VBHN-VPQH",
+    "ngay_ban_hanh": "17/02/2026",
+    "co_quan_ban_hanh": "Văn phòng Quốc hội",
+    "trich_yeu": "Bảo vệ quyền lợi người tiêu dùng",
+    "nguoi_ky": "Lê Quang Mạnh"
+  },
+  "pdf_test_97.pdf": {
+    "loai_van_ban": "Chỉ thị",
+    "so_hieu": "08/CT-TTg",
+    "ngay_ban_hanh": "17/03/2026",
+    "co_quan_ban_hanh": "Thủ tướng Chính phủ",
+    "trich_yeu": "Về tổ chức kỳ họp thứ nhất của Hội đồng nhân dân các cấp nhiệm kỳ 2026 - 2031 và tiếp tục nâng cao chất lượng, hiệu quả hoạt động của chính quyền địa phương 02 cấp",
+    "nguoi_ky": "Phạm Minh Chính"
+  },
+  "pdf_test_98.pdf": {
+    "loai_van_ban": "Quyết định",
+    "so_hieu": "445/QĐ-TTg",
+    "ngay_ban_hanh": "16/03/2026",
+    "co_quan_ban_hanh": "Thủ tướng Chính phủ",
+    "trich_yeu": "Thành lập Tổ công tác của Thủ tướng Chính phủ về quy hoạch và thể chế hành chính sau sáp nhập",
+    "nguoi_ky": "Nguyễn Chí Dũng"
+  },
+  "pdf_test_99.pdf": {
+    "loai_van_ban": "Thông tư",
+    "so_hieu": "10/VBHN-BYT",
+    "ngay_ban_hanh": "16/03/2026",
+    "co_quan_ban_hanh": "Bộ Y tế",
+    "trich_yeu": "Quy định việc phân cấp giải quyết thủ tục hành chính trong lĩnh vực khám bệnh, chữa bệnh thuộc thẩm quyền quản lý của Bộ Y tế",
+    "nguoi_ky": "Đỗ Xuân Tuyên"
+  },
+  "pdf_test_100.pdf": {
+    "loai_van_ban": "Thông tư",
+    "so_hieu": "09/VBHN-BYT",
+    "ngay_ban_hanh": "16/03/2026",
+    "co_quan_ban_hanh": "Bộ Y tế",
+    "trich_yeu": "Quy định về xác nhận nội dung quảng cáo đối với sản phẩm, hàng hóa, dịch vụ đặc biệt thuộc lĩnh vực quản lý của Bộ Y tế",
+    "nguoi_ky": "Vũ Mạnh Hà"
+  }
+}
