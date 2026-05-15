@@ -1,6 +1,9 @@
 # TÊN ĐỀ TÀI: TRÍCH XUẤT THÔNG TIN HÀNH CHÍNH TỰ ĐỘNG SỬ DỤNG MÔ HÌNH THỊ GIÁC - NGÔN NGỮ KẾT HỢP (HYBRID VISION-LANGUAGE PIPELINE)
 
-**Tác giả:** Nguyễn Tiến, Hoàng Trần Đức Hải, Nguyễn Hữu Thái
+**Tác giả:** Nguyễn Tiến, Hoàng Trần Đức Hải, Nguyễn Hữu Thái  
+**GVHD:** TS. Nguyễn Năng Hùng Vân  
+**Đơn vị:** Lớp 24T_Nhat1, Khoa Công nghệ Thông tin, Trường Đại học Bách khoa, Đại học Đà Nẵng  
+**Email:** nguyentien281006@gmail.com, hoangtranduchai@gmail.com, thaivuivui@gmail.com
 
 **Ngày viết bản thảo:** 23/04/2026
 

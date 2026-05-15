@@ -1,8 +1,9 @@
 # Nghiên cứu Xây dựng Hệ thống Trích xuất và Cấu trúc hóa Thông tin Tự động từ Văn bản Hành chính Tiếng Việt sử dụng Mô hình Ngôn ngữ Lớn (LLMs) và Công nghệ OCR
 
-**Tác giả:** [Tên tác giả]  
-**Đơn vị:** [Tên đơn vị / Trường]  
-**Email:** [email]
+**Tác giả:** Nguyễn Tiến, Nguyễn Hữu Thái, Hoàng Trần Đức Hải  
+**GVHD:** TS. Nguyễn Năng Hùng Vân  
+**Đơn vị:** Lớp 24T_Nhat1, Khoa Công nghệ Thông tin, Trường Đại học Bách khoa, Đại học Đà Nẵng  
+**Email:** nguyentien281006@gmail.com, thaivuivui@gmail.com, hoangtranduchai@gmail.com
 
 ---
 
@@ -32,7 +33,7 @@ Trong bối cảnh chuyển đổi số quốc gia, hàng triệu văn bản hà
 1. **HybridStampMatting**: Phương pháp kết hợp Color Matting (HSV) + Background Removal (U2-Net) xóa con dấu đỏ hiệu quả hơn GAN truyền thống
 2. **Pipeline 5 giai đoạn**: Kiến trúc module hóa cho phép thay thế từng thành phần độc lập
 3. **Sliding Window Chunking**: Kỹ thuật chia văn bản dài thành đoạn paragraph-aware cho LLM context window 32K
-4. **NeuralIDP Enterprise**: Web application hoàn chỉnh cho triển khai thực tế
+4. **VietIDP Web UI**: Web application hoàn chỉnh cho triển khai thực tế
 
 ---
 
@@ -196,7 +197,7 @@ class HybridStampMatting:
 
 ---
 
-## 5. Web Application — NeuralIDP Enterprise
+## 5. Web Application — VietIDP Web UI
 
 Hệ thống được đóng gói thành ứng dụng web enterprise với kiến trúc:
 
@@ -208,7 +209,7 @@ Hệ thống được đóng gói thành ứng dụng web enterprise với kiế
 ```mermaid
 sequenceDiagram
     participant User
-    participant Frontend as NeuralIDP UI
+    participant Frontend as VietIDP UI
     participant Backend as FastAPI Server
     participant Pipeline as VietIDP Pipeline
     participant LLM as Ollama (Qwen2.5)
@@ -244,7 +245,7 @@ Nghiên cứu đã đề xuất và triển khai thành công hệ thống VietI
 1. **HybridStampMatting** cho kết quả xóa con dấu ổn định hơn GAN
 2. **Pipeline 5 giai đoạn** module hóa, dễ mở rộng
 3. **Tích hợp Qwen2.5-7B** offline với Sliding Window chunking
-4. **NeuralIDP Enterprise** — web application sẵn sàng triển khai
+4. **VietIDP Web UI** — web application sẵn sàng triển khai
 
 ### Hướng phát triển:
 - Fine-tune VietOCR trên tập dữ liệu văn bản hành chính

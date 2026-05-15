@@ -5,7 +5,8 @@ setup(
     name="vietidp",
     version="2.0.0",
     description="Vietnamese Intelligent Document Processing - OCR + LLM Pipeline",
-    author="VietIDP Research Team",
+    author="Nguyễn Tiến, Nguyễn Hữu Thái, Hoàng Trần Đức Hải",
+    author_email="nguyentien281006@gmail.com, thaivuivui@gmail.com, hoangtranduchai@gmail.com",
     python_requires=">=3.9",
     packages=find_packages(),
     install_requires=[

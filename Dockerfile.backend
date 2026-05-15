@@ -4,7 +4,7 @@
 # ═══════════════════════════════════════════════════════════════
 FROM nvidia/cuda:12.8.0-runtime-ubuntu22.04
 
-LABEL maintainer="VietIDP Team"
+LABEL maintainer="Nguyễn Tiến, Nguyễn Hữu Thái, Hoàng Trần Đức Hải - Khoa CNTT, ĐH Bách khoa, ĐHĐN"
 LABEL description="VietIDP Backend API with GPU support"
 
 # Avoid interactive prompts

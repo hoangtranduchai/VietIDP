@@ -1,5 +1,5 @@
 # ═══════════════════════════════════════════════════════════════
-# VietIDP NeuralIDP Enterprise — Docker Compose
+# VietIDP — Docker Compose
 # ═══════════════════════════════════════════════════════════════
 # Canonical Stack: FastAPI + React/Vite + PostgreSQL + Ollama
 #

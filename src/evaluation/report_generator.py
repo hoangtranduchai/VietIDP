@@ -270,7 +270,7 @@ def generate_html_report(data: dict, output_path: str):
         </table>
 
         <div class="footer">
-            VietIDP NeuralIDP Enterprise v3.0 — Benchmark Report
+            VietIDP v3.0 — Benchmark Report | Khoa CNTT, ĐH Bách khoa, ĐHĐN
         </div>
     </div>
 </body>

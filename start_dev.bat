@@ -1,7 +1,7 @@
 @echo off
 chcp 65001 >nul 2>&1
 REM =============================================================
-REM  VietIDP NeuralIDP Enterprise - Dev Startup (Anaconda Prompt)
+REM  VietIDP - Dev Startup (Anaconda Prompt)
 REM  Su dung Miniconda env "vietidp" voi GPU (RTX 5070)
 REM =============================================================
 REM
@@ -10,11 +10,11 @@ REM   cd /d E:\OCR-LLM_Research\OCR-LLM_Research
 REM   start_dev.bat
 REM =============================================================
 
-title VietIDP NeuralIDP Enterprise
+title VietIDP
 
 echo.
 echo  ============================================================
-echo     VietIDP NeuralIDP Enterprise v3.0
+echo     VietIDP v3.0
 echo     GPU: RTX 5070 8GB  -  LLM: Qwen2.5-7B
 echo  ============================================================
 echo.

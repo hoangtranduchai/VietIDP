@@ -274,7 +274,11 @@ Hệ thống đã sẵn sàng **demo và đánh giá** trên bộ dữ liệu 15
 
 ---
 
-> **Người báo cáo:** VietIDP Research Team
+> **Người báo cáo:** Nguyễn Tiến, Nguyễn Hữu Thái, Hoàng Trần Đức Hải
+>
+> **GVHD:** TS. Nguyễn Năng Hùng Vân
+>
+> **Đơn vị:** Lớp 24T_Nhat1, Khoa Công nghệ Thông tin, Trường Đại học Bách khoa, Đại học Đà Nẵng
 >
 > **Ngày:** 03/04/2026
 >

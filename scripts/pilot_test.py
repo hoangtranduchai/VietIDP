@@ -282,7 +282,7 @@ def test_full_pipeline():
 
 def main():
     print("\n" + "=" * 60)
-    print("  VietIDP NeuralIDP Enterprise -- Pilot Test")
+    print("  VietIDP -- Pilot Test")
     print("  Testing all components on GPU")
     print("=" * 60)
 

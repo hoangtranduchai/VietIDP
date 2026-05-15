@@ -15,4 +15,4 @@ Modules:
 """
 
 __version__ = "1.0.0"
-__author__ = "VietIDP Research Team"
+__author__ = "Nguyễn Tiến, Nguyễn Hữu Thái, Hoàng Trần Đức Hải"

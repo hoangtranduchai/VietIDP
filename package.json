@@ -10,6 +10,6 @@
     "audit": "python scripts/audit_artifacts.py"
   },
   "keywords": ["ocr", "llm", "vietnamese", "document-processing"],
-  "author": "VietIDP Research Team",
+  "author": "Nguyễn Tiến, Nguyễn Hữu Thái, Hoàng Trần Đức Hải (DUT - Đại học Bách khoa, Đại học Đà Nẵng)",
   "license": "MIT"
 }
