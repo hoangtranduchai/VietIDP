@@ -3,12 +3,14 @@ import { useLocale } from '../LocaleContext'
 import { chatWithDocument } from '../services/api'
 import ReactMarkdown from 'react-markdown'
 import { toast } from 'react-toastify'
+import { MOCK_CHAT_RESPONSES, MOCK_SUGGESTED_QUESTIONS } from '../data/mockData'
 
 export default function ChatPanel({ documentId, context }) {
   const [messages, setMessages] = useState([])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
-  const { t } = useLocale()
+  const { t, locale } = useLocale()
+  const mockResponseIdx = useRef(0)
   const messagesEndRef = useRef(null)
   const autoSummarizedDocId = useRef(null)
 
@@ -32,7 +34,11 @@ export default function ChatPanel({ documentId, context }) {
           const res = await chatWithDocument(prompt, documentId, context)
           setMessages([{ role: 'assistant', text: res.answer }])
         } catch {
-          setMessages([])
+          // Fallback: mock auto-summary
+          const mockResp = MOCK_CHAT_RESPONSES[locale] || MOCK_CHAT_RESPONSES.vi
+          setMessages([{ role: 'assistant', text: `👋 ${locale === 'vi' ? 'Chào bạn!' : 'Hello!'} ${locale === 'vi' ? 'Đây là bản tóm tắt tài liệu:' : 'Here is the document summary:'}
+
+${mockResp[2]?.a || 'Document loaded successfully.'}` }])
         } finally {
           setLoading(false)
         }
@@ -53,9 +59,13 @@ export default function ChatPanel({ documentId, context }) {
       const res = await chatWithDocument(textToSend, documentId, context)
       setMessages(prev => [...prev, { role: 'assistant', text: res.answer }])
     } catch {
+      // Fallback: mock response
+      const mockResp = MOCK_CHAT_RESPONSES[locale] || MOCK_CHAT_RESPONSES.vi
+      const idx = mockResponseIdx.current % mockResp.length
+      mockResponseIdx.current++
       setMessages(prev => [...prev, {
         role: 'assistant',
-        text: 'Error: Cannot connect to AI. Check if Ollama is running.'
+        text: mockResp[idx]?.a || `${locale === 'vi' ? 'Xin lỗi, tôi không thể trả lời câu hỏi này.' : 'Sorry, I cannot answer this question.'}`
       }])
     } finally {
       setLoading(false)
@@ -80,6 +90,17 @@ export default function ChatPanel({ documentId, context }) {
           <div style={{ textAlign: 'center', padding: 40, color: 'var(--text-muted)' }}>
             <span className="material-symbols-outlined float" style={{ fontSize: 44, opacity: 0.3, color: 'var(--accent)' }}>forum</span>
             <p style={{ marginTop: 12, fontSize: 13 }}>{t('chatEmpty')}</p>
+            {/* Suggested questions */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginTop: 16, alignItems: 'center' }}>
+              {(MOCK_SUGGESTED_QUESTIONS[locale] || MOCK_SUGGESTED_QUESTIONS.vi).slice(0, 3).map((q, i) => (
+                <button key={i} onClick={() => sendMessage(q)}
+                  style={{ padding: '8px 16px', background: 'var(--bg-elevated)', border: '1px solid var(--border)', borderRadius: 'var(--radius-full)', color: 'var(--accent)', fontSize: 12, fontWeight: 500, cursor: 'pointer', transition: 'all 0.2s', maxWidth: 280, textAlign: 'center' }}
+                  onMouseOver={e => e.currentTarget.style.borderColor = 'var(--accent)'}
+                  onMouseOut={e => e.currentTarget.style.borderColor = 'var(--border)'}>
+                  {q}
+                </button>
+              ))}
+            </div>
           </div>
         )}
         {messages.map((msg, i) => (

@@ -11,6 +11,7 @@ const getNavItems = (t) => [
 ]
 
 const getFooterItems = (t) => [
+  { path: '/benchmark', icon: 'science', label: t('navBenchmark') },
   { path: '/dashboard', icon: 'monitoring', label: t('navSystem') },
 ]
 
@@ -73,7 +74,7 @@ export default function SideNavBar() {
           ))}
 
           {/* Theme Toggle */}
-          <button className="theme-toggle" onClick={toggleTheme}>
+          <button className="theme-toggle" onClick={toggleTheme} aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}>
             <span className="material-symbols-outlined" style={{ fontSize: 18 }}>
               {isDark ? 'light_mode' : 'dark_mode'}
             </span>
@@ -81,7 +82,7 @@ export default function SideNavBar() {
           </button>
 
           {/* Locale Toggle */}
-          <button className="locale-toggle" onClick={toggleLocale}>
+          <button className="locale-toggle" onClick={toggleLocale} aria-label="Toggle language">
             <span className="flag">{locale === 'vi' ? '🇻🇳' : '🇺🇸'}</span>
             <span>{locale === 'vi' ? 'Tiếng Việt' : 'English'}</span>
           </button>

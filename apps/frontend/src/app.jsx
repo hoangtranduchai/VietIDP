@@ -13,6 +13,7 @@ import './app.css'
 const WorkspacePage  = lazy(() => import('./pages/WorkspacePage'))
 const HistoryPage    = lazy(() => import('./pages/historypage'))
 const DashboardPage  = lazy(() => import('./pages/DashboardPage'))
+const BenchmarkPage  = lazy(() => import('./pages/BenchmarkPage'))
 const ProcessingPage = lazy(() => import('./pages/processingpage'))
 const ResultsPage    = lazy(() => import('./pages/resultspage'))
 const NotFoundPage   = lazy(() => import('./pages/NotFoundPage'))
@@ -52,6 +53,7 @@ function AppShell() {
                 <Route path="/results/:id" element={<ResultsPage />} />
                 <Route path="/history" element={<HistoryPage />} />
                 <Route path="/dashboard" element={<DashboardPage />} />
+                <Route path="/benchmark" element={<BenchmarkPage />} />
                 <Route path="*" element={<NotFoundPage />} />
               </Routes>
             </Suspense>

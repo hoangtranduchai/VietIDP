@@ -11,6 +11,7 @@ import ExtractionPanel from '../components/ExtractionPanel'
 import OverviewPanel from '../components/OverviewPanel'
 import Skeleton from '../ui/Skeleton'
 import { toast } from 'react-toastify'
+import { getMockDocument } from '../data/mockData'
 
 const PIPELINE = ['YOLOv8', 'VietOCR', 'Qwen2.5-7B', 'JSON']
 
@@ -116,7 +117,16 @@ export default function WorkspacePage() {
         setCurrentStage('storage')
         if (doc.extraction.trich_yeu) setHasUnreadChat(true)
       }
-    }).catch(() => {})
+    }).catch(() => {
+      // Mock fallback when backend is offline
+      if (controller.signal.aborted) return
+      const mock = getMockDocument(id)
+      if (mock?.extraction) {
+        setExtraction(mock.extraction)
+        setCurrentStage('storage')
+        if (mock.extraction.trich_yeu) setHasUnreadChat(true)
+      }
+    })
 
     return () => controller.abort()
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -401,9 +411,11 @@ export default function WorkspacePage() {
             <span className="material-symbols-outlined">save</span>
             {t('saveEdits')}
           </button>
-          <button className="btn btn-primary" onClick={() => id && docApi.execute(id)}>
-            <span className="material-symbols-outlined">play_arrow</span>
-            {t('runValidation')}
+          <button className="btn btn-primary" onClick={() => id && docApi.execute(id)} disabled={docApi.loading}>
+            <span className={docApi.loading ? "material-symbols-outlined spin" : "material-symbols-outlined"}>
+              {docApi.loading ? "autorenew" : "play_arrow"}
+            </span>
+            {docApi.loading ? t('processing') || 'Processing...' : t('runValidation')}
           </button>
         </div>
       </div>

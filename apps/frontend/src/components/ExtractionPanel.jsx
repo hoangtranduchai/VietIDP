@@ -4,12 +4,31 @@ import { useLocale } from '../LocaleContext'
 function ConfidenceBadge({ value }) {
   const pct = Math.round((value || 0) * 100)
   const level = pct >= 95 ? 'high' : pct >= 80 ? 'medium' : 'low'
-  const icon = pct >= 95 ? 'check' : 'warning'
+  const icon = pct >= 95 ? 'check_circle' : pct >= 80 ? 'info' : 'warning'
+  const colors = {
+    high: { bg: 'rgba(5,150,105,0.1)', border: 'rgba(5,150,105,0.2)', text: 'var(--accent-success)' },
+    medium: { bg: 'rgba(217,119,6,0.1)', border: 'rgba(217,119,6,0.2)', text: 'var(--accent-warning)' },
+    low: { bg: 'rgba(220,38,38,0.1)', border: 'rgba(220,38,38,0.2)', text: 'var(--accent-error)' },
+  }
+  const c = colors[level]
   return (
-    <span className={`confidence-badge ${level}`}>
-      <span className="material-symbols-outlined" style={{fontSize: 14}}>{icon}</span>
+    <span className={`confidence-badge ${level}`} style={{
+      background: c.bg, borderColor: c.border, color: c.text,
+    }}>
+      <span className="material-symbols-outlined" style={{fontSize: 12}}>{icon}</span>
       {pct}%
     </span>
+  )
+}
+
+/* Thin confidence indicator bar */
+function ConfidenceBar({ value }) {
+  const pct = Math.round((value || 0) * 100)
+  const color = pct >= 95 ? 'var(--accent-success)' : pct >= 80 ? 'var(--accent-warning)' : 'var(--accent-error)'
+  return (
+    <div style={{ height: 2, borderRadius: 1, background: 'var(--border)', marginTop: 6 }}>
+      <div style={{ height: '100%', width: `${pct}%`, borderRadius: 1, background: color, transition: 'width 1s var(--ease)' }} />
+    </div>
   )
 }
 
@@ -154,6 +173,7 @@ export default function ExtractionPanel({ data = {}, onUpdate, processing = fals
                         onFocus={() => handleFocus(field.key, editData[field.key])}
                       />
                     )}
+                    <ConfidenceBar value={confidence[field.key] || 0.95} />
                   </div>
                 ))}
               </div>

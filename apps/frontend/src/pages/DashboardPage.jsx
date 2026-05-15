@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useLocale } from '../LocaleContext'
 import { useDocuments } from '../hooks/useDocuments'
 import { useApi } from '../hooks/useApi'
@@ -6,6 +7,7 @@ import { healthCheck } from '../services/api'
 import TopBar from '../layouts/TopBar'
 import Skeleton from '../ui/Skeleton'
 import StatusDot from '../ui/StatusDot'
+import { MOCK_DOCUMENTS, MOCK_HEALTH, MOCK_BENCHMARK } from '../data/mockData'
 
 function StatCard({ icon, label, value, sub, glowColor }) {
   return (
@@ -65,19 +67,24 @@ function SystemRow({ label, status, detail, loading: isLoading }) {
 }
 
 export default function DashboardPage() {
-  const { t } = useLocale()
-  const { documents, loading: docsLoading } = useDocuments(100)
+  const { t, locale } = useLocale()
+  const navigate = useNavigate()
+  const { documents: realDocs, loading: docsLoading, error: docsError } = useDocuments(100)
   const healthApi = useApi(healthCheck)
 
+  // Use mock data when backend unavailable
+  const documents = (!docsLoading && (docsError || realDocs.length === 0)) ? MOCK_DOCUMENTS : realDocs
+  const isMock = documents === MOCK_DOCUMENTS
+
   useEffect(() => {
-    // Run once on mount and then every 5 seconds to update dashboard system status
     healthApi.execute()
-    const interval = setInterval(() => {
-      healthApi.execute()
-    }, 5000)
+    const interval = setInterval(() => { healthApi.execute() }, 5000)
     return () => clearInterval(interval)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  const healthData = healthApi.data || (isMock ? MOCK_HEALTH : null)
+  const sys = healthData?.services || {}
 
   const completed = documents.filter(d => d.status === 'completed')
   const failed = documents.filter(d => d.status === 'failed')
@@ -92,16 +99,27 @@ export default function DashboardPage() {
     active: i === ((today + 6) % 7),
   }))
 
-  const sys = healthApi.data?.services || {}
+  // Benchmark mini summary
+  const bench = MOCK_BENCHMARK
 
   return (
     <>
       <TopBar />
       <div className="page-container">
-        <h1>{t('dashTitle')}</h1>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24, flexWrap: 'wrap', gap: 12 }}>
+          <div>
+            <h1 style={{ marginBottom: 4 }}>{t('dashTitle')}</h1>
+            {isMock && (
+              <span className="badge badge-yellow" style={{ fontSize: 10 }}>
+                <span className="material-symbols-outlined" style={{ fontSize: 12 }}>info</span>
+                Demo Mode
+              </span>
+            )}
+          </div>
+        </div>
 
         {/* Stats */}
-        {docsLoading ? (
+        {docsLoading && !isMock ? (
           <div style={{ display: 'flex', gap: 14, marginBottom: 24 }}>
             {[1,2,3,4].map(i => <Skeleton key={i} variant="card" height={110} style={{ flex: 1 }} />)}
           </div>
@@ -127,14 +145,50 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* System — Bug 13 fix: show skeleton while health check loads */}
+        {/* Benchmark Summary Card */}
+        <div className="card card-glow" style={{ marginBottom: 20, cursor: 'pointer' }} onClick={() => navigate('/benchmark')}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(124, 58, 237, 0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <span className="material-symbols-outlined" style={{ fontSize: 20, color: '#a78bfa' }}>science</span>
+              </div>
+              <div>
+                <p style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-muted)' }}>
+                  {locale === 'vi' ? 'Hiệu năng AI Pipeline' : 'AI Pipeline Performance'}
+                </p>
+                <p style={{ fontSize: 12, color: 'var(--text-muted)' }}>
+                  {bench.document_level.total_documents} {locale === 'vi' ? 'văn bản' : 'documents'} · {bench.metadata.gpu}
+                </p>
+              </div>
+            </div>
+            <span className="material-symbols-outlined" style={{ fontSize: 18, color: 'var(--text-muted)' }}>arrow_forward</span>
+          </div>
+          <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap' }}>
+            {[
+              { label: 'Exact Match', value: `${Math.round(bench.macro_averages.exact_match * 100)}%`, color: '#3b82f6' },
+              { label: 'Token F1', value: `${Math.round(bench.macro_averages.token_f1 * 100)}%`, color: '#34d399' },
+              { label: 'Char Sim', value: `${Math.round(bench.macro_averages.char_similarity * 100)}%`, color: '#22d3ee' },
+              { label: locale === 'vi' ? 'Hoàn hảo' : 'Perfect', value: `${bench.document_level.perfect_documents}/${bench.document_level.total_documents}`, color: '#fbbf24' },
+            ].map(({ label, value, color }) => (
+              <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <div style={{ width: 8, height: 8, borderRadius: '50%', background: color, boxShadow: `0 0 8px ${color}60` }} />
+                <div>
+                  <div style={{ fontSize: 18, fontWeight: 800, fontFamily: 'var(--font-display)', color: 'var(--text-primary)' }}>{value}</div>
+                  <div style={{ fontSize: 10, color: 'var(--text-muted)', fontWeight: 600 }}>{label}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* System */}
         <div className="card">
           <p style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-muted)', marginBottom: 8 }}>{t('sysComponents')}</p>
-          <SystemRow label="Ollama LLM Server" status={sys.ollama || 'inactive'} detail={`Model: ${sys.model || 'qwen2.5:7b'}`} loading={healthApi.loading} />
-          <SystemRow label="PostgreSQL / SQLite" status={sys.database || 'inactive'} detail="Document storage" loading={healthApi.loading} />
-          <SystemRow label="YOLO Stamp Detector" status="standby" detail="YOLOv8x best.pt" loading={false} />
-          <SystemRow label="VietOCR Engine" status="standby" detail="vgg_transformer" loading={false} />
-          <SystemRow label="NVIDIA RTX 5070" status="active" detail="8GB VRAM" loading={false} />
+          <SystemRow label="Ollama LLM Server" status={sys.ollama || (isMock ? 'active' : 'inactive')} detail={`Model: ${sys.model || 'qwen2.5:7b'}`} loading={healthApi.loading && !isMock} />
+          <SystemRow label="PostgreSQL / SQLite" status={sys.database || (isMock ? 'active' : 'inactive')} detail="Document storage" loading={healthApi.loading && !isMock} />
+          <SystemRow label="YOLO Stamp Detector" status={sys.yolo || 'standby'} detail="YOLOv8x best.pt" loading={false} />
+          <SystemRow label="VietOCR Engine" status={sys.vietocr || 'standby'} detail="vgg_transformer" loading={false} />
+          <SystemRow label={sys.gpu_name || 'NVIDIA RTX 5070'} status={sys.gpu || (isMock ? 'active' : 'standby')} detail={sys.gpu_vram || '8GB VRAM'} loading={false} />
         </div>
       </div>
     </>

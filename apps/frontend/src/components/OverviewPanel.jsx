@@ -42,6 +42,29 @@ function EntityBadges({ label, icon, items, color }) {
   )
 }
 
+/* ─── Mini Donut Chart (CSS-only) ──────────────────────────── */
+function MiniDonut({ value, size = 48, color = '#34d399' }) {
+  const pct = Math.round((value || 0) * 100)
+  const r = (size - 6) / 2
+  const circ = 2 * Math.PI * r
+  const offset = circ * (1 - (value || 0))
+  return (
+    <div style={{ width: size, height: size, position: 'relative', flexShrink: 0 }}>
+      <svg viewBox={`0 0 ${size} ${size}`} style={{ transform: 'rotate(-90deg)' }}>
+        <circle cx={size/2} cy={size/2} r={r} fill="none" stroke="var(--border)" strokeWidth="5" />
+        <circle cx={size/2} cy={size/2} r={r} fill="none" stroke={color} strokeWidth="5"
+          strokeDasharray={`${circ - offset} ${offset}`}
+          strokeLinecap="round"
+          style={{ transition: 'stroke-dasharray 1s var(--ease)' }}
+        />
+      </svg>
+      <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <span style={{ fontSize: size * 0.22, fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-display)' }}>{pct}%</span>
+      </div>
+    </div>
+  )
+}
+
 /* ─── Main Panel ──────────────────────────────────────────── */
 export default function OverviewPanel({ data = {} }) {
   const { t } = useLocale()
@@ -71,6 +94,7 @@ export default function OverviewPanel({ data = {} }) {
       confidence: data.ocr_confidence,
       stamps: data.total_stamps || 0,
     },
+    fieldConfidence: data._confidence || {},
   }
 
   const hasData = d.tldr || d.meta.so_hieu !== '—'
@@ -133,25 +157,57 @@ export default function OverviewPanel({ data = {} }) {
 
             {/* ── 3. Quick Stats Bar ────────────────────────── */}
             {(d.stats.time || d.stats.confidence || d.stats.stamps > 0) && (
-              <div className="quick-stats-bar fade-in-up">
-                {d.stats.time && (
-                  <div className="quick-stat">
-                    <span className="material-symbols-outlined" style={{ fontSize: 14, color: 'var(--accent-cyan)' }}>timer</span>
-                    <span>{d.stats.time}s</span>
-                  </div>
-                )}
+              <div className="quick-stats-bar fade-in-up" style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
                 {d.stats.confidence && (
-                  <div className="quick-stat">
-                    <span className="material-symbols-outlined" style={{ fontSize: 14, color: 'var(--accent-success)' }}>verified</span>
-                    <span>{Math.round(d.stats.confidence * 100)}% OCR</span>
-                  </div>
+                  <MiniDonut value={d.stats.confidence} size={52} color="var(--accent-success)" />
                 )}
-                {d.stats.stamps > 0 && (
-                  <div className="quick-stat">
-                    <span className="material-symbols-outlined" style={{ fontSize: 14, color: 'var(--accent-error)' }}>stamp</span>
-                    <span>{d.stats.stamps} {t('stampsFound')}</span>
-                  </div>
-                )}
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, flex: 1 }}>
+                  {d.stats.time && (
+                    <div className="quick-stat">
+                      <span className="material-symbols-outlined" style={{ fontSize: 14, color: 'var(--accent-cyan)' }}>timer</span>
+                      <span>{d.stats.time}s</span>
+                    </div>
+                  )}
+                  {d.stats.confidence && (
+                    <div className="quick-stat">
+                      <span className="material-symbols-outlined" style={{ fontSize: 14, color: 'var(--accent-success)' }}>verified</span>
+                      <span>{Math.round(d.stats.confidence * 100)}% OCR</span>
+                    </div>
+                  )}
+                  {d.stats.stamps > 0 && (
+                    <div className="quick-stat">
+                      <span className="material-symbols-outlined" style={{ fontSize: 14, color: 'var(--accent-error)' }}>stamp</span>
+                      <span>{d.stats.stamps} {t('stampsFound')}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* ── 3b. Field Confidence Bars ───────────────────── */}
+            {Object.keys(d.fieldConfidence).length > 0 && (
+              <div className="fade-in-up" style={{
+                background: 'var(--bg-elevated)', border: '1px solid var(--border)',
+                borderRadius: 'var(--radius-sm)', padding: 14, marginTop: -4,
+              }}>
+                <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 10 }}>
+                  Field Confidence
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  {Object.entries(d.fieldConfidence).map(([key, val]) => {
+                    const pct = Math.round((val || 0) * 100)
+                    const color = pct >= 95 ? 'var(--accent-success)' : pct >= 80 ? 'var(--accent-warning)' : 'var(--accent-error)'
+                    return (
+                      <div key={key} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <span style={{ fontSize: 10, fontFamily: 'var(--font-mono)', color: 'var(--text-muted)', minWidth: 100, textAlign: 'right' }}>{key}</span>
+                        <div style={{ flex: 1, height: 5, borderRadius: 3, background: 'var(--bg-hover)', overflow: 'hidden' }}>
+                          <div style={{ height: '100%', width: `${pct}%`, borderRadius: 3, background: color, transition: 'width 1s var(--ease)' }} />
+                        </div>
+                        <span style={{ fontSize: 10, fontFamily: 'var(--font-mono)', fontWeight: 700, color, minWidth: 30, textAlign: 'right' }}>{pct}%</span>
+                      </div>
+                    )
+                  })}
+                </div>
               </div>
             )}
 

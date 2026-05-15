@@ -3,25 +3,9 @@ import { useNavigate } from 'react-router-dom'
 import { useLocale } from '../LocaleContext'
 import TopBar from '../layouts/TopBar'
 import { chatWithDocument } from '../services/api'
+import { MOCK_DOCUMENTS, MOCK_CHAT_RESPONSES, MOCK_SUGGESTED_QUESTIONS } from '../data/mockData'
 
-// ── Mock data for demo mode ──────────────────────────────────
-const MOCK = {
-  meta: { loai: "Quyết định", so_hieu: "123/QĐ-BGDĐT", ngay: "15/05/2025", co_quan: "Bộ Giáo dục và Đào tạo", nguoi_ky: "Nguyễn Kim Sơn — Bộ trưởng", linh_vuc: "Giáo dục & Đào tạo", hieu_luc: "01/06/2025" },
-  tldr: "Quy định mới về quản lý, cấp phát và thu hồi văn bằng, chứng chỉ trong hệ thống giáo dục quốc dân.",
-  tom_tat: "Quyết định quy định rõ thẩm quyền cấp phát, điều kiện cấp phát và quy trình thu hồi văn bằng trong các trường hợp vi phạm.",
-  insights: [
-    { title: "Giới hạn thời gian cấp văn bằng", body: "Cơ sở giáo dục phải cấp văn bằng trong tối đa 30 ngày làm việc." },
-    { title: "Tích hợp CSDL văn bằng quốc gia", body: "Tất cả cơ sở giáo dục phải kết nối hệ thống CSDL trước 01/12/2025." },
-    { title: "Mức xử phạt mới", body: "Cấp văn bằng không đúng quy định bị phạt lên đến 50 triệu đồng." },
-  ],
-  entities: {
-    organizations: ["Bộ Giáo dục và Đào tạo"],
-    people: ["Nguyễn Kim Sơn"],
-    laws: ["Luật Giáo dục 2019", "Nghị định 99/2019/NĐ-CP"],
-  },
-  keywords: ["Văn bằng", "Chứng chỉ", "Thu hồi", "Gian lận"],
-}
-
+// ── Collapsible Insight Card ──────────────────────────────────
 function InsightCard({ idx, title, body }) {
   const [open, setOpen] = useState(idx === 0)
   return (
@@ -54,6 +38,7 @@ function InsightCard({ idx, title, body }) {
   )
 }
 
+// ── Entity Badge Group ────────────────────────────────────────
 function EntityBadges({ label, icon, items, color }) {
   if (!items?.length) return null
   return (
@@ -76,22 +61,68 @@ function EntityBadges({ label, icon, items, color }) {
 
 export default function ResultsPage() {
   const navigate = useNavigate()
-  const { t } = useLocale()
+  const { t, locale } = useLocale()
   const [chatInput, setChatInput] = useState('')
   const [chatLoading, setChatLoading] = useState(false)
   const [faqs, setFaqs] = useState([])
 
-  // Load real data or fallback to mock
+  // Load real data from localStorage or fallback to centralized mock
   let savedData = null
   try { savedData = JSON.parse(localStorage.getItem('last_summary'))?.summary } catch {}
   const hasReal = savedData?.tom_tat_ngan?.length > 5
+
+  // Use first mock document's extraction as default
+  const mockExtraction = MOCK_DOCUMENTS[0].extraction
+
   const d = hasReal ? {
-    meta: { loai: savedData.loai_van_ban || '—', so_hieu: savedData.so_hieu || '—', ngay: savedData.ngay_ban_hanh || '—', co_quan: savedData.co_quan_ban_hanh || '—', nguoi_ky: savedData.nguoi_ky || '—', linh_vuc: savedData.linh_vuc || '—', hieu_luc: savedData.thoi_han_hieu_luc || '—' },
-    tldr: savedData.tom_tat_ngan || '', tom_tat: savedData.tom_tat_day_du || '',
-    insights: savedData.diem_chinh?.map((p, i) => ({ title: `Point ${i+1}`, body: p })) || [],
-    entities: { organizations: savedData.co_quan_ban_hanh ? [savedData.co_quan_ban_hanh] : [], people: savedData.nguoi_ky ? [savedData.nguoi_ky] : [], laws: savedData.van_ban_lien_quan || [] },
+    meta: {
+      loai: savedData.loai_van_ban || '—',
+      so_hieu: savedData.so_hieu || '—',
+      ngay: savedData.ngay_ban_hanh || '—',
+      co_quan: savedData.co_quan_ban_hanh || '—',
+      nguoi_ky: savedData.nguoi_ky || '—',
+      linh_vuc: savedData.linh_vuc || '—',
+      hieu_luc: savedData.thoi_han_hieu_luc || '—',
+    },
+    tldr: savedData.tom_tat_ngan || '',
+    tom_tat: savedData.tom_tat_day_du || '',
+    insights: savedData.diem_chinh?.map((p, i) => ({ title: `${t('insightPoint')} ${i + 1}`, body: p })) || [],
+    entities: {
+      organizations: savedData.co_quan_ban_hanh ? [savedData.co_quan_ban_hanh] : [],
+      people: savedData.nguoi_ky ? [savedData.nguoi_ky] : [],
+      laws: savedData.van_ban_lien_quan || [],
+    },
     keywords: savedData.tu_khoa || [],
-  } : MOCK
+    stats: {
+      time: savedData.processing_time,
+      confidence: savedData.ocr_confidence,
+      stamps: savedData.total_stamps || 0,
+    },
+  } : {
+    meta: {
+      loai: mockExtraction.loai_van_ban,
+      so_hieu: mockExtraction.so_hieu,
+      ngay: mockExtraction.ngay_ban_hanh,
+      co_quan: mockExtraction.co_quan_ban_hanh,
+      nguoi_ky: mockExtraction.nguoi_ky,
+      linh_vuc: mockExtraction.linh_vuc,
+      hieu_luc: mockExtraction.thoi_han_hieu_luc,
+    },
+    tldr: mockExtraction.tom_tat_ngan,
+    tom_tat: mockExtraction.tom_tat_day_du,
+    insights: mockExtraction.diem_chinh?.map((p, i) => ({ title: `${t('insightPoint')} ${i + 1}`, body: p })) || [],
+    entities: {
+      organizations: [mockExtraction.co_quan_ban_hanh],
+      people: [mockExtraction.nguoi_ky],
+      laws: mockExtraction.van_ban_lien_quan || [],
+    },
+    keywords: mockExtraction.tu_khoa || [],
+    stats: {
+      time: mockExtraction.processing_time,
+      confidence: mockExtraction.ocr_confidence,
+      stamps: mockExtraction.total_stamps || 0,
+    },
+  }
 
   const handleAsk = async (e) => {
     e.preventDefault()
@@ -99,25 +130,28 @@ export default function ResultsPage() {
     const q = chatInput.trim()
     setChatInput('')
     setChatLoading(true)
-    setFaqs(prev => [...prev, { q, a: '⏳ Analyzing...' }])
+    setFaqs(prev => [...prev, { q, a: '⏳ ...' }])
     try {
-      // In ResultsPage, we might not have id but we use savedData text
-      // if not available, fallback to mock text
-      const context = savedData ? JSON.stringify(savedData) : JSON.stringify(MOCK)
+      const context = savedData ? JSON.stringify(savedData) : JSON.stringify(mockExtraction)
       const res = await chatWithDocument(q, null, context)
       setFaqs(prev => prev.map((f, i) => i === prev.length - 1 ? { q, a: res.answer } : f))
     } catch {
-      setFaqs(prev => prev.map((f, i) => i === prev.length - 1 ? { q, a: '❌ Connection error' } : f))
+      // Fallback to mock response
+      const mockResp = MOCK_CHAT_RESPONSES[locale] || MOCK_CHAT_RESPONSES.vi
+      const mockIdx = faqs.length % mockResp.length
+      setFaqs(prev => prev.map((f, i) => i === prev.length - 1 ? { q, a: mockResp[mockIdx]?.a || 'Demo response.' } : f))
     }
     setChatLoading(false)
   }
+
+  const suggestedQs = MOCK_SUGGESTED_QUESTIONS[locale] || MOCK_SUGGESTED_QUESTIONS.vi
 
   return (
     <>
       <TopBar />
       <div className="results-layout">
 
-        {/* LEFT — Document Preview */}
+        {/* LEFT — Document Info Sidebar */}
         <div className="results-sidebar">
           {/* Doc identity */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
@@ -146,6 +180,30 @@ export default function ResultsPage() {
               </div>
             </div>
           ))}
+
+          {/* Stats */}
+          {(d.stats.time || d.stats.confidence || d.stats.stamps > 0) && (
+            <div style={{ display: 'flex', gap: 12, padding: '12px 0', borderBottom: '1px solid var(--border)', flexWrap: 'wrap' }}>
+              {d.stats.time && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, color: 'var(--text-muted)' }}>
+                  <span className="material-symbols-outlined" style={{ fontSize: 14, color: 'var(--accent-cyan)' }}>timer</span>
+                  {d.stats.time}s
+                </div>
+              )}
+              {d.stats.confidence && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, color: 'var(--text-muted)' }}>
+                  <span className="material-symbols-outlined" style={{ fontSize: 14, color: 'var(--accent-success)' }}>verified</span>
+                  {Math.round(d.stats.confidence * 100)}% OCR
+                </div>
+              )}
+              {d.stats.stamps > 0 && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, color: 'var(--text-muted)' }}>
+                  <span className="material-symbols-outlined" style={{ fontSize: 14, color: 'var(--accent-error)' }}>stamp</span>
+                  {d.stats.stamps} {t('stampsFound')}
+                </div>
+              )}
+            </div>
+          )}
 
           <div style={{ marginTop: 12 }}>
             <EntityBadges label={t('resultsOrgs')} icon="apartment" items={d.entities.organizations} color="#60a5fa" />
@@ -176,6 +234,16 @@ export default function ResultsPage() {
 
         {/* CENTER — Analysis */}
         <div className="results-main">
+
+          {/* Demo badge */}
+          {!hasReal && (
+            <div style={{ marginBottom: 16 }}>
+              <span className="badge badge-yellow" style={{ fontSize: 10 }}>
+                <span className="material-symbols-outlined" style={{ fontSize: 12 }}>info</span>
+                Demo Mode — {locale === 'vi' ? 'Dữ liệu mẫu' : 'Sample data'}
+              </span>
+            </div>
+          )}
 
           {/* TL;DR */}
           <div style={{
@@ -217,6 +285,25 @@ export default function ResultsPage() {
               <span className="material-symbols-outlined" style={{ fontSize: 16, color: 'var(--accent)' }}>forum</span>
               <h3 style={{ fontSize: 15, fontWeight: 700 }}>{t('resultsAskAI')}</h3>
             </div>
+
+            {/* Suggested Questions */}
+            {faqs.length === 0 && (
+              <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
+                {suggestedQs.slice(0, 4).map((q, i) => (
+                  <button key={i} onClick={() => { setChatInput(q); }}
+                    style={{
+                      padding: '8px 14px', background: 'var(--bg-elevated)', border: '1px solid var(--border)',
+                      borderRadius: 'var(--radius-full)', color: 'var(--accent)', fontSize: 12,
+                      fontWeight: 500, cursor: 'pointer', transition: 'all 0.2s',
+                    }}
+                    onMouseOver={e => e.currentTarget.style.borderColor = 'var(--accent)'}
+                    onMouseOut={e => e.currentTarget.style.borderColor = 'var(--border)'}>
+                    {q}
+                  </button>
+                ))}
+              </div>
+            )}
+
             {faqs.map((f, i) => (
               <div key={i} className="card" style={{ marginBottom: 8 }}>
                 <div style={{ fontWeight: 600, fontSize: 14, marginBottom: 6, color: 'var(--accent)' }}>{f.q}</div>
