@@ -243,6 +243,20 @@ async def process_document(file: UploadFile = File(...), async_mode: bool = Fals
 
         extraction_data = result.get("extraction", {})
 
+        # Save page images for PDF preview (preserve original filename/file_type)
+        processed_images = result.get("processed_images", [])
+        if processed_images and ext == ".pdf":
+            import cv2
+
+            base_name = file_path.stem
+            saved_pages = []
+            for idx, img in enumerate(processed_images):
+                page_name = f"{base_name}_page_{idx+1}.jpg"
+                page_path = UPLOAD_DIR / page_name
+                cv2.imwrite(str(page_path), img)
+                saved_pages.append(page_name)
+            extraction_data["pages"] = saved_pages
+
         extraction = ExtractionResult(
             document_id=doc_id,
             loai_van_ban=extraction_data.get("loai_van_ban", ""),
@@ -471,6 +485,9 @@ async def chat_with_document(req: ChatRequest):
             session.close()
 
     if not context:
+        if req.document_id:
+            # Document exists but has no text yet (likely still processing)
+            return {"answer": "⏳ Tài liệu đang được xử lý, vui lòng đợi hoàn tất rồi thử lại.", "question": req.question}
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Không có context. Cung cấp document_id hoặc context text.")
 
     from src.llm.ollama_client import OllamaClient

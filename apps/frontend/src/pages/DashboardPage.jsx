@@ -78,7 +78,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     healthApi.execute()
-    const interval = setInterval(() => { healthApi.execute() }, 5000)
+    const interval = setInterval(() => { healthApi.execute() }, 30000)
     return () => clearInterval(interval)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

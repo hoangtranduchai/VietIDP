@@ -132,9 +132,10 @@ def _process_document_worker(task_id: str, document_id: int, file_path: str):
                 cv2.imwrite(page_path, img)
                 saved_pages.append(page_name)
             
-            doc.file_path = str(os.path.join(str(upload_dir), saved_pages[0]))
-            doc.filename = saved_pages[0]
-            doc.file_type = "jpg"
+            # NOTE: Do NOT overwrite doc.filename or doc.file_type here.
+            # The original filename (e.g., "NghiDinh_54.pdf") and file_type ("pdf")
+            # must be preserved for correct display in the UI.
+            # Page image paths are stored in extraction_data['pages'] for preview.
             
             # Store all pages in extraction data to pass to frontend
             extraction_data['pages'] = saved_pages

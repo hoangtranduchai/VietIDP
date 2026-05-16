@@ -22,7 +22,7 @@ export default function ChatPanel({ documentId, context }) {
 
   // Auto-Summary Feature
   useEffect(() => {
-    if (documentId && context && autoSummarizedDocId.current !== documentId && messages.length === 0) {
+    if (documentId && context && context.trim() && autoSummarizedDocId.current !== documentId && messages.length === 0) {
       autoSummarizedDocId.current = documentId
       
       const generateSummary = async () => {
@@ -50,6 +50,7 @@ ${mockResp[2]?.a || 'Document loaded successfully.'}` }])
   const sendMessage = async (overrideInput = null) => {
     const textToSend = typeof overrideInput === 'string' ? overrideInput : input
     if (!textToSend.trim()) return
+    if (!context && !documentId) return
     const userMsg = { role: 'user', text: textToSend }
     setMessages(prev => [...prev, userMsg])
     if (!overrideInput) setInput('')

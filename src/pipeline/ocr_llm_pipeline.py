@@ -1441,6 +1441,9 @@ class VietIDPPipeline:
                 'text': text,
                 'stamps': stamps,
                 'ocr_lines': ocr_lines,
+                'original_image': img.copy(),
+                'detection_image': detection_viz,
+                'clean_image': clean_img,
             })
 
         doc.close()
