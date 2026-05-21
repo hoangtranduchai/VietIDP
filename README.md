@@ -38,6 +38,10 @@
 
 **VietIDP** (Vietnamese Intelligent Document Processing) là hệ thống xử lý tài liệu thông minh chạy **100% cục bộ (on-premise)**, được thiết kế đặc biệt cho văn bản hành chính tiếng Việt.
 
+**Tên đề tài:** Nghiên cứu xây dựng hệ thống trích xuất và cấu trúc hóa thông tin tự động từ văn bản hành chính tiếng Việt sử dụng Mô hình ngôn ngữ lớn (LLMs) và công nghệ OCR phục vụ công tác chuyển đổi số.
+
+**Thành tích:** Top 7 (giải khuyến khích) đề tài xuất sắc nhất khoa IT, Đại học Bách khoa Đà Nẵng.
+
 Hệ thống kết hợp **Computer Vision** (YOLO, OCR) với **Large Language Model** (Qwen2.5-7B) để tự động:
 
 - 🔍 Phát hiện và xóa con dấu đỏ trên văn bản
